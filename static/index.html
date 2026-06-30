@@ -108,14 +108,21 @@
     .search-bar input::placeholder { color: var(--text-muted); }
     .search-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
 
-    .filter-chips {
-      display: flex; gap: 6px; flex-wrap: nowrap; margin-bottom: 10px;
-      overflow-x: auto; overflow-y: hidden; scrollbar-width: thin;
-      padding-bottom: 4px; -webkit-overflow-scrolling: touch;
+    .catalog-filters {
+      display: flex; gap: 8px; margin-bottom: 12px;
     }
-    .filter-chips::-webkit-scrollbar { height: 3px; }
-    .filter-chips::-webkit-scrollbar-track { background: transparent; }
-    .filter-chips::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+    .filter-select {
+      flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
+      border: 1px solid var(--border); background: var(--surface);
+      color: var(--text); font-size: 13px; font-weight: 500;
+      outline: none; cursor: pointer; appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      background-size: 14px;
+    }
+    .filter-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .filter-select option { background: #1e1e32; color: var(--text); }
     .chip {
       padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
       background: var(--surface); color: var(--text-dim); cursor: pointer;
@@ -741,31 +748,43 @@
       if (profileFilter !== undefined) catalogProfileFilter = profileFilter;
       const container = document.getElementById('tabContent');
       container.innerHTML =
-        '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию, организатору, профилю..." oninput="debouncedSearch()"></div>' +
-        '<div class="filter-chips" id="catalogChips"></div>' +
-        '<div class="filter-chips" id="catalogLevelChips"></div>' +
+        '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию..." oninput="debouncedSearch()"></div>' +
         '<div id="catalogResults"></div>' +
         '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:12px 0 20px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(15,15,26,0) 0%, rgba(15,15,26,1) 40%)">' +
           '<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedFromCatalog()">+ Добавить выбранные</button>' +
         '</div>';
-      renderCatalogChips();
-      renderCatalogLevelChips();
+      renderCatalogFilter();
       renderCatalogResults();
     }
 
-    function renderCatalogChips() {
-      const el = document.getElementById('catalogChips');
-      if (!el) return;
+    function renderCatalogFilter() {
+      const container = document.getElementById('tabContent');
+      if (!container) return;
       var profiles = new Set();
       catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
-      var profileList = [''].concat(Array.from(profiles).sort());
-      var labels = { '': 'Все' };
-      profileList.forEach(function(p) { if (p) labels[p] = p; });
-      el.innerHTML = profileList.map(function(c) {
-        var active = catalogProfileFilter === c || (!catalogProfileFilter && !c);
-        var label = labels[c] || c;
-        return '<button class="chip' + (active ? ' active' : '') + '" onclick="filterCatalogProfile(\'' + esc(c) + '\')">' + esc(label) + '</button>';
+      var profileList = Array.from(profiles).sort();
+
+      var profileOptions = '<option value="">Все направления</option>' +
+        profileList.map(function(p) { return '<option value="' + esc(p) + '"' + (catalogProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('');
+
+      var levelOptions = ['', 1, 2, 3].map(function(l) {
+        var label = l ? 'Ур. ' + l : 'Любой уровень';
+        return '<option value="' + l + '"' + (catalogLevelFilter === String(l) ? ' selected' : '') + '>' + label + '</option>';
       }).join('');
+
+      var filterHtml =
+        '<div class="catalog-filters">' +
+          '<select class="filter-select" id="profileFilterSelect" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
+          '<select class="filter-select" id="levelFilterSelect" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
+        '</div>';
+
+      // Вставляем после search-bar
+      var searchBar = container.querySelector('.search-bar');
+      if (searchBar) {
+        var existing = container.querySelector('.catalog-filters');
+        if (existing) existing.remove();
+        searchBar.insertAdjacentHTML('afterend', filterHtml);
+      }
     }
 
     function renderCatalogLevelChips() {
@@ -786,15 +805,13 @@
 
     function filterCatalogProfile(profile) {
       catalogProfileFilter = profile;
-      renderCatalogChips();
-      renderCatalogLevelChips();
+      renderCatalogFilter();
       renderCatalogResults();
     }
 
     function filterCatalogLevel(level) {
       catalogLevelFilter = level;
-      renderCatalogChips();
-      renderCatalogLevelChips();
+      renderCatalogFilter();
       renderCatalogResults();
     }
 
