@@ -110,10 +110,12 @@
 
     .filter-chips {
       display: flex; gap: 6px; flex-wrap: nowrap; margin-bottom: 10px;
-      overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
-      padding-bottom: 2px; -webkit-overflow-scrolling: touch;
+      overflow-x: auto; overflow-y: hidden; scrollbar-width: thin;
+      padding-bottom: 4px; -webkit-overflow-scrolling: touch;
     }
-    .filter-chips::-webkit-scrollbar { display: none; }
+    .filter-chips::-webkit-scrollbar { height: 3px; }
+    .filter-chips::-webkit-scrollbar-track { background: transparent; }
+    .filter-chips::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
     .chip {
       padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
       background: var(--surface); color: var(--text-dim); cursor: pointer;
