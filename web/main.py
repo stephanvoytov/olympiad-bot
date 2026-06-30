@@ -223,7 +223,7 @@ async def health():
 # ─────────────────────────────── PAGES ───────────────────────────────
 
 
-@app.get("/app", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def mini_app_index():
     with open("static/index.html", encoding="utf-8") as f:
         return HTMLResponse(f.read())
