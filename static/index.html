@@ -713,6 +713,16 @@
       modal.classList.add('open');
     }
 
+    function addSelectedProfiles() {
+      var checked = document.querySelectorAll('.profile-chk:checked');
+      var count = 0;
+      checked.forEach(function(cb) {
+        addOlympiad(cb.getAttribute('data-oid'), cb.getAttribute('data-slug'));
+        count++;
+      });
+      if (count === 0) { showToast('Выберите хотя бы один профиль'); }
+    }
+
     async function addOlympiad(olympiadId, profileSlug) {
       try {
         const h = authHeaders();
@@ -720,7 +730,7 @@
         const resp = await fetch(API + '/my-olympiads/add', {
           method: 'POST',
           headers: h,
-          body: JSON.stringify({ olympiad_id: parseInt(olympiadId), profile_slug: profileSlug })
+          body: JSON.stringify({ olympiad_id: olympiadId, profile_slug: profileSlug })
         });
         if (!resp.ok) {
           var err = await resp.json();
