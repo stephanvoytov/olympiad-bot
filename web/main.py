@@ -47,6 +47,7 @@ app = FastAPI(
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
+    root_path="",
 )
 
 app.add_middleware(
@@ -77,6 +78,8 @@ class AddStageRequest(BaseModel):
     name: str = Field(..., min_length=1, max_length=256)
     date_start: str | None = None
     date_end: str | None = None
+    is_completed: bool = False
+    result: str | None = None
 
 
 class UpdateStatusRequest(BaseModel):
@@ -467,11 +470,69 @@ async def add_stage(
         name=body.name,
         date_start=datetime.fromisoformat(body.date_start) if body.date_start else None,
         date_end=datetime.fromisoformat(body.date_end) if body.date_end else None,
+        is_completed=body.is_completed,
+        result=body.result or None,
     )
     db.add(stage)
     db.commit()
     db.refresh(stage)
     return {"id": stage.id, "status": "created"}
+
+
+@app.delete("/api/my-olympiads/{entry_id}/stage/{stage_id}")
+@limiter.limit("30/minute")
+async def delete_stage(
+    entry_id: int,
+    stage_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    telegram_id = _get_telegram_id(request)
+    uo = db.query(UserOlympiad).filter(UserOlympiad.id == entry_id).first()
+    if not uo:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user or uo.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    stage = db.query(Stage).filter(Stage.id == stage_id, Stage.user_olympiad_id == entry_id).first()
+    if not stage:
+        raise HTTPException(status_code=404, detail="Stage not found")
+
+    db.delete(stage)
+    db.commit()
+    return {"status": "deleted"}
+
+
+@app.patch("/api/my-olympiads/{entry_id}/stage/{stage_id}")
+@limiter.limit("30/minute")
+async def update_stage(
+    entry_id: int,
+    stage_id: int,
+    body: AddStageRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    telegram_id = _get_telegram_id(request)
+    uo = db.query(UserOlympiad).filter(UserOlympiad.id == entry_id).first()
+    if not uo:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user or uo.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    stage = db.query(Stage).filter(Stage.id == stage_id, Stage.user_olympiad_id == entry_id).first()
+    if not stage:
+        raise HTTPException(status_code=404, detail="Stage not found")
+
+    stage.name = body.name
+    stage.date_start = datetime.fromisoformat(body.date_start) if body.date_start else None
+    stage.date_end = datetime.fromisoformat(body.date_end) if body.date_end else None
+    stage.is_completed = body.is_completed
+    stage.result = body.result or None
+    db.commit()
+    db.refresh(stage)
+    return {"id": stage.id, "status": "updated"}
 
 
 @app.post("/api/my-olympiads/{entry_id}/status")

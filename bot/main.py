@@ -31,7 +31,7 @@ def tg_keyboard():
     builder = InlineKeyboardBuilder()
     if is_https:
         builder.row(
-            InlineKeyboardButton(text="Панель управления", web_app=WebAppInfo(url=f"{APP_URL}/app"))
+            InlineKeyboardButton(text="Панель управления", web_app=WebAppInfo(url=f"{APP_URL}/"))
         )
     return builder.as_markup()
 
@@ -43,7 +43,7 @@ async def cmd_start(message: types.Message):
     text = (
         f"{message.from_user.first_name}, добро пожаловать.\n\n"
         "Бот отслеживает олимпиады: напоминает о регистрациях, этапах и дедлайнах.\n\n"
-        f"Панель управления: {APP_URL}/app\n\n"
+        f"Панель управления: {APP_URL}/\n\n"
         "Откройте в браузере, чтобы добавить олимпиады и настроить статусы."
     )
     try:
@@ -63,7 +63,7 @@ async def fallback(message: types.Message):
     logger.info(f"Message from {message.from_user.id}: {message.text}")
     try:
         await message.answer(
-            f"Панель управления: {APP_URL}/app\n\n"
+            f"Панель управления: {APP_URL}/\n\n"
             "Добавляйте олимпиады, следите за этапами и статусами."
         )
         logger.info(f"Fallback response sent to {message.from_user.id}")

@@ -348,6 +348,41 @@
     .countdown.urgent { color: var(--red); }
     .countdown.soon { color: var(--yellow); }
     .countdown.normal { color: var(--green); }
+
+    /* Loading overlay */
+    .loading-overlay {
+      position: fixed; inset: 0; z-index: 300;
+      background: rgba(15,15,26,0.7);
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column; gap: 10px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: var(--text-dim); font-size: 14px; }
+
+    /* Detail panel inside add modal */
+    #addDetailView {
+      flex: 1 1 auto; overflow-y: auto; min-height: 0;
+      padding: 8px 0;
+    }
+    #addDetailView .back-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    /* Edit stage / confirm modals */
+    .edit-stage-actions {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+    .edit-stage-actions .btn { flex: 1; justify-content: center; }
+    #confirmModal .modal { max-width: 360px; }
   </style>
 </head>
 <body>
@@ -369,6 +404,29 @@
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
   </button>
   <div class="toast" id="toast"></div>
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text" id="loadingText">Загрузка...</div>
+  </div>
+
+  <!-- Confirm modal -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="confirmTitle">Подтверждение</h2>
+        <button class="modal-close" onclick="closeConfirmModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div id="confirmBody" style="font-size:14px;color:var(--text-dim);margin-bottom:16px;line-height:1.5"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-danger" id="confirmYesBtn" style="flex:1;justify-content:center"></button>
+        <button class="btn btn-outline" onclick="closeConfirmModal()" style="flex:1;justify-content:center">Отмена</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Детальная модалка -->
   <div class="modal-overlay" id="detailModal">
@@ -404,7 +462,8 @@
         </div>
       </div>
       <div id="catalogList" class="catalog-scroll"></div>
-      <div class="catalog-footer">
+      <div id="addDetailView" style="display:none"></div>
+      <div class="catalog-footer" id="catalogFooter">
         <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedProfiles()">+ Добавить выбранные</button>
       </div>
     </div>
@@ -426,12 +485,20 @@
         </div>
         <div class="info-grid">
           <div class="form-group">
-            <label>Дата начала</label>
+            <label>Дата начала <span style="color:var(--text-muted)">(необяз.)</span></label>
             <input type="date" id="stageStartInput">
           </div>
           <div class="form-group">
-            <label>Дата окончания</label>
+            <label>Дата окончания <span style="color:var(--text-muted)">(необяз.)</span></label>
             <input type="date" id="stageEndInput">
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer">
+            <input type="checkbox" id="stageCompletedInput" style="accent-color:var(--green);width:18px;height:18px"> Завершён
+          </label>
+          <div class="form-group" style="flex:1;margin-bottom:0">
+            <input type="text" id="stageResultInput" placeholder="Результат (диплом, баллы...)" style="font-size:13px">
           </div>
         </div>
         <div style="display:flex;gap:8px;margin-top:16px">
@@ -440,6 +507,7 @@
           </button>
           <button class="btn btn-outline" onclick="closeStageModal()">Отмена</button>
         </div>
+        <div id="stageError" style="color:var(--red);font-size:12px;margin-top:8px;display:none"></div>
       </div>
     </div>
   </div>
@@ -454,6 +522,7 @@
     let catalog = [];
     let addFilter = 'all';
     let catalogProfileFilter = '';
+    let catalogLevelFilter = '';
     let currentDetailEntryId = null;
 
     // ========== SVG ICONS ==========
@@ -473,6 +542,97 @@
       alert: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
       close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
     };
+
+    // ========== ХЕЛПЕРЫ ==========
+    function showLoading(msg) {
+      document.getElementById('loadingText').textContent = msg || 'Загрузка...';
+      document.getElementById('loadingOverlay').classList.add('show');
+    }
+    function hideLoading() {
+      document.getElementById('loadingOverlay').classList.remove('show');
+    }
+
+    function haptic(style) {
+      try { Telegram.WebApp.HapticFeedback.impactOccurred(style || 'light'); } catch(e) {}
+    }
+
+    function hapticNotify(type) {
+      try { Telegram.WebApp.HapticFeedback.notificationOccurred(type || 'success'); } catch(e) {}
+    }
+
+    function openConfirm(title, body, btnText, onConfirm) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmBody').textContent = body;
+      var btn = document.getElementById('confirmYesBtn');
+      btn.textContent = btnText || 'Подтвердить';
+      btn.onclick = function() {
+        closeConfirmModal();
+        if (onConfirm) onConfirm();
+      };
+      document.getElementById('confirmModal').classList.add('open');
+      bodyScrollLock(true);
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirmModal').classList.remove('open');
+      bodyScrollLock(false);
+    }
+
+    function bodyScrollLock(lock) {
+      if (lock) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        // Проверяем, открыта ли ещё какая-то модалка
+        var anyOpen = document.querySelectorAll('.modal-overlay.open').length > 0;
+        if (!anyOpen) document.body.style.overflow = '';
+      }
+    }
+
+    // Глобальный Escape + Telegram BackButton
+    function setupGlobalHandlers() {
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          var openModals = document.querySelectorAll('.modal-overlay.open');
+          if (openModals.length) {
+            // Закрываем самую верхнюю
+            var last = openModals[openModals.length - 1];
+            if (last.id === 'detailModal') closeModal();
+            else if (last.id === 'addModal') closeAddModal();
+            else if (last.id === 'stageModal') closeStageModal();
+            else if (last.id === 'confirmModal') closeConfirmModal();
+            e.preventDefault();
+          }
+        }
+      });
+
+      try {
+        Telegram.WebApp.BackButton.onClick(function() {
+          var openModals = document.querySelectorAll('.modal-overlay.open');
+          if (openModals.length) {
+            var last = openModals[openModals.length - 1];
+            if (last.id === 'detailModal') closeModal();
+            else if (last.id === 'addModal') closeAddModal();
+            else if (last.id === 'stageModal') closeStageModal();
+            else if (last.id === 'confirmModal') closeConfirmModal();
+          }
+        });
+      } catch(e) {}
+    }
+
+    // Отслеживание открытых модалок для BackButton
+    function updateBackButton() {
+      try {
+        var openModals = document.querySelectorAll('.modal-overlay.open');
+        if (openModals.length) {
+          Telegram.WebApp.BackButton.show();
+        } else {
+          Telegram.WebApp.BackButton.hide();
+        }
+      } catch(e) {}
+    }
+
+    // Обёртка для всех открытий модалок с блокировкой скролла
+    var _origOpenModalFns = [];
 
     // ========== XSS ЗАЩИТА ==========
     function esc(str) {
@@ -501,17 +661,23 @@
     Telegram.WebApp.expand();
 
     async function init() {
+      setupGlobalHandlers();
+
       if (!TELEGRAM_ID) {
         document.getElementById('subtitle').textContent = 'Ошибка: не удалось получить данные Telegram';
         return;
       }
+      showLoading('Загрузка...');
       try {
         const resp = await fetch(API + '/user/me', { headers: authHeaders() });
         tgUser = await resp.json();
         document.getElementById('subtitle').textContent = tgUser.full_name || tgUser.username || '';
         await loadData();
+        hideLoading();
         renderTab('my');
+        haptic('light');
       } catch(e) {
+        hideLoading();
         console.error('Init error:', e);
         document.getElementById('subtitle').textContent = 'Ошибка загрузки';
       }
@@ -570,27 +736,60 @@
       if (profileFilter !== undefined) catalogProfileFilter = profileFilter;
       const container = document.getElementById('tabContent');
       container.innerHTML =
-        '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск..." oninput="debouncedSearch()"></div>' +
+        '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию, организатору, профилю..." oninput="debouncedSearch()"></div>' +
         '<div class="filter-chips" id="catalogChips"></div>' +
-        '<div id="catalogResults"></div>';
+        '<div class="filter-chips" id="catalogLevelChips"></div>' +
+        '<div id="catalogResults"></div>' +
+        '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:12px 0 20px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(15,15,26,0) 0%, rgba(15,15,26,1) 40%)">' +
+          '<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedFromCatalog()">+ Добавить выбранные</button>' +
+        '</div>';
       renderCatalogChips();
+      renderCatalogLevelChips();
       renderCatalogResults();
     }
 
     function renderCatalogChips() {
       const el = document.getElementById('catalogChips');
       if (!el) return;
-      var chips = ['', 'математика', 'информатика', 'физика', 'биология', 'химия'];
-      var labels = { '': 'Все', 'математика': 'Математика', 'информатика': 'Информатика', 'физика': 'Физика', 'биология': 'Биология', 'химия': 'Химия' };
-      el.innerHTML = chips.map(function(c) {
+      var profiles = new Set();
+      catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
+      var profileList = [''].concat(Array.from(profiles).sort());
+      var labels = { '': 'Все' };
+      profileList.forEach(function(p) { if (p) labels[p] = p; });
+      el.innerHTML = profileList.map(function(c) {
         var active = catalogProfileFilter === c || (!catalogProfileFilter && !c);
-        return '<button class="chip' + (active ? ' active' : '') + '" data-profile="' + c + '" onclick="filterCatalogProfile(\'' + c + '\')">' + labels[c] + '</button>';
+        var label = labels[c] || c;
+        return '<button class="chip' + (active ? ' active' : '') + '" onclick="filterCatalogProfile(\'' + esc(c) + '\')">' + esc(label) + '</button>';
+      }).join('');
+    }
+
+    function renderCatalogLevelChips() {
+      const el = document.getElementById('catalogLevelChips');
+      if (!el) return;
+      var levels = [''].concat(Array.from(new Set(
+        catalog.reduce(function(acc, o) {
+          (o.profiles || []).forEach(function(p) { if (p.level) acc.push(p.level); });
+          return acc;
+        }, [])
+      )).sort());
+      var labels = { '': 'Любой уровень', 1: 'Ур. 1', 2: 'Ур. 2', 3: 'Ур. 3' };
+      el.innerHTML = levels.map(function(l) {
+        var active = (catalogLevelFilter === l) || (!catalogLevelFilter && !l);
+        return '<button class="chip' + (active ? ' active' : '') + '" onclick="filterCatalogLevel(' + (l ? "'" + l + "'" : "''") + ')">' + (labels[l] || 'Ур. ' + l) + '</button>';
       }).join('');
     }
 
     function filterCatalogProfile(profile) {
       catalogProfileFilter = profile;
       renderCatalogChips();
+      renderCatalogLevelChips();
+      renderCatalogResults();
+    }
+
+    function filterCatalogLevel(level) {
+      catalogLevelFilter = level;
+      renderCatalogChips();
+      renderCatalogLevelChips();
       renderCatalogResults();
     }
 
@@ -615,8 +814,16 @@
       if (catalogProfileFilter) {
         items = items.filter(function(o) { return profileMatchesFilter(o.profiles, catalogProfileFilter); });
       }
+      if (catalogLevelFilter) {
+        items = items.filter(function(o) { return (o.profiles || []).some(function(p) { return p.level === parseInt(catalogLevelFilter); }); });
+      }
       if (q) {
-        items = items.filter(function(o) { return o.name.toLowerCase().indexOf(q) !== -1 || (o.organizer || '').toLowerCase().indexOf(q) !== -1; });
+        items = items.filter(function(o) {
+          if (o.name.toLowerCase().indexOf(q) !== -1) return true;
+          if ((o.organizer || '').toLowerCase().indexOf(q) !== -1) return true;
+          if ((o.profiles || []).some(function(p) { return p.name.toLowerCase().indexOf(q) !== -1; })) return true;
+          return false;
+        });
       }
       items.sort(function(a, b) { return a.name.localeCompare(b.name); });
 
@@ -655,12 +862,34 @@
 
     // ========== ADD FROM CATALOG ==========
     document.getElementById('addBtn').addEventListener('click', function() {
+      resetAddModalView();
       document.getElementById('addModal').classList.add('open');
-      searchCatalog();
+      bodyScrollLock(true);
+      updateBackButton();
     });
 
     function closeAddModal() {
+      resetAddModalView();
       document.getElementById('addModal').classList.remove('open');
+    }
+
+    function resetAddModalView() {
+      // Восстанавливаем стандартный вид каталога
+      document.getElementById('addModalBody').innerHTML =
+        '<div class="search-bar">' +
+          '<input type="text" id="catalogSearch" placeholder="Поиск..." oninput="searchCatalog()">' +
+        '</div>' +
+        '<div class="filter-chips">' +
+          '<button class="chip active" onclick="filterAddCatalog(\'all\', this)">Все</button>' +
+          '<button class="chip" onclick="filterAddCatalog(\'level1\', this)">Ур. 1</button>' +
+          '<button class="chip" onclick="filterAddCatalog(\'level2\', this)">Ур. 2</button>' +
+          '<button class="chip" onclick="filterAddCatalog(\'level3\', this)">Ур. 3</button>' +
+        '</div>';
+      document.getElementById('catalogList').style.display = '';
+      document.getElementById('catalogFooter').style.display = '';
+      document.getElementById('addDetailView').style.display = 'none';
+      addFilter = 'all';
+      searchCatalog();
     }
 
     function filterAddCatalog(level, btn) {
@@ -683,20 +912,38 @@
       document.getElementById('catalogList').innerHTML = items.length
         ? items.map(function(o) {
             var allProfiles = o.profiles || [];
-            return '<div class="olympiad-card" onclick="openAddDetailModal(catalog.find(function(x) { return x.id === \'' + esc(o.id) + '\'; }))">' +
-              '<div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
-              '<div class="meta">' +
-              allProfiles.map(function(p) {
-                var badges = '<span class="badge level">Ур. ' + p.level + '</span>' + (p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '') + (p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '');
-                return '<div style="font-size:12px;color:var(--text);margin:2px 0">' + esc(p.name) + ' ' + badges + '</div>';
-              }).join('') +
-              '</div></div>';
+            var hasBvi = allProfiles.some(function(p) { return p.benefits && p.benefits['БВИ']; });
+            var has100 = allProfiles.some(function(p) { return p.benefits && p.benefits['100_баллов']; });
+            var levels = [...new Set(allProfiles.map(function(p) { return p.level; }).filter(Boolean))].sort().join(', ');
+            var profHtml = '<div class="profiles-list" style="margin-top:10px">';
+            allProfiles.forEach(function(p) {
+              var levelBadge = p.level ? '<span class="badge level">Ур. ' + p.level + '</span>' : '';
+              var bviBadge = p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '';
+              var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '';
+              profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer">' +
+                '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color:var(--primary)"> ' +
+                '<span>' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
+                '</label>';
+            });
+            profHtml += '</div>';
+            return '<div class="olympiad-card" style="cursor:default;padding-bottom:8px">' +
+              '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
+              (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
+              (hasBvi || has100 ? '<div class="meta" style="margin-top:6px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
+              profHtml +
+              '</div>';
           }).join('')
         : '<div class="empty-state">Ничего не найдено</div>';
     }
 
+    function addDetailGoBack() {
+      document.getElementById('addDetailView').style.display = 'none';
+      document.getElementById('addModalBody').style.display = '';
+      document.getElementById('catalogList').style.display = '';
+      document.getElementById('catalogFooter').style.display = '';
+    }
+
     function openAddDetailModal(o) {
-      var modal = document.getElementById('addModal');
       var allProfiles = o.profiles || [];
 
       var profilesHtml = allProfiles.map(function(p) {
@@ -729,28 +976,43 @@
           '</div>';
       }).join('');
 
-      document.getElementById('addModalBody').innerHTML =
+      // Прячем каталог, показываем детали
+      document.getElementById('addModalBody').style.display = 'none';
+      document.getElementById('catalogList').style.display = 'none';
+      document.getElementById('catalogFooter').style.display = 'none';
+
+      var dv = document.getElementById('addDetailView');
+      dv.style.display = 'block';
+      dv.innerHTML =
+        '<button class="btn btn-outline btn-sm back-btn" onclick="addDetailGoBack()">← Назад</button>' +
         '<div style="margin-bottom:12px">' +
           '<h3 style="font-size:18px;font-weight:700;margin-bottom:4px">' + esc(o.name) + '</h3>' +
           '<div style="font-size:13px;color:var(--text-dim)">' + esc(o.organizer || '') + '</div></div>' +
         '<div class="section-title">Выберите направление</div>' +
         profilesHtml +
-        '<div style="display:flex;gap:8px;margin-top:8px">' +
+        '<div style="display:flex;gap:8px;margin-top:8px;margin-bottom:12px">' +
           '<a class="btn btn-outline btn-sm" href="' + esc(o.registration_url || o.url) + '" target="_blank" rel="noopener">' + ICONS.external + ' Сайт</a></div>';
-      modal.classList.add('open');
     }
 
-    async function addSelectedProfiles() {
-      var checked = document.querySelectorAll('.profile-chk:checked');
+    // Показываем/скрываем кнопку "Добавить" на вкладке Каталог при клике по чекбоксам
+    document.addEventListener('change', function(e) {
+      if (e.target.classList.contains('profile-chk')) {
+        var footer = document.getElementById('catalogTabFooter');
+        if (footer) {
+          var checked = document.querySelectorAll('#catalogResults .profile-chk:checked').length;
+          footer.style.display = checked > 0 ? '' : 'none';
+        }
+      }
+    });
+
+    async function batchAddProfiles(elements) {
       var ids = [];
-      checked.forEach(function(cb) {
+      elements.forEach(function(cb) {
         ids.push({ oid: cb.getAttribute('data-oid'), slug: cb.getAttribute('data-slug') });
       });
-      if (ids.length === 0) { showToast('Выберите хотя бы один профиль'); return; }
+      if (ids.length === 0) return;
 
-      // Disable button to prevent double-submit
-      var btn = document.querySelector('.catalog-footer .btn');
-      if (btn) { btn.disabled = true; btn.textContent = 'Добавление...'; }
+      haptic('medium');
 
       var ok = 0, fail = 0;
       for (var i = 0; i < ids.length; i++) {
@@ -766,15 +1028,36 @@
           else { fail++; }
         } catch(e) { fail++; }
       }
-      if (btn) { btn.disabled = false; btn.textContent = '+ Добавить выбранные'; }
-      closeAddModal();
       if (fail === 0) { showToast('Добавлено: ' + ok); }
       else { showToast('Добавлено: ' + ok + ', ошибок: ' + fail); }
+      hapticNotify(fail === 0 ? 'success' : 'warning');
       await loadData();
+      // Переключаем на "Мои"
+      document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+      document.querySelector('[data-tab="my"]').classList.add('active');
       renderTab('my');
     }
 
+    async function addSelectedFromCatalog() {
+      var checked = document.querySelectorAll('#catalogResults .profile-chk:checked');
+      if (checked.length === 0) { showToast('Выберите хотя бы один профиль'); return; }
+      haptic('medium');
+      await batchAddProfiles(checked);
+    }
+
+    async function addSelectedProfiles() {
+      var checked = document.querySelectorAll('#catalogList .profile-chk:checked');
+      if (checked.length === 0) { showToast('Выберите хотя бы один профиль'); return; }
+      haptic('medium');
+      var btn = document.querySelector('.catalog-footer .btn');
+      if (btn) { btn.disabled = true; btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px"></div> Добавление...'; }
+      await batchAddProfiles(checked);
+      closeAddModal();
+    }
+
     async function addOlympiad(olympiadId, profileSlug) {
+      haptic('light');
+      showLoading('Добавление...');
       try {
         const h = authHeaders();
         h['Content-Type'] = 'application/json';
@@ -783,15 +1066,18 @@
           headers: h,
           body: JSON.stringify({ olympiad_id: olympiadId, profile_slug: profileSlug })
         });
+        hideLoading();
         if (!resp.ok) {
           var err = await resp.json();
           showToast(err.detail || 'Ошибка');
           return;
         }
+        hapticNotify('success');
         closeAddModal();
         await loadData();
         renderTab('my');
       } catch(e) {
+        hideLoading();
         showToast('Ошибка при добавлении');
       }
     }
@@ -806,7 +1092,16 @@
       }
 
       var order = { won: 0, passed_round: 1, registered: 2, participating: 3, planned: 4 };
-      var sorted = myOlympiads.slice().sort(function(a, b) { return (order[a.status] || 99) - (order[b.status] || 99); });
+      var sorted = myOlympiads.slice().sort(function(a, b) {
+        var statusDiff = (order[a.status] || 99) - (order[b.status] || 99);
+        if (statusDiff !== 0) return statusDiff;
+        // Внутри группы — по ближайшему дедлайну
+        var nextA = findNextStage(a.stages);
+        var nextB = findNextStage(b.stages);
+        var dateA = nextA ? new Date(nextA.date_start || nextA.date_end || 0).getTime() : 9999999999999;
+        var dateB = nextB ? new Date(nextB.date_start || nextB.date_end || 0).getTime() : 9999999999999;
+        return dateA - dateB;
+      });
 
       container.innerHTML = sorted.map(function(o) {
         var nextStage = findNextStage(o.stages);
@@ -827,7 +1122,11 @@
     function findNextStage(stages) {
       var upcoming = stages.filter(function(s) { return !s.is_completed && (s.date_start || s.date_end); });
       if (!upcoming.length) return null;
-      return upcoming.sort(function(a, b) { return (a.date_start || a.date_end || '').localeCompare(b.date_start || b.date_end || ''); })[0];
+      return upcoming.sort(function(a, b) {
+        var da = new Date(a.date_start || a.date_end || 0).getTime();
+        var db = new Date(b.date_start || b.date_end || 0).getTime();
+        return da - db;
+      })[0];
     }
 
     function renderNextStageInfo(stage, daysLeft) {
@@ -835,7 +1134,7 @@
       var cls = 'deadline-later';
       var urgency = '';
       if (daysLeft !== null) {
-        if (daysLeft < 0) { cls = 'deadline-urgent'; urgency = 'ПРОШЁЛ'; }
+        if (daysLeft < 0) { cls = 'deadline-urgent'; urgency = 'Просрочено'; }
         else if (daysLeft <= 7) { cls = 'deadline-urgent'; urgency = daysLeft + ' дн.'; }
         else if (daysLeft <= 30) { cls = 'deadline-soon'; urgency = daysLeft + ' дн.'; }
       }
@@ -850,8 +1149,10 @@
 
       document.getElementById('modalTitle').textContent = o.name;
       document.getElementById('detailModal').classList.add('open');
+      bodyScrollLock(true);
+      updateBackButton();
 
-      var stagesHtml = o.stages.map(function(s) {
+      var stagesHtml = o.stages.map(function(s, idx) {
         var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' - ');
         var days = s.date_start ? daysUntil(s.date_start) : null;
         var daysStr = '';
@@ -860,7 +1161,17 @@
           else if (days <= 7) daysStr = '<span style="color:var(--red);font-size:11px">' + days + ' дн.</span>';
           else daysStr = '<span style="color:var(--text-dim);font-size:11px">' + days + ' дн.</span>';
         }
-        return '<div class="stage-item"><div class="stage-name"><span style="color:' + (s.is_completed ? 'var(--green)' : 'var(--yellow)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' + esc(s.name) + (s.result ? '<span style="color:var(--green);font-size:11px"> (' + esc(s.result) + ')</span>' : '') + '</div><div style="text-align:right"><div class="date">' + (dateStr || '-') + '</div>' + daysStr + '</div></div>';
+        var editBtn = '<button class="btn-link" style="font-size:11px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + idx + ')" title="Редактировать">✎</button>';
+        var delBtn = '<button class="btn-link" style="font-size:11px;color:var(--red)" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" title="Удалить">✕</button>';
+        return '<div class="stage-item">' +
+          '<div class="stage-name">' +
+          '<span style="color:' + (s.is_completed ? 'var(--green)' : 'var(--yellow)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' +
+          esc(s.name) + (s.result ? ' <span style="color:var(--green);font-size:11px">(' + esc(s.result) + ')</span>' : '') +
+          '</div>' +
+          '<div style="text-align:right;display:flex;align-items:center;gap:4px">' +
+          editBtn + delBtn +
+          '<div><div class="date">' + (dateStr || '-') + '</div>' + daysStr + '</div>' +
+          '</div></div>';
       }).join('');
 
       document.getElementById('modalBody').innerHTML =
@@ -883,6 +1194,8 @@
     }
 
     async function updateStatus(entryId, status) {
+      haptic('medium');
+      showLoading('Обновление статуса...');
       try {
         const h = authHeaders();
         h['Content-Type'] = 'application/json';
@@ -890,25 +1203,37 @@
           method: 'POST', headers: h,
           body: JSON.stringify({ status: status })
         });
+        hideLoading();
         showToast('Статус обновлён');
+        hapticNotify('success');
         await loadData();
         openDetail(entryId);
-      } catch(e) { showToast('Ошибка'); }
+      } catch(e) {
+        hideLoading();
+        showToast('Ошибка');
+      }
     }
 
     async function deleteOlympiad(entryId) {
-      if (!confirm('Удалить олимпиаду из списка?')) return;
-      try {
-        const h = authHeaders();
-        h['Content-Type'] = 'application/json';
-        await fetch(API + '/my-olympiads/' + entryId, {
-          method: 'DELETE', headers: h
-        });
-        showToast('Удалено');
-        closeModal();
-        await loadData();
-        renderTab('my');
-      } catch(e) { showToast('Ошибка'); }
+      openConfirm(
+        'Удалить олимпиаду',
+        'Вы уверены, что хотите удалить эту олимпиаду из списка? Все этапы будут удалены.',
+        'Удалить',
+        async function() {
+          try {
+            const h = authHeaders();
+            h['Content-Type'] = 'application/json';
+            await fetch(API + '/my-olympiads/' + entryId, {
+              method: 'DELETE', headers: h
+            });
+            showToast('Удалено');
+            closeModal();
+            await loadData();
+            renderTab('my');
+            hapticNotify('success');
+          } catch(e) { showToast('Ошибка при удалении'); }
+        }
+      );
     }
 
     // ========== STAGE MODAL (вместо prompt) ==========
@@ -917,11 +1242,42 @@
       document.getElementById('stageNameInput').value = '';
       document.getElementById('stageStartInput').value = '';
       document.getElementById('stageEndInput').value = '';
+      // Сброс убран: старый скрытый инпут для completed/result — добавляем новые
+      var existingCompleted = document.getElementById('stageCompletedInput');
+      if (existingCompleted) existingCompleted.checked = false;
+      var existingResult = document.getElementById('stageResultInput');
+      if (existingResult) existingResult.value = '';
+
       document.getElementById('stageModal').classList.add('open');
+      bodyScrollLock(true);
+      updateBackButton();
+      document.getElementById('stageNameInput').focus();
+    }
+
+    function openEditStageModal(entryId, stageIdx) {
+      var o = myOlympiads.find(function(x) { return x.id == entryId; });
+      if (!o || !o.stages[stageIdx]) return;
+      var s = o.stages[stageIdx];
+      currentDetailEntryId = entryId;
+      document.getElementById('stageNameInput').value = s.name;
+      document.getElementById('stageStartInput').value = s.date_start ? s.date_start.slice(0,10) : '';
+      document.getElementById('stageEndInput').value = s.date_end ? s.date_end.slice(0,10) : '';
+      var sc = document.getElementById('stageCompletedInput');
+      if (sc) sc.checked = s.is_completed || false;
+      var sr = document.getElementById('stageResultInput');
+      if (sr) sr.value = s.result || '';
+
+      document.getElementById('stageModal').classList.add('open');
+      if (sc) sc.dataset.editStageId = stageIdx;
+      if (sc) sc.dataset.editEntryId = entryId;
+      bodyScrollLock(true);
+      updateBackButton();
     }
 
     function closeStageModal() {
       document.getElementById('stageModal').classList.remove('open');
+      bodyScrollLock(false);
+      updateBackButton();
     }
 
     async function submitStage() {
@@ -929,23 +1285,68 @@
       if (!name) { showToast('Введите название этапа'); return; }
       var start = document.getElementById('stageStartInput').value || null;
       var end = document.getElementById('stageEndInput').value || null;
+      var isCompleted = document.getElementById('stageCompletedInput').checked;
+      var result = document.getElementById('stageResultInput').value.trim() || null;
+
+      // Валидация дат
+      if (start && end && start > end) {
+        showToast('Дата начала не может быть позже даты окончания');
+        return;
+      }
+
+      // Определяем edit или create
+      var sc = document.getElementById('stageCompletedInput');
+      var editStageId = sc ? sc.dataset.editStageId : undefined;
+      var editEntryId = sc ? sc.dataset.editEntryId : undefined;
+      var isEdit = editStageId !== undefined && editStageId !== '';
 
       try {
         const h = authHeaders();
         h['Content-Type'] = 'application/json';
-        await fetch(API + '/my-olympiads/' + currentDetailEntryId + '/stage', {
-          method: 'POST', headers: h,
-          body: JSON.stringify({ name: name, date_start: start, date_end: end })
-        });
-        showToast('Этап добавлен');
+        var body = { name: name, date_start: start, date_end: end, is_completed: isCompleted, result: result };
+
+        if (isEdit) {
+          await fetch(API + '/my-olympiads/' + editEntryId + '/stage/' + editStageId, {
+            method: 'PATCH', headers: h, body: JSON.stringify(body)
+          });
+          showToast('Этап обновлён');
+        } else {
+          await fetch(API + '/my-olympiads/' + currentDetailEntryId + '/stage', {
+            method: 'POST', headers: h, body: JSON.stringify(body)
+          });
+          showToast('Этап добавлен');
+        }
+
+        // Сбрасываем edit-флаги
+        if (sc) { delete sc.dataset.editStageId; delete sc.dataset.editEntryId; }
+
         closeStageModal();
         await loadData();
         openDetail(currentDetailEntryId);
-      } catch(e) { showToast('Ошибка'); }
+        hapticNotify('success');
+      } catch(e) { showToast('Ошибка при сохранении этапа'); }
+    }
+
+    async function deleteStage(entryId, stageId) {
+      openConfirm('Удалить этап', 'Вы уверены, что хотите удалить этот этап?', 'Удалить', async function() {
+        try {
+          const h = authHeaders();
+          h['Content-Type'] = 'application/json';
+          await fetch(API + '/my-olympiads/' + entryId + '/stage/' + stageId, {
+            method: 'DELETE', headers: h
+          });
+          showToast('Этап удалён');
+          await loadData();
+          openDetail(entryId);
+          hapticNotify('success');
+        } catch(e) { showToast('Ошибка при удалении этапа'); }
+      });
     }
 
     function closeModal() {
       document.getElementById('detailModal').classList.remove('open');
+      bodyScrollLock(false);
+      updateBackButton();
     }
 
     async function syncToCalendar(entryId) {
@@ -984,7 +1385,7 @@
       el.textContent = msg;
       el.classList.add('show');
       clearTimeout(el._t);
-      el._t = setTimeout(function() { el.classList.remove('show'); }, 2500);
+      el._t = setTimeout(function() { el.classList.remove('show'); }, 3500);
     }
 
     // ========== START ==========
