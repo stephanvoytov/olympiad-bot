@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# Database
+*.db
+*.sqlite
+
+# Logs
+logs/
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.env
+
+# Alembic
+alembic/versions/*.pyc
+
+# Temp / one-off scripts
+.tmp/
+fix_caddy*.py
+patch_caddy*.py
+Caddyfile.*
+run.py
+
+# Config
+config.local.yaml
+config.local.json
+*.local.*
+settings*.cfg

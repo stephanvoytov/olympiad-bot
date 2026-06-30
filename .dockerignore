@@ -1,0 +1,13 @@
+__pycache__
+*.pyc
+*.pyo
+*.db
+.env
+.venv
+venv
+logs/
+*.log
+.git
+.gitignore
+check_*.py
+settings_template.cfg

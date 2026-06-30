@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: olympiad-postgres
+    environment:
+      POSTGRES_USER: ${PG_USER:-olympiad}
+      POSTGRES_PASSWORD: ${PG_PASSWORD:-olympiad_secret}
+      POSTGRES_DB: ${PG_DB:-olympiadb}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"
+    restart: unless-stopped
+    networks:
+      - olympiad-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PG_USER:-olympiad} -d ${PG_DB:-olympiadb}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  olympiad-bot:
+    build: .
+    container_name: olympiad-bot
+    ports:
+      - "8001:8000"
+    env_file:
+      - .env
+    environment:
+      - APP_URL=${APP_URL:-https://olympiad.info.gf}
+      - USE_WEBHOOK=${USE_WEBHOOK:-false}
+      - DATABASE_URL=postgresql://${PG_USER:-olympiad}:${PG_PASSWORD:-olympiad_secret}@postgres:5432/${PG_DB:-olympiadb}
+    volumes:
+      - ./data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - olympiad-network
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; exit(0 if urllib.request.urlopen('http://localhost:8000/api/olympiads').getcode() == 200 else 1)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  pg-backup:
+    image: postgres:16-alpine
+    container_name: olympiad-pg-backup
+    environment:
+      PG_USER: ${PG_USER:-olympiad}
+      PG_PASSWORD: ${PG_PASSWORD:-olympiad_secret}
+      PG_DB: ${PG_DB:-olympiadb}
+      PG_HOST: postgres
+    volumes:
+      - ./backups:/backups
+      - ./scripts/backup.sh:/usr/local/bin/backup.sh:ro
+    entrypoint: |
+      sh -c "
+      echo '0 */6 * * * /usr/local/bin/backup.sh' > /etc/crontabs/root;
+      crond -f -l 2
+      "
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - olympiad-network
+
+volumes:
+  pgdata:
+
+networks:
+  olympiad-network:
+    external: true
