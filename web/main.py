@@ -7,11 +7,12 @@ import hmac
 import json
 import logging
 import os
+import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from urllib.parse import parse_qs
 
-from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -21,11 +22,19 @@ from pydantic import BaseModel, Field
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 
 from bot.config import BOT_TOKEN
 from database.db import get_db
 from database.models import Olympiad, OlympiadProfile, Stage, User, UserOlympiad
+
+# ─────────────────────────────── CACHE ───────────────────────────────
+_INDEX_HTML: str | None = None
+_INDEX_ETAG: str | None = None
+_CATALOG_CACHE: list | None = None
+_CATALOG_ETAG: str | None = None
+_CATALOG_MTIME: float = 0
+_INDEX_MTIME: float = 0
 
 logger = logging.getLogger(__name__)
 
@@ -34,10 +43,65 @@ logger = logging.getLogger(__name__)
 ALLOWED_ORIGINS = os.getenv("CORS_ORIGINS", "https://olympiad.info.gf").split(",")
 
 
+# ─────────────────────────────── CACHE HELPERS ───────────────────────────────
+
+
+def _load_index_html():
+    """Load index.html into memory cache, return (content, etag)."""
+    global _INDEX_HTML, _INDEX_ETAG, _INDEX_MTIME
+    try:
+        mtime = os.path.getmtime("static/index.html")
+        if mtime > _INDEX_MTIME:
+            with open("static/index.html", encoding="utf-8") as f:
+                _INDEX_HTML = f.read()
+            _INDEX_ETAG = hashlib.md5(_INDEX_HTML.encode()).hexdigest()[:16]
+            _INDEX_MTIME = mtime
+            logger.info("Index cache refreshed")
+    except OSError:
+        pass
+    return _INDEX_HTML or "", _INDEX_ETAG or ""
+
+
+def _load_catalog_cache(db: Session):
+    """Load catalog into memory cache."""
+    global _CATALOG_CACHE, _CATALOG_ETAG
+    if _CATALOG_CACHE is not None:
+        return _CATALOG_CACHE, _CATALOG_ETAG
+    result = _build_catalog(db)
+    _CATALOG_CACHE = result
+    _CATALOG_ETAG = hashlib.md5(json.dumps(result, sort_keys=True, default=str).encode()).hexdigest()[:16]
+    logger.info(f"Catalog cache built: {len(result)} olympiads")
+    return result, _CATALOG_ETAG
+
+
+def _invalidate_catalog_cache():
+    """Invalidate catalog cache (call after seed)."""
+    global _CATALOG_CACHE, _CATALOG_ETAG
+    _CATALOG_CACHE = None
+    _CATALOG_ETAG = None
+
+
+def _make_cache_headers(etag: str | None = None, max_age: int = 0) -> dict:
+    """Build Cache-Control/ETag headers."""
+    headers = {}
+    if etag:
+        headers["ETag"] = etag
+    if max_age:
+        headers["Cache-Control"] = f"public, max-age={max_age}"
+    else:
+        headers["Cache-Control"] = "no-cache"
+    return headers
+
+
+# ─────────────────────────────── LIFESPAN ───────────────────────────────
+
+
 @asynccontextmanager
 async def lifespan(application: FastAPI):
-    """Lifespan: seed data on startup, cleanup on shutdown."""
+    """Lifespan: seed data on startup, preload minimal caches."""
     _seed_olympiads()
+    # Preload index.html only (tiny, ~30KB)
+    _load_index_html()
     yield
 
 
@@ -227,9 +291,12 @@ async def health():
 
 
 @app.get("/", response_class=HTMLResponse)
-async def mini_app_index():
-    with open("static/index.html", encoding="utf-8") as f:
-        return HTMLResponse(f.read())
+async def mini_app_index(request: Request):
+    content, etag = _load_index_html()
+    # Return 304 Not Modified if ETag matches
+    if etag and request.headers.get("if-none-match") == etag:
+        return Response(status_code=304, headers=_make_cache_headers(etag, 0))
+    return HTMLResponse(content=content, headers=_make_cache_headers(etag, 0))
 
 
 # ─────────────────────────────── USER ───────────────────────────────
@@ -269,30 +336,12 @@ async def get_user(
 # ─────────────────────────────── CATALOG ───────────────────────────────
 
 
-@app.get("/api/olympiads")
-async def list_olympiads(
-    search: str | None = Query(None),
-    profile: str | None = Query(None),
-    level: int | None = Query(None),
-    db: Session = Depends(get_db),
-):
-    query = db.query(Olympiad)
-    if search:
-        query = query.filter(
-            Olympiad.name.ilike(f"%{search}%") | Olympiad.organizer.ilike(f"%{search}%")
-        )
-    olympiads = query.all()
+def _build_catalog(db: Session) -> list:
+    """Build full catalog from database (used by cache)."""
+    olympiads = db.query(Olympiad).all()
     result = []
     for o in olympiads:
-        profiles = o.olympiad_profiles
-        if profile:
-            profiles = [
-                p
-                for p in profiles
-                if profile.lower() in p.name.lower() or profile.lower() in p.slug.lower()
-            ]
-        if level:
-            profiles = [p for p in profiles if p.level == level]
+        profiles = [_serialize_profile(p) for p in o.olympiad_profiles]
         if profiles:
             result.append(
                 {
@@ -302,9 +351,58 @@ async def list_olympiads(
                     "url": o.url,
                     "registration_url": o.registration_url or o.url,
                     "tags": o.tags or [],
-                    "profiles": [_serialize_profile(p) for p in profiles],
+                    "profiles": profiles,
                 }
             )
+    return result
+
+
+@app.get("/api/olympiads")
+@limiter.limit("60/minute")
+async def list_olympiads(
+    request: Request,
+    search: str | None = Query(None),
+    profile: str | None = Query(None),
+    level: int | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    full_catalog, etag = _load_catalog_cache(db)
+    result = full_catalog
+
+    # Apply filters on cached data (no DB hit)
+    if search:
+        search_lower = search.lower()
+        result = [
+            o for o in result
+            if search_lower in o["name"].lower()
+            or (o["organizer"] and search_lower in o["organizer"].lower())
+        ]
+    if profile:
+        profile_lower = profile.lower()
+        result = [
+            o for o in result
+            if any(
+                profile_lower in p["name"].lower() or profile_lower in p["slug"].lower()
+                for p in o["profiles"]
+            )
+        ]
+    if level:
+        result = [
+            o for o in result
+            if any(p["level"] == level for p in o["profiles"])
+        ]
+
+    # If no filters, return full cached response with ETag
+    if not any([search, profile, level]):
+        client_etag = request.headers.get("if-none-match")
+        if client_etag == etag:
+            return Response(status_code=304, headers=_make_cache_headers(etag, 120))
+        return Response(
+            content=json.dumps(result, default=str),
+            media_type="application/json",
+            headers=_make_cache_headers(etag, 120),
+        )
+
     return result
 
 
@@ -320,6 +418,7 @@ async def get_olympiad_detail(olympiad_id: str, db: Session = Depends(get_db)):
 
 
 @app.get("/api/my-olympiads")
+@limiter.limit("30/minute")
 async def list_my_olympiads(
     request: Request,
     telegram_id: int | None = Query(None),
@@ -332,9 +431,38 @@ async def list_my_olympiads(
         except HTTPException:
             raise HTTPException(status_code=401, detail="Unauthorized")
 
-    user = db.query(User).filter(User.telegram_id == tid).first()
+    # Eager load olympiads + stages + olympiad_ref (3 queries total instead of N+1)
+    user = (
+        db.query(User)
+        .options(
+            selectinload(User.olympiads)
+            .selectinload(UserOlympiad.stages),
+            selectinload(User.olympiads)
+            .selectinload(UserOlympiad.olympiad_ref),
+        )
+        .filter(User.telegram_id == tid)
+        .first()
+    )
     if not user:
         return []
+
+    # Batch load all profiles for these olympiads
+    profile_keys = [(uo.olympiad_id, uo.profile_slug) for uo in user.olympiads if uo.profile_slug]
+    profiles_map: dict[tuple[str, str], OlympiadProfile | None] = {}
+    if profile_keys:
+        import itertools
+        olympiad_ids = set(k[0] for k in profile_keys)
+        slugs = set(k[1] for k in profile_keys)
+        batch_profiles = (
+            db.query(OlympiadProfile)
+            .filter(
+                OlympiadProfile.olympiad_id.in_(olympiad_ids),
+                OlympiadProfile.slug.in_(slugs),
+            )
+            .all()
+        )
+        for p in batch_profiles:
+            profiles_map[(p.olympiad_id, p.slug)] = p
 
     result = []
     for uo in user.olympiads:
@@ -350,7 +478,7 @@ async def list_my_olympiads(
             }
             for s in uo.stages
         ]
-        profile = _get_profile(olympiad.id, uo.profile_slug, db) if uo.profile_slug else None
+        profile = profiles_map.get((olympiad.id, uo.profile_slug)) if uo.profile_slug else None
         obj = {
             "id": uo.id,
             "olympiad_id": olympiad.id,
@@ -536,6 +664,7 @@ async def update_stage(
 
 
 @app.post("/api/my-olympiads/{entry_id}/status")
+@limiter.limit("30/minute")
 async def update_status(
     entry_id: int,
     body: UpdateStatusRequest,
@@ -556,6 +685,7 @@ async def update_status(
 
 
 @app.delete("/api/my-olympiads/{entry_id}")
+@limiter.limit("10/minute")
 async def delete_olympiad(
     entry_id: int,
     request: Request,
@@ -578,6 +708,7 @@ async def delete_olympiad(
 
 
 @app.get("/api/dashboard")
+@limiter.limit("30/minute")
 async def dashboard(
     request: Request,
     telegram_id: int | None = Query(None),
@@ -590,7 +721,18 @@ async def dashboard(
         except HTTPException:
             return {"total": 0, "by_status": {}, "upcoming_events": []}
 
-    user = db.query(User).filter(User.telegram_id == tid).first()
+    # Eager load olympiads + stages + olympiad_ref (3 queries instead of N+1)
+    user = (
+        db.query(User)
+        .options(
+            selectinload(User.olympiads)
+            .selectinload(UserOlympiad.stages),
+            selectinload(User.olympiads)
+            .selectinload(UserOlympiad.olympiad_ref),
+        )
+        .filter(User.telegram_id == tid)
+        .first()
+    )
     if not user:
         return {"total": 0, "by_status": {}, "upcoming_events": []}
 

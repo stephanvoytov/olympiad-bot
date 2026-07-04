@@ -29,10 +29,9 @@ def tg_keyboard():
         return None  # без кнопок — Telegram блокирует HTTP
 
     builder = InlineKeyboardBuilder()
-    if is_https:
-        builder.row(
-            InlineKeyboardButton(text="Панель управления", web_app=WebAppInfo(url=f"{APP_URL}/"))
-        )
+    builder.row(
+        InlineKeyboardButton(text="Панель управления", web_app=WebAppInfo(url=f"{APP_URL}/"))
+    )
     return builder.as_markup()
 
 

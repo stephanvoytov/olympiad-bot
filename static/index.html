@@ -724,22 +724,6 @@
       }
     }
 
-    function renderCatalogLevelChips() {
-      const el = document.getElementById('catalogLevelChips');
-      if (!el) return;
-      var levels = [''].concat(Array.from(new Set(
-        catalog.reduce(function(acc, o) {
-          (o.profiles || []).forEach(function(p) { if (p.level) acc.push(p.level); });
-          return acc;
-        }, [])
-      )).sort());
-      var labels = { '': 'Любой уровень', 1: 'Ур. 1', 2: 'Ур. 2', 3: 'Ур. 3' };
-      el.innerHTML = levels.map(function(l) {
-        var active = (catalogLevelFilter === l) || (!catalogLevelFilter && !l);
-        return '<button class="chip' + (active ? ' active' : '') + '" onclick="filterCatalogLevel(' + (l ? "'" + l + "'" : "''") + ')">' + (labels[l] || 'Ур. ' + l) + '</button>';
-      }).join('');
-    }
-
     function filterCatalogProfile(profile) {
       catalogProfileFilter = profile;
       renderCatalogFilter();
@@ -875,7 +859,7 @@
       var container = document.getElementById('tabContent');
       if (!myOlympiads.length) {
         container.innerHTML =
-          '<div class="empty-state"><h3>Нет добавленных олимпиад</h3><p>Нажмите +, чтобы добавить из каталога</p></div>';
+          '<div class="empty-state"><h3>Нет добавленных олимпиад</h3><p>Откройте вкладку «Каталог», выберите профили и нажмите «Добавить выбранные»</p></div>';
         return;
       }
 
@@ -949,7 +933,7 @@
           else if (days <= 7) daysStr = '<span style="color:var(--red);font-size:11px">' + days + ' дн.</span>';
           else daysStr = '<span style="color:var(--text-dim);font-size:11px">' + days + ' дн.</span>';
         }
-        var editBtn = '<button class="btn-link" style="font-size:11px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + idx + ')" title="Редактировать">✎</button>';
+        var editBtn = '<button class="btn-link" style="font-size:11px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + s.id + ')" title="Редактировать">✎</button>';
         var delBtn = '<button class="btn-link" style="font-size:11px;color:var(--red)" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" title="Удалить">✕</button>';
         return '<div class="stage-item">' +
           '<div class="stage-name">' +
@@ -987,11 +971,12 @@
       try {
         const h = authHeaders();
         h['Content-Type'] = 'application/json';
-        await fetch(API + '/my-olympiads/' + entryId + '/status', {
+        var resp = await fetch(API + '/my-olympiads/' + entryId + '/status', {
           method: 'POST', headers: h,
           body: JSON.stringify({ status: status })
         });
         hideLoading();
+        if (!resp.ok) { showToast('Ошибка обновления'); return; }
         showToast('Статус обновлён');
         hapticNotify('success');
         await loadData();
@@ -1042,10 +1027,11 @@
       document.getElementById('stageNameInput').focus();
     }
 
-    function openEditStageModal(entryId, stageIdx) {
+    function openEditStageModal(entryId, stageId) {
       var o = myOlympiads.find(function(x) { return x.id == entryId; });
-      if (!o || !o.stages[stageIdx]) return;
-      var s = o.stages[stageIdx];
+      if (!o) return;
+      var s = o.stages.find(function(st) { return st.id == stageId; });
+      if (!s) return;
       currentDetailEntryId = entryId;
       document.getElementById('stageNameInput').value = s.name;
       document.getElementById('stageStartInput').value = s.date_start ? s.date_start.slice(0,10) : '';
@@ -1056,7 +1042,7 @@
       if (sr) sr.value = s.result || '';
 
       document.getElementById('stageModal').classList.add('open');
-      if (sc) sc.dataset.editStageId = stageIdx;
+      if (sc) sc.dataset.editStageId = s.id;
       if (sc) sc.dataset.editEntryId = entryId;
       bodyScrollLock(true);
       updateBackButton();
