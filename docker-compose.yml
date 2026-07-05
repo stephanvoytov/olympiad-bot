@@ -31,6 +31,7 @@ services:
       - APP_URL=${APP_URL:-https://olympiad.info.gf}
       - USE_WEBHOOK=${USE_WEBHOOK:-false}
       - DATABASE_URL=postgresql://${PG_USER:-olympiad}:${PG_PASSWORD:-olympiad_secret}@postgres:5432/${PG_DB:-olympiadb}
+      - PYTHONMALLOC=malloc
     volumes:
       - ./data:/app/data
     depends_on:

@@ -38,6 +38,7 @@ RUN mkdir -p /app/data
 EXPOSE 8000
 
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONMALLOC=malloc
 
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 --start-period=15s \
     CMD python -c "import urllib.request; exit(0 if urllib.request.urlopen('http://localhost:8000/health').getcode() == 200 else 1)"
