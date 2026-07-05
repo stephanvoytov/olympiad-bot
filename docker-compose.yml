@@ -40,8 +40,8 @@ services:
     networks:
       - olympiad-network
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; exit(0 if urllib.request.urlopen('http://localhost:8000/api/olympiads').getcode() == 200 else 1)"]
-      interval: 30s
+      test: ["CMD", "python", "-c", "import urllib.request; exit(0 if urllib.request.urlopen('http://localhost:8000/health').getcode() == 200 else 1)"]
+      interval: 60s
       timeout: 10s
       retries: 3
       start_period: 15s
