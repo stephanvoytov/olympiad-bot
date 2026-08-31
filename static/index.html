@@ -247,11 +247,6 @@
       border-bottom: var(--border-size-1) solid var(--border);
     }
     .group-header:first-child { margin-top: 0; }
-    .group-header .group-icon {
-      width: 24px; height: 24px; border-radius: var(--radius-1);
-      background: var(--surface-hover); display: flex; align-items: center; justify-content: center;
-      font-size: var(--font-size-0); flex-shrink: 0;
-    }
     .group-header .group-count {
       margin-left: auto; background: var(--surface-hover);
       padding: 1px var(--size-2); border-radius: var(--radius-pill); font-size: var(--font-size-00);
@@ -377,10 +372,6 @@
       plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
       check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
       clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-      group_university: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10L2 7l10-5 10 5-10 3z"/><path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5"/><path d="M22 10v6"/></svg>',
-      group_direction: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4"/><path d="M12 18v4"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 9 15a1.65 1.65 0 0 0-1-1.51V13a2 2 0 0 1 0-4v-.49a1.65 1.65 0 0 0 1-1.51 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 13 9a1.65 1.65 0 0 0 1 1.51V11a2 2 0 0 1 0 4v.49a1.65 1.65 0 0 0-1 1.51z"/></svg>',
-      group_level: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><path d="M7 16v4"/><path d="M12 12v8"/><path d="M17 8v12"/></svg>',
-      group_benefits: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
     };
 
     // ========== HELPERS ==========
@@ -925,9 +916,7 @@
         var html = '';
         result.order.forEach(function(groupName) {
           var groupItems = result.groups[groupName];
-          var groupIconSvg = catalogGroupBy === 'university' ? ICONS.group_university : catalogGroupBy === 'direction' ? ICONS.group_direction : catalogGroupBy === 'level' ? ICONS.group_level : ICONS.group_benefits;
           html += '<div class="group-header">' +
-            '<div class="group-icon">' + groupIconSvg + '</div>' +
             '<span>' + esc(groupName) + '</span>' +
             '<span class="group-count">' + groupItems.length + '</span>' +
             '</div>';
