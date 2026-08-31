@@ -145,6 +145,11 @@ async def on_shutdown():
 async def main():
     await on_startup()
     try:
+        # Start background notifier (checks every 30 minutes)
+        from bot.notifier import notifier_loop
+        notifier_task = asyncio.create_task(notifier_loop(interval_minutes=30))
+        logger.info("Background notifier started (every 30 min)")
+
         if USE_WEBHOOK:
             import uvicorn
 

@@ -11,7 +11,7 @@ from aiogram import Bot
 
 from bot.config import BOT_TOKEN
 from database.db import SessionLocal
-from database.models import Stage, User, UserOlympiad
+from database.models import Olympiad, Stage, User, UserOlympiad
 
 logger = logging.getLogger(__name__)
 
@@ -71,14 +71,16 @@ async def check_and_notify():
             if days_left > user.notify_days_before:
                 continue
 
-            olympiad_name = uo.olympiad_ref.name
+            # Получаем название олимпиады
+            olympiad = db.query(Olympiad).filter(Olympiad.id == uo.olympiad_id).first()
+            olympiad_name = olympiad.name if olympiad else "Олимпиада"
 
             text = (
-                f"Напоминание\n\n"
-                f"Олимпиада: {olympiad_name}\n"
-                f"Этап: {stage.name}\n"
-                f"Дата: {target_date.strftime('%d.%m.%Y')}\n"
-                f"Осталось дней: {days_left}"
+                f"⏰ Напоминание\n\n"
+                f"📌 {olympiad_name}\n"
+                f"📅 {stage.name}\n"
+                f"📆 {target_date.strftime('%d.%m.%Y')}\n"
+                f"⏳ Осталось {days_left} дн."
             )
 
             await send_telegram_message(user.telegram_id, text)
