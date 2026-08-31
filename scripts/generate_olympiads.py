@@ -328,14 +328,14 @@ OLYMPIADS = [
 # Real data: official URLs (always set when known) + dates (only when verified).
 # Where dates are unknown — make_stages() is used as default placeholder.
 REAL_DATA = {
-    # 1. Финатлон
+# 1. Финатлон
     1: {
         "url": "https://olympiadnafr.ru/",
         "registration_url": "https://olympiadnafr.ru/",
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-15"},
-            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
-            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
+            {"name": "Регистрация", "date_start": "2026-09-01", "date_end": "2027-01-22"},
+            {"name": "Отборочный этап", "date_start": "2026-09-01", "date_end": "2027-01-22"},
+            {"name": "Заключительный этап", "date_start": "2027-03-06", "date_end": "2027-03-06"},
         ],
     },
     # 2. Формула единства / Третье тысячелетие
@@ -379,7 +379,7 @@ REAL_DATA = {
         "url": "https://vysprob.ru/",
         "registration_url": "https://vysprob.ru/",
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-08-20", "date_end": "2026-10-15"},
+            {"name": "Регистрация", "date_start": "2026-09-01", "date_end": "2026-10-15"},
             {"name": "Отборочный этап", "date_start": "2026-10-16", "date_end": "2026-12-15"},
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
         ],
@@ -399,14 +399,14 @@ REAL_DATA = {
         "url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
         "registration_url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
     },
-    # 12. Толстовская
+# 12. Толстовская
     12: {
         "url": "https://olymp.tsput.ru",
         "registration_url": "https://olymp.tsput.ru",
         "stages": [
-            {"name": "Регистрация", "date_start": "2025-12-01", "date_end": "2026-01-21"},
-            {"name": "Отборочный этап", "date_start": "2025-12-01", "date_end": "2026-01-21"},
-            {"name": "Заключительный этап", "date_start": "2026-01-25", "date_end": "2026-01-25"},
+            {"name": "Регистрация", "date_start": "2026-12-01", "date_end": "2027-01-20"},
+            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-20"},
+            {"name": "Заключительный этап", "date_start": "2027-01-25", "date_end": "2027-01-25"},
         ],
     },
     # 13. Юниор

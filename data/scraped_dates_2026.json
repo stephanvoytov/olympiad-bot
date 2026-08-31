@@ -172,16 +172,16 @@
     "name": "Всероссийская Сеченовская олимпиада школьников",
     "url": "https://olimpiada.ru/activity/5150",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5150\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5429,
-    "name": "Всероссийская Толстовская олимпиада школьников",
+    "name": "Всероссийская Толстовская олимпиада",
     "url": "https://olimpiada.ru/activity/5429",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5429\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 181,
@@ -292,11 +292,11 @@
   },
   {
     "id": 5022,
-    "name": "Герценовская олимпиада школьников",
+    "name": "Герценовские олимпиады школьников",
     "url": "https://olimpiada.ru/activity/5022",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5022\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 282,
@@ -473,35 +473,48 @@
   },
   {
     "id": 203,
-    "name": "Межрегиональные предметные олимпиады федерального государственного автономного образовательного учреждения высшего образования «Казанский (Приволжский) федеральный университет»",
+    "name": "Олимпиада Казанского федерального университета",
     "url": "https://olimpiada.ru/activity/203",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/203\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/203\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 240,
     "name": "Многопредметная олимпиада «Юные таланты»",
     "url": "https://olimpiada.ru/activity/240",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/240\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/240\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5018,
     "name": "Многопрофильная инженерная олимпиада «Звезда»",
     "url": "https://olimpiada.ru/activity/5018",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5018\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5018\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 130,
     "name": "Московская олимпиада школьников",
     "url": "https://olimpiada.ru/activity/130",
-    "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/130\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/130\", waiting until \"load\"\n"
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-15",
+        "date_end": "2026-11-22",
+        "raw": "15 окт...22 ноя"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": "2026-11-22",
+        "raw": "14...22 ноя"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 58,
@@ -590,11 +603,11 @@
   },
   {
     "id": 242,
-    "name": "Олимпиада по экономике в рамках международного экономического фестиваля школьников «Сибириада. Шаг в мечту»",
+    "name": "Олимпиада по экономике в рамках международного экономического фестиваля «Сибириада. Шаг в мечту»",
     "url": "https://olimpiada.ru/activity/242",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/242\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 176,
@@ -661,16 +674,16 @@
     "name": "Олимпиада школьников «Ломоносов»",
     "url": "https://olimpiada.ru/activity/146",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_TIMED_OUT at https://olimpiada.ru/activity/146\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/146\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 5332,
-    "name": "Олимпиада школьников «Надежда энергетики»",
+    "name": "Олимпиада школьников «Надежда энергетики» по физике",
     "url": "https://olimpiada.ru/activity/5332",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5332\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 357,
@@ -763,11 +776,11 @@
   },
   {
     "id": 196,
-    "name": "Олимпиада школьников «Шаг в будущее»",
+    "name": "Олимпиада «Шаг в будущее»",
     "url": "https://olimpiada.ru/activity/196",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/196\", waiting until \"load\"\n"
+    "status": "not_held",
+    "notes": []
   },
   {
     "id": 4337,
@@ -779,11 +792,11 @@
   },
   {
     "id": 5371,
-    "name": "Олимпиада школьников по программированию «ТехноКубок»",
+    "name": "Олимпиада по программированию «Технокубок»",
     "url": "https://olimpiada.ru/activity/5371",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5371\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5006,
@@ -803,19 +816,32 @@
   },
   {
     "id": 5726,
-    "name": "Олимпиада школьников федерального государственного бюджетного образовательного учреждения высшего образования «Всероссийский государственный университет юстиции (РПА Минюста России)» «В мир права»",
+    "name": "Олимпиада школьников «В мир права»",
     "url": "https://olimpiada.ru/activity/5726",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5726\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 66,
     "name": "Олимпиада Юношеской математической школы",
     "url": "https://olimpiada.ru/activity/66",
-    "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/66\", waiting until \"load\"\n"
+    "stages": [
+      {
+        "name": "Первый отборочный этап",
+        "date_start": "2026-09-13",
+        "date_end": "2026-09-13",
+        "raw": "13 сен"
+      },
+      {
+        "name": "Второй отборочный этап",
+        "date_start": "2026-10-17",
+        "date_end": "2026-10-17",
+        "raw": "17 окт"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 237,
@@ -846,11 +872,11 @@
   },
   {
     "id": 5177,
-    "name": "Открытая олимпиада школьников",
+    "name": "Открытые олимпиады школьников Университета ИТМО",
     "url": "https://olimpiada.ru/activity/5177",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5177\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 23,
@@ -870,19 +896,19 @@
   },
   {
     "id": 243,
-    "name": "Открытая региональная межвузовская олимпиада школьников (ОРМО) с международным участием",
+    "name": "Открытая региональная межвузовская олимпиада школьников",
     "url": "https://olimpiada.ru/activity/243",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/243\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/243\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5353,
     "name": "Открытая химическая олимпиада",
     "url": "https://olimpiada.ru/activity/5353",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5353\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5353\", waiting until \"load\"\n"
+    "status": "schedule_upcoming",
+    "notes": []
   },
   {
     "id": 5516,
@@ -921,8 +947,8 @@
     "name": "Региональный конкурс школьников Челябинского университетского образовательного округа",
     "url": "https://olimpiada.ru/activity/244",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/244\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/244\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 287,
@@ -942,19 +968,19 @@
   },
   {
     "id": 5793,
-    "name": "Северо-Восточная олимпиада школьников",
+    "name": "Северо-Восточная олимпиада по родным языкам",
     "url": "https://olimpiada.ru/activity/5793",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/5793\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5793\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5352,
     "name": "Строгановская олимпиада",
     "url": "https://olimpiada.ru/activity/5352",
     "stages": [],
-    "status": "error",
-    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5352\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5352\", waiting until \"load\"\n"
+    "status": "unknown",
+    "notes": []
   },
   {
     "id": 5894,
