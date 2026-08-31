@@ -36,12 +36,13 @@ class Olympiad(Base):
 
     __tablename__ = "olympiads"
 
-    id = Column(String(64), primary_key=True)
+    id = Column(String(256), primary_key=True)
     name = Column(String(256), nullable=False)
     organizer = Column(String(256), nullable=True)
     url = Column(Text, nullable=True)
     registration_url = Column(Text, nullable=True)
     tags = Column(JSON, default=list)
+    universities = Column(JSON, default=list)
 
     olympiad_profiles = relationship(
         "OlympiadProfile", back_populates="olympiad", cascade="all, delete-orphan"

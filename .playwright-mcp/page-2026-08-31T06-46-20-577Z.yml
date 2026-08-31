@@ -1,0 +1,8 @@
+- generic [ref=f2e2]:
+  - separator [ref=f2e3]
+  - separator [ref=f2e4]
+  - generic [ref=f2e5]:
+    - text: About this page Our systems have detected unusual traffic from your computer network. This page checks to see if it's really you sending the requests, and not a robot.
+    - link "Why did this happen?" [ref=f2e6] [cursor=pointer]:
+      - /url: "#"
+    - generic [ref=f2e7]: "IP address: 31.76.76.10Time: 2026-08-31T06:46:16ZURL: https://www.google.com/search?q=%D0%9F%D0%B5%D1%80%D0%B5%D1%87%D0%B5%D0%BD%D1%8C+%D0%BE%D0%BB%D0%B8%D0%BC%D0%BF%D0%B8%D0%B0%D0%B4+%D1%88%D0%BA%D0%BE%D0%BB%D1%8C%D0%BD%D0%B8%D0%BA%D0%BE%D0%B2+2026-2027+%D0%9C%D0%B8%D0%BD%D0%BE%D0%B1%D1%80%D0%BD%D0%B0%D1%83%D0%BA%D0%B8+%D0%BF%D0%BE%D0%BB%D0%BD%D1%8B%D0%B9+%D1%81%D0%BF%D0%B8%D1%81%D0%BE%D0%BA"

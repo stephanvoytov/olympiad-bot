@@ -486,6 +486,8 @@
     let catalog = [];
     let catalogProfileFilter = '';
     let catalogLevelFilter = '';
+    let catalogDirectionFilter = '';
+    let catalogUniFilter = '';
     let currentDetailEntryId = null;
 
     // ========== SVG ICONS ==========
@@ -804,11 +806,28 @@
     function renderCatalogFilter() {
       const container = document.getElementById('tabContent');
       if (!container) return;
+
+      // Collect unique directions (tags) and universities
+      var directions = new Set();
+      var unis = new Set();
+      catalog.forEach(function(o) {
+        (o.tags || []).forEach(function(t) { directions.add(t); });
+        (o.universities || []).forEach(function(u) { unis.add(u); });
+      });
+      var dirList = Array.from(directions).sort();
+      var uniList = Array.from(unis).sort();
+
+      var dirOptions = '<option value="">Все направления</option>' +
+        dirList.map(function(d) { return '<option value="' + esc(d) + '"' + (catalogDirectionFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('');
+
+      var uniOptions = '<option value="">Все вузы</option>' +
+        uniList.map(function(u) { return '<option value="' + esc(u) + '"' + (catalogUniFilter === u ? ' selected' : '') + '>' + esc(u) + '</option>'; }).join('');
+
       var profiles = new Set();
       catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
       var profileList = Array.from(profiles).sort();
 
-      var profileOptions = '<option value="">Все направления</option>' +
+      var profileOptions = '<option value="">Все профили</option>' +
         profileList.map(function(p) { return '<option value="' + esc(p) + '"' + (catalogProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('');
 
       var levelOptions = ['', 1, 2, 3].map(function(l) {
@@ -817,9 +836,15 @@
       }).join('');
 
       var filterHtml =
-        '<div class="catalog-filters">' +
-          '<select class="filter-select" id="profileFilterSelect" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
-          '<select class="filter-select" id="levelFilterSelect" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
+        '<div class="catalog-filters" style="display:flex;flex-direction:column;gap:8px;margin:12px 0">' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+            '<select class="filter-select" id="dirFilterSelect" onchange="filterCatalogDirection(this.value)">' + dirOptions + '</select>' +
+            '<select class="filter-select" id="uniFilterSelect" onchange="filterCatalogUni(this.value)">' + uniOptions + '</select>' +
+          '</div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+            '<select class="filter-select" id="profileFilterSelect" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
+            '<select class="filter-select" id="levelFilterSelect" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
+          '</div>' +
         '</div>';
 
       // Вставляем после search-bar
@@ -833,6 +858,18 @@
 
     function filterCatalogProfile(profile) {
       catalogProfileFilter = profile;
+      renderCatalogFilter();
+      renderCatalogResults();
+    }
+
+    function filterCatalogDirection(dir) {
+      catalogDirectionFilter = dir;
+      renderCatalogFilter();
+      renderCatalogResults();
+    }
+
+    function filterCatalogUni(uni) {
+      catalogUniFilter = uni;
       renderCatalogFilter();
       renderCatalogResults();
     }
@@ -861,6 +898,12 @@
       if (inp) q = inp.value.toLowerCase();
 
       var items = catalog.slice();
+      if (catalogDirectionFilter) {
+        items = items.filter(function(o) { return (o.tags || []).indexOf(catalogDirectionFilter) !== -1; });
+      }
+      if (catalogUniFilter) {
+        items = items.filter(function(o) { return (o.universities || []).indexOf(catalogUniFilter) !== -1; });
+      }
       if (catalogProfileFilter) {
         items = items.filter(function(o) { return profileMatchesFilter(o.profiles, catalogProfileFilter); });
       }
@@ -895,7 +938,9 @@
             });
             profHtml += '</div>';
             return '<div class="olympiad-card" style="cursor:default">' +
-              '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
+              '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
+              (o.universities && o.universities.length ? '<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">' + o.universities.map(function(u) { return '<span class="badge" style="background:rgba(139,124,247,0.15);color:var(--primary);font-size:10px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
+              '</div>' +
               (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
               (hasBvi || has100 ? '<div class="meta" style="margin-top:6px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
               profHtml +

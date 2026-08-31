@@ -272,6 +272,7 @@ def _serialize_olympiad(o: Olympiad) -> dict:
         "url": o.url,
         "registration_url": o.registration_url or o.url,
         "tags": o.tags or [],
+        "universities": getattr(o, 'universities', []) or [],
         "profiles": [_serialize_profile(p) for p in o.olympiad_profiles],
     }
 
@@ -391,6 +392,7 @@ def _build_catalog(db: Session) -> list:
                     "url": o.url,
                     "registration_url": o.registration_url or o.url,
                     "tags": o.tags or [],
+                    "universities": o.universities or [],
                     "profiles": profiles,
                 }
             )
@@ -820,6 +822,7 @@ def _seed_olympiads():
                 existing.url = data.get("url")
                 existing.registration_url = data.get("registration_url")
                 existing.tags = data.get("tags", [])
+                existing.universities = data.get("universities", [])
                 updated += 1
             else:
                 # Create new
@@ -830,6 +833,7 @@ def _seed_olympiads():
                     url=data.get("url"),
                     registration_url=data.get("registration_url"),
                     tags=data.get("tags", []),
+                    universities=data.get("universities", []),
                 )
                 db.add(existing)
                 created += 1

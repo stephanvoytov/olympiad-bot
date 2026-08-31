@@ -1,0 +1,202 @@
+- generic [ref=f6e2]:
+  - generic [ref=f6e3]:
+    - link "DuckDuckGo" [ref=f6e4] [cursor=pointer]:
+      - /url: /html/
+    - generic [ref=f6e5]:
+      - generic [ref=f6e6]:
+        - textbox [ref=f6e7]: Перечень олимпиад школьников 2026 2027 Минобрнауки уровни полный список
+        - button "Submit" [ref=f6e8] [cursor=pointer]
+      - combobox [ref=f6e10] [cursor=pointer]:
+        - option "All Regions" [selected]
+        - option "Argentina"
+        - option "Australia"
+        - option "Austria"
+        - option "Belgium (fr)"
+        - option "Belgium (nl)"
+        - option "Brazil"
+        - option "Bulgaria"
+        - option "Canada (en)"
+        - option "Canada (fr)"
+        - option "Catalonia"
+        - option "Chile"
+        - option "China"
+        - option "Colombia"
+        - option "Croatia"
+        - option "Czech Republic"
+        - option "Denmark"
+        - option "Estonia"
+        - option "Finland"
+        - option "France"
+        - option "Germany"
+        - option "Greece"
+        - option "Hong Kong"
+        - option "Hungary"
+        - option "Iceland"
+        - option "India (en)"
+        - option "Indonesia (en)"
+        - option "Ireland"
+        - option "Israel (en)"
+        - option "Italy"
+        - option "Japan"
+        - option "Korea"
+        - option "Latvia"
+        - option "Lithuania"
+        - option "Malaysia (en)"
+        - option "Mexico"
+        - option "Netherlands"
+        - option "New Zealand"
+        - option "Norway"
+        - option "Pakistan (en)"
+        - option "Peru"
+        - option "Philippines (en)"
+        - option "Poland"
+        - option "Portugal"
+        - option "Romania"
+        - option "Russia"
+        - option "Saudi Arabia"
+        - option "Singapore"
+        - option "Slovakia"
+        - option "Slovenia"
+        - option "South Africa"
+        - option "Spain (ca)"
+        - option "Spain (es)"
+        - option "Sweden"
+        - option "Switzerland (de)"
+        - option "Switzerland (fr)"
+        - option "Taiwan"
+        - option "Thailand (en)"
+        - option "Turkey"
+        - option "US (English)"
+        - option "US (Spanish)"
+        - option "Ukraine"
+        - option "United Kingdom"
+        - option "Vietnam (en)"
+      - combobox [ref=f6e12] [cursor=pointer]:
+        - option "Any Time" [selected]
+        - option "Past Day"
+        - option "Past Week"
+        - option "Past Month"
+        - option "Past Year"
+  - generic [ref=f6e15]:
+    - generic [ref=f6e17]:
+      - heading [level=2] [ref=f6e18]:
+        - link "Минобрнауки обновило список олимпиад для школьников на 2026-2027 год" [ref=f6e19] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdensus.ru%2Fnews%2Fminobrnauki%2Dobnovilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2D2026%2D08%2D12&rut=ac33e1cc7d67c55bcde10636c3b08c8dad0d935f39a7d581ddb241c16a3488e8
+      - generic [ref=f6e21]:
+        - link [ref=f6e23] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdensus.ru%2Fnews%2Fminobrnauki%2Dobnovilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2D2026%2D08%2D12&rut=ac33e1cc7d67c55bcde10636c3b08c8dad0d935f39a7d581ddb241c16a3488e8
+        - link "densus.ru/news/minobrnauki-obnovilo-spisok-olimpiad-dlya-shkolnikov-2026-08-12" [ref=f6e24] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdensus.ru%2Fnews%2Fminobrnauki%2Dobnovilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2D2026%2D08%2D12&rut=ac33e1cc7d67c55bcde10636c3b08c8dad0d935f39a7d581ddb241c16a3488e8
+        - text: 2026-08-12T00:00:00.0000000
+      - link "Министерство науки и высшего образования России обнародовало обновлённый перечень олимпиад для школьников на 2026-2027 учебный год. В него вошли 79 соревнований, разделённых на три уровня. Как показала приёмная кампания 2026 года, победители и призёры этих олимпиад заняли львиную долю бюджетных мест ещё до старта общего конкурса по результатам ЕГЭ." [ref=f6e25] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdensus.ru%2Fnews%2Fminobrnauki%2Dobnovilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2D2026%2D08%2D12&rut=ac33e1cc7d67c55bcde10636c3b08c8dad0d935f39a7d581ddb241c16a3488e8
+    - generic [ref=f6e27]:
+      - heading [level=2] [ref=f6e28]:
+        - link "Перечень олимпиад школьников на 2026-2027 учебный год" [ref=f6e29] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F4ege.ru%2Fmaterials_podgotovka%2F80544%2Dperechen%2Dolimpiad%2Dshkolnikov%2Dna%2D2026%2D2027%2Duchebnyj%2Dgod.html&rut=108cc709e4312731fb5b31a2b348caafacebac5495d99165b66282b7d6382b42
+      - generic [ref=f6e31]:
+        - link [ref=f6e33] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F4ege.ru%2Fmaterials_podgotovka%2F80544%2Dperechen%2Dolimpiad%2Dshkolnikov%2Dna%2D2026%2D2027%2Duchebnyj%2Dgod.html&rut=108cc709e4312731fb5b31a2b348caafacebac5495d99165b66282b7d6382b42
+        - link "4ege.ru/materials_podgotovka/80544-perechen-olimpiad-shkolnikov-na-2026-2027-uchebnyj-god.html" [ref=f6e34] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F4ege.ru%2Fmaterials_podgotovka%2F80544%2Dperechen%2Dolimpiad%2Dshkolnikov%2Dna%2D2026%2D2027%2Duchebnyj%2Dgod.html&rut=108cc709e4312731fb5b31a2b348caafacebac5495d99165b66282b7d6382b42
+        - text: 2026-08-11T00:00:00.0000000
+      - link "Всего в списке 79 олимпиад. Перечень олимпиад школьников и их уровни на 2026/27 учебный год." [ref=f6e35] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F4ege.ru%2Fmaterials_podgotovka%2F80544%2Dperechen%2Dolimpiad%2Dshkolnikov%2Dna%2D2026%2D2027%2Duchebnyj%2Dgod.html&rut=108cc709e4312731fb5b31a2b348caafacebac5495d99165b66282b7d6382b42
+    - generic [ref=f6e37]:
+      - heading [level=2] [ref=f6e38]:
+        - link "Минобрнауки утвердило список олимпиад для школьников на 2026-2027 ..." [ref=f6e39] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fvm.ru%2Fnews%2F1349232%2Dminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D20262027%2Duchebnyj%2Dgod&rut=f27525023b4306d679c259964bbe9ff6d10f9118f304e64a14c75df17cfd6874
+      - generic [ref=f6e41]:
+        - link [ref=f6e43] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fvm.ru%2Fnews%2F1349232%2Dminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D20262027%2Duchebnyj%2Dgod&rut=f27525023b4306d679c259964bbe9ff6d10f9118f304e64a14c75df17cfd6874
+        - link "vm.ru/news/1349232-minobrnauki-utverdilo-spisok-olimpiad-dlya-shkolnikov-na-20262027-uchebnyj-god" [ref=f6e44] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fvm.ru%2Fnews%2F1349232%2Dminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D20262027%2Duchebnyj%2Dgod&rut=f27525023b4306d679c259964bbe9ff6d10f9118f304e64a14c75df17cfd6874
+        - text: 2026-08-10T00:00:00.0000000
+      - link "Министерство науки и высшего образования России представило обновленный список олимпиад, рекомендованных для проведения среди школьников в 2026-2027 учебном году. Согласно проекту приказа ведомства, в перечень вошли ..." [ref=f6e45] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fvm.ru%2Fnews%2F1349232%2Dminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D20262027%2Duchebnyj%2Dgod&rut=f27525023b4306d679c259964bbe9ff6d10f9118f304e64a14c75df17cfd6874
+    - generic [ref=f6e47]:
+      - heading [level=2] [ref=f6e48]:
+        - link "Перечень олимпиад школьников 2026-2027 учебный год Министерства Образования" [ref=f6e49] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F100ballnik.com%2F%25D0%25BF%25D0%25B5%25D1%2580%25D0%25B5%25D1%2587%25D0%25B5%25D0%25BD%25D1%258C%2D%25D0%25BE%25D0%25BB%25D0%25B8%25D0%25BC%25D0%25BF%25D0%25B8%25D0%25B0%25D0%25B4%2D%25D1%2588%25D0%25BA%25D0%25BE%25D0%25BB%25D1%258C%25D0%25BD%25D0%25B8%25D0%25BA%25D0%25BE%25D0%25B2%2D2026%2D2027%2D%25D1%2583%25D1%2587%25D0%25B5%25D0%25B1%25D0%25BD%2F&rut=bb1ae1708b30a5c4c393eda67ab2a686d5174c5c6c20895fe64e56b08e31a32d
+      - generic [ref=f6e51]:
+        - link [ref=f6e53] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F100ballnik.com%2F%25D0%25BF%25D0%25B5%25D1%2580%25D0%25B5%25D1%2587%25D0%25B5%25D0%25BD%25D1%258C%2D%25D0%25BE%25D0%25BB%25D0%25B8%25D0%25BC%25D0%25BF%25D0%25B8%25D0%25B0%25D0%25B4%2D%25D1%2588%25D0%25BA%25D0%25BE%25D0%25BB%25D1%258C%25D0%25BD%25D0%25B8%25D0%25BA%25D0%25BE%25D0%25B2%2D2026%2D2027%2D%25D1%2583%25D1%2587%25D0%25B5%25D0%25B1%25D0%25BD%2F&rut=bb1ae1708b30a5c4c393eda67ab2a686d5174c5c6c20895fe64e56b08e31a32d
+        - link "100ballnik.com/перечень-олимпиад-школьников-2026-2027-учебн/" [ref=f6e54] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F100ballnik.com%2F%25D0%25BF%25D0%25B5%25D1%2580%25D0%25B5%25D1%2587%25D0%25B5%25D0%25BD%25D1%258C%2D%25D0%25BE%25D0%25BB%25D0%25B8%25D0%25BC%25D0%25BF%25D0%25B8%25D0%25B0%25D0%25B4%2D%25D1%2588%25D0%25BA%25D0%25BE%25D0%25BB%25D1%258C%25D0%25BD%25D0%25B8%25D0%25BA%25D0%25BE%25D0%25B2%2D2026%2D2027%2D%25D1%2583%25D1%2587%25D0%25B5%25D0%25B1%25D0%25BD%2F&rut=bb1ae1708b30a5c4c393eda67ab2a686d5174c5c6c20895fe64e56b08e31a32d
+      - link "Что такое Перечень олимпиад школьников на 2026-2027 учебный год? Это официальный список олимпиад, который ежегодно утверждается приказом министерства на один учебный год." [ref=f6e55] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2F100ballnik.com%2F%25D0%25BF%25D0%25B5%25D1%2580%25D0%25B5%25D1%2587%25D0%25B5%25D0%25BD%25D1%258C%2D%25D0%25BE%25D0%25BB%25D0%25B8%25D0%25BC%25D0%25BF%25D0%25B8%25D0%25B0%25D0%25B4%2D%25D1%2588%25D0%25BA%25D0%25BE%25D0%25BB%25D1%258C%25D0%25BD%25D0%25B8%25D0%25BA%25D0%25BE%25D0%25B2%2D2026%2D2027%2D%25D1%2583%25D1%2587%25D0%25B5%25D0%25B1%25D0%25BD%2F&rut=bb1ae1708b30a5c4c393eda67ab2a686d5174c5c6c20895fe64e56b08e31a32d
+    - generic [ref=f6e57]:
+      - heading [level=2] [ref=f6e58]:
+        - link "Минобрнауки РФ разработало список школьных олимпиад на новый учебный ..." [ref=f6e59] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.m24.ru%2Fnews%2F10082026%2F929190&rut=9c3ea4bd7a5a06f1e21de41dd12ba35fa3e6861cfb6935e75af6195c750f59c2
+      - generic [ref=f6e61]:
+        - link [ref=f6e63] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.m24.ru%2Fnews%2F10082026%2F929190&rut=9c3ea4bd7a5a06f1e21de41dd12ba35fa3e6861cfb6935e75af6195c750f59c2
+        - link "www.m24.ru/news/10082026/929190" [ref=f6e64] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.m24.ru%2Fnews%2F10082026%2F929190&rut=9c3ea4bd7a5a06f1e21de41dd12ba35fa3e6861cfb6935e75af6195c750f59c2
+        - text: 2026-08-10T00:00:00.0000000
+      - link "Минобрнауки России разработало перечень олимпиад для школьников на 2026-2027 учебный год. В него вошли 79 конкурсов первого, второго и третьего уровней." [ref=f6e65] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.m24.ru%2Fnews%2F10082026%2F929190&rut=9c3ea4bd7a5a06f1e21de41dd12ba35fa3e6861cfb6935e75af6195c750f59c2
+    - generic [ref=f6e67]:
+      - heading [level=2] [ref=f6e68]:
+        - 'link "Полный перечень школьных олимпиад 2026/27: уровни, льготы, регистрация" [ref=f6e69] [cursor=pointer]':
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fpravovoi%2Dnavigator%2Donlain.ru%2Fpolnyj%2Dperechen%2Dshkolnyh%2Dolimpiad%2D2026%2D27%2Durovni%2Dlgoty%2Dregistracziya.html&rut=a36e281c494a40651bf9e4bea875e0e664e9adb80c323778e59e8930311fbdb4
+      - generic [ref=f6e71]:
+        - link [ref=f6e73] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fpravovoi%2Dnavigator%2Donlain.ru%2Fpolnyj%2Dperechen%2Dshkolnyh%2Dolimpiad%2D2026%2D27%2Durovni%2Dlgoty%2Dregistracziya.html&rut=a36e281c494a40651bf9e4bea875e0e664e9adb80c323778e59e8930311fbdb4
+        - link "pravovoi-navigator-onlain.ru/polnyj-perechen-shkolnyh-olimpiad-2026-27-urovni-lgoty-registracziya.html" [ref=f6e74] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fpravovoi%2Dnavigator%2Donlain.ru%2Fpolnyj%2Dperechen%2Dshkolnyh%2Dolimpiad%2D2026%2D27%2Durovni%2Dlgoty%2Dregistracziya.html&rut=a36e281c494a40651bf9e4bea875e0e664e9adb80c323778e59e8930311fbdb4
+      - link "Ниже вы найдёте исчерпывающую информацию о том, какие именно олимпиады «работают» на 2026/27 учебный год, какие льготы они дают, где регистрироваться и куда обращаться по всем вопросам․" [ref=f6e75] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fpravovoi%2Dnavigator%2Donlain.ru%2Fpolnyj%2Dperechen%2Dshkolnyh%2Dolimpiad%2D2026%2D27%2Durovni%2Dlgoty%2Dregistracziya.html&rut=a36e281c494a40651bf9e4bea875e0e664e9adb80c323778e59e8930311fbdb4
+    - generic [ref=f6e77]:
+      - heading [level=2] [ref=f6e78]:
+        - link "Минобрнауки опубликовало новый перечень олимпиад школьников на 2026/27 год" [ref=f6e79] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdoege.press%2F2026%2F08%2F12%2Fminobrnauki%2Dopublikovalo%2Dproekt%2Dperechnya%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D2026%2D27%2Dgod%2F&rut=b71c1eb43d3e0a4433caa9ccf815f5e747b1718bf807c37755a5dd72f5189bdc
+      - generic [ref=f6e81]:
+        - link [ref=f6e83] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdoege.press%2F2026%2F08%2F12%2Fminobrnauki%2Dopublikovalo%2Dproekt%2Dperechnya%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D2026%2D27%2Dgod%2F&rut=b71c1eb43d3e0a4433caa9ccf815f5e747b1718bf807c37755a5dd72f5189bdc
+        - link "doege.press/2026/08/12/minobrnauki-opublikovalo-proekt-perechnya-olimpiad-dlya-shkolnikov-na-2026-27-god/" [ref=f6e84] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdoege.press%2F2026%2F08%2F12%2Fminobrnauki%2Dopublikovalo%2Dproekt%2Dperechnya%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D2026%2D27%2Dgod%2F&rut=b71c1eb43d3e0a4433caa9ccf815f5e747b1718bf807c37755a5dd72f5189bdc
+        - text: 2026-08-12T00:00:00.0000000
+      - link "Проект перечня находится на стадии обсуждения, итоговый список олимпиад будет известен после утверждения." [ref=f6e85] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fdoege.press%2F2026%2F08%2F12%2Fminobrnauki%2Dopublikovalo%2Dproekt%2Dperechnya%2Dolimpiad%2Ddlya%2Dshkolnikov%2Dna%2D2026%2D27%2Dgod%2F&rut=b71c1eb43d3e0a4433caa9ccf815f5e747b1718bf807c37755a5dd72f5189bdc
+    - generic [ref=f6e87]:
+      - heading [level=2] [ref=f6e88]:
+        - link "Проект Перечня олимпиад школьников на 2026/27 учебный год" [ref=f6e89] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Folimpiada.ru%2Farticle%2F1266&rut=c5c0c0084c613292f645c802348f3b5fd18a34c2ac196d32881f290cfa45a2ab
+      - generic [ref=f6e91]:
+        - link [ref=f6e93] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Folimpiada.ru%2Farticle%2F1266&rut=c5c0c0084c613292f645c802348f3b5fd18a34c2ac196d32881f290cfa45a2ab
+        - link "olimpiada.ru/article/1266" [ref=f6e94] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Folimpiada.ru%2Farticle%2F1266&rut=c5c0c0084c613292f645c802348f3b5fd18a34c2ac196d32881f290cfa45a2ab
+        - text: 2026-08-12T00:00:00.0000000
+      - link "Опубликован проект приказа Министерства науки и высшего образования Российской Федерации «Об утверждении перечня олимпиад школьников и их уровней на 2026/27 учебный год». Документ доступен на федеральном портале проектов нормативных правовых актов. Всего в список вошли 79 соревнований." [ref=f6e95] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Folimpiada.ru%2Farticle%2F1266&rut=c5c0c0084c613292f645c802348f3b5fd18a34c2ac196d32881f290cfa45a2ab
+    - generic [ref=f6e97]:
+      - heading [level=2] [ref=f6e98]:
+        - link "Минобрнауки утвердило список олимпиад для школьников на 2026-2027 ..." [ref=f6e99] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fweb.lifelines.name%2Fnews%2F2026%2F8%2F10%2Fminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlia%2Dshkolnikov%2Dna%2D20262027%2Duchebnyi%2Dgod&rut=6b8000a7e4ba8ee4c451c56e4b3afba7fde89efc4e06973443c677dc989d15c9
+      - generic [ref=f6e101]:
+        - link [ref=f6e103] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fweb.lifelines.name%2Fnews%2F2026%2F8%2F10%2Fminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlia%2Dshkolnikov%2Dna%2D20262027%2Duchebnyi%2Dgod&rut=6b8000a7e4ba8ee4c451c56e4b3afba7fde89efc4e06973443c677dc989d15c9
+        - link "web.lifelines.name/news/2026/8/10/minobrnauki-utverdilo-spisok-olimpiad-dlia-shkolnikov-na-20262027-uchebnyi-god" [ref=f6e104] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fweb.lifelines.name%2Fnews%2F2026%2F8%2F10%2Fminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlia%2Dshkolnikov%2Dna%2D20262027%2Duchebnyi%2Dgod&rut=6b8000a7e4ba8ee4c451c56e4b3afba7fde89efc4e06973443c677dc989d15c9
+        - text: 2026-08-10T00:00:00.0000000
+      - link "Министерство науки и высшего образования России представило обновленный список олимпиад, рекомендованных для проведения среди школьников в 2026-2027 учебном году. Согласно проекту приказа ведомства, в перечень вошли ..." [ref=f6e105] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fweb.lifelines.name%2Fnews%2F2026%2F8%2F10%2Fminobrnauki%2Dutverdilo%2Dspisok%2Dolimpiad%2Ddlia%2Dshkolnikov%2Dna%2D20262027%2Duchebnyi%2Dgod&rut=6b8000a7e4ba8ee4c451c56e4b3afba7fde89efc4e06973443c677dc989d15c9
+    - generic [ref=f6e107]:
+      - heading [level=2] [ref=f6e108]:
+        - link "PDF Перечень олимпиад школьников, проводимых в порядке, устанавливаемом ..." [ref=f6e109] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.ranepa.ru%2Fupload%2Fdoc%2Fpk%2F2026%2Folimp%2DMON%2D2026.pdf&rut=bcd9208e6fb4a8ce463e428533a46bd15b60983b959618e26ba6959b2f289f9d
+          - generic [ref=f6e110]: PDF
+          - text: Перечень олимпиад школьников, проводимых в порядке, устанавливаемом ...
+      - generic [ref=f6e112]:
+        - link [ref=f6e114] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.ranepa.ru%2Fupload%2Fdoc%2Fpk%2F2026%2Folimp%2DMON%2D2026.pdf&rut=bcd9208e6fb4a8ce463e428533a46bd15b60983b959618e26ba6959b2f289f9d
+        - link "www.ranepa.ru/upload/doc/pk/2026/olimp-MON-2026.pdf" [ref=f6e115] [cursor=pointer]:
+          - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.ranepa.ru%2Fupload%2Fdoc%2Fpk%2F2026%2Folimp%2DMON%2D2026.pdf&rut=bcd9208e6fb4a8ce463e428533a46bd15b60983b959618e26ba6959b2f289f9d
+      - link "Перечень олимпиад школьников, проводимых в порядке, устанавливаемом федеральным органом исполнительной власти, осуществляющим функции по выработке государственной политики и ..." [ref=f6e116] [cursor=pointer]:
+        - /url: //duckduckgo.com/l/?uddg=https%3A%2F%2Fwww.ranepa.ru%2Fupload%2Fdoc%2Fpk%2F2026%2Folimp%2DMON%2D2026.pdf&rut=bcd9208e6fb4a8ce463e428533a46bd15b60983b959618e26ba6959b2f289f9d
+    - button "Next" [ref=f6e119] [cursor=pointer]
+    - link "Feedback" [ref=f6e121] [cursor=pointer]:
+      - /url: //duckduckgo.com/feedback.html

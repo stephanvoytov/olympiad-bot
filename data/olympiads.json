@@ -8,6 +8,9 @@
     "tags": [
       "экономика"
     ],
+    "universities": [
+      "Минобрнауки"
+    ],
     "profiles": [
       {
         "slug": "finansovaya-gramotnost",
@@ -55,6 +58,9 @@
     "tags": [
       "математика",
       "физика"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
@@ -138,6 +144,9 @@
     "tags": [
       "искусство"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "risunok-zhivopis-kompozitsiya-cherchenie",
@@ -184,6 +193,9 @@
     "registration_url": "",
     "tags": [
       "экономика"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
@@ -271,6 +283,9 @@
       "искусство",
       "химия",
       "экономика"
+    ],
+    "universities": [
+      "Сириус"
     ],
     "profiles": [
       {
@@ -1040,6 +1055,9 @@
     "tags": [
       "биология"
     ],
+    "universities": [
+      "Минобрнауки"
+    ],
     "profiles": [
       {
         "slug": "agrarnaya-genetika",
@@ -1087,6 +1105,9 @@
     "tags": [
       "информатика",
       "искусство"
+    ],
+    "universities": [
+      "Сбер"
     ],
     "profiles": [
       {
@@ -1144,6 +1165,9 @@
       "химия",
       "экономика",
       "языки"
+    ],
+    "universities": [
+      "Минобрнауки"
     ],
     "profiles": [
       {
@@ -2060,6 +2084,9 @@
       "экономика",
       "языки"
     ],
+    "universities": [
+      "Минобрнауки"
+    ],
     "profiles": [
       {
         "slug": "inostrannyy-yazyk",
@@ -2247,6 +2274,9 @@
     "tags": [
       "обществознание"
     ],
+    "universities": [
+      "РГЮА"
+    ],
     "profiles": [
       {
         "slug": "pravo",
@@ -2294,6 +2324,9 @@
     "tags": [
       "биология",
       "химия"
+    ],
+    "universities": [
+      "Сеченовский"
     ],
     "profiles": [
       {
@@ -2380,6 +2413,9 @@
       "история",
       "обществознание",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -2533,6 +2569,9 @@
     "tags": [
       "инженерия"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "estestvennye-nauki",
@@ -2618,6 +2657,9 @@
       "математика",
       "физика",
       "химия"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -2807,6 +2849,9 @@
       "география",
       "языки"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "geografiya",
@@ -2924,6 +2969,9 @@
     "tags": [
       "физика"
     ],
+    "universities": [
+      "МГТУ Баумана"
+    ],
     "profiles": [
       {
         "slug": "fizika",
@@ -2970,6 +3018,9 @@
     "registration_url": "",
     "tags": [
       "физика"
+    ],
+    "universities": [
+      "МГУ"
     ],
     "profiles": [
       {
@@ -3018,6 +3069,9 @@
     "tags": [
       "обществознание"
     ],
+    "universities": [
+      "РГЮА"
+    ],
     "profiles": [
       {
         "slug": "pravo",
@@ -3064,6 +3118,9 @@
     "registration_url": "",
     "tags": [
       "история"
+    ],
+    "universities": [
+      "Московская консерватория"
     ],
     "profiles": [
       {
@@ -3325,6 +3382,10 @@
       "искусство",
       "математика"
     ],
+    "universities": [
+      "Иннополис",
+      "Сбер"
+    ],
     "profiles": [
       {
         "slug": "informatika",
@@ -3517,6 +3578,9 @@
     "tags": [
       "экономика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "finansovaya-bezopasnost",
@@ -3564,6 +3628,9 @@
     "tags": [
       "языки"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "inostrannye-yazyki",
@@ -3610,6 +3677,9 @@
     "registration_url": "",
     "tags": [
       "искусство"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -3732,6 +3802,9 @@
       "обществознание",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "УрФУ"
     ],
     "profiles": [
       {
@@ -3955,6 +4028,9 @@
     "tags": [
       "обществознание"
     ],
+    "universities": [
+      "УрФУ"
+    ],
     "profiles": [
       {
         "slug": "pravo",
@@ -4001,6 +4077,9 @@
     "registration_url": "",
     "tags": [
       "искусство"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -4053,6 +4132,9 @@
       "физика",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -4276,6 +4358,9 @@
     "tags": [
       "искусство"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "grafika",
@@ -4394,6 +4479,9 @@
       "информатика",
       "математика"
     ],
+    "universities": [
+      "УрФУ"
+    ],
     "profiles": [
       {
         "slug": "kompyuternaya-bezopasnost",
@@ -4478,6 +4566,9 @@
       "обществознание",
       "физика",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -4666,6 +4757,9 @@
     "tags": [
       "химия"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "khimiya",
@@ -4718,6 +4812,9 @@
       "физика",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -5012,6 +5109,9 @@
       "география",
       "химия"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "geografiya",
@@ -5130,6 +5230,9 @@
       "инженерия",
       "информатика"
     ],
+    "universities": [
+      "НИУ МЭИ"
+    ],
     "profiles": [
       {
         "slug": "estestvennye-nauki",
@@ -5224,6 +5327,9 @@
       "химия",
       "экономика",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -5921,6 +6027,9 @@
     "tags": [
       "география"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "geologiya",
@@ -5967,6 +6076,9 @@
     "registration_url": "",
     "tags": [
       "физика"
+    ],
+    "universities": [
+      "МГТУ Баумана"
     ],
     "profiles": [
       {
@@ -6016,6 +6128,9 @@
       "инженерия",
       "информатика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "tekhnika-i-tekhnologii",
@@ -6062,6 +6177,9 @@
     "registration_url": "",
     "tags": [
       "обществознание"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -6110,6 +6228,9 @@
     "tags": [
       "математика",
       "физика"
+    ],
+    "universities": [
+      "МГУ"
     ],
     "profiles": [
       {
@@ -6196,6 +6317,9 @@
       "математика",
       "физика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "matematika",
@@ -6280,6 +6404,9 @@
     "tags": [
       "олимпиада"
     ],
+    "universities": [
+      "МГИМО"
+    ],
     "profiles": [
       {
         "slug": "gumanitarnye-i-sotsialnye-nauki",
@@ -6327,6 +6454,9 @@
     "registration_url": "",
     "tags": [
       "искусство"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -6410,6 +6540,9 @@
     "tags": [
       "химия"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "khimiya",
@@ -6456,6 +6589,9 @@
     "registration_url": "",
     "tags": [
       "экономика"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
@@ -6505,6 +6641,9 @@
       "история",
       "обществознание",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -6693,6 +6832,9 @@
     "tags": [
       "информатика"
     ],
+    "universities": [
+      "УрФУ"
+    ],
     "profiles": [
       {
         "slug": "estestvennye-nauki",
@@ -6783,6 +6925,9 @@
       "физика",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "МГУ"
     ],
     "profiles": [
       {
@@ -7768,6 +7913,9 @@
     "tags": [
       "физика"
     ],
+    "universities": [
+      "НИУ МЭИ"
+    ],
     "profiles": [
       {
         "slug": "fizika",
@@ -7819,6 +7967,9 @@
       "обществознание",
       "физика",
       "языки"
+    ],
+    "universities": [
+      "МГТУ Баумана"
     ],
     "profiles": [
       {
@@ -8117,6 +8268,9 @@
       "физика",
       "химия"
     ],
+    "universities": [
+      "МИФИ"
+    ],
     "profiles": [
       {
         "slug": "biologiya",
@@ -8386,6 +8540,9 @@
       "физика",
       "химия"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "inzhenernoe-delo",
@@ -8608,6 +8765,9 @@
     "tags": [
       "информатика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "informatika",
@@ -8655,6 +8815,9 @@
     "registration_url": "",
     "tags": [
       "информатика"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -8705,6 +8868,9 @@
       "обществознание",
       "экономика",
       "языки"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
@@ -8972,6 +9138,9 @@
       "химия",
       "экономика",
       "языки"
+    ],
+    "universities": [
+      "СПбГУ"
     ],
     "profiles": [
       {
@@ -9741,6 +9910,9 @@
     "tags": [
       "обществознание"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "pravo",
@@ -9789,6 +9961,9 @@
     "tags": [
       "математика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "matematika",
@@ -9836,6 +10011,9 @@
     "tags": [
       "физика",
       "химия"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -9920,6 +10098,9 @@
       "информатика",
       "математика",
       "физика"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -10038,6 +10219,9 @@
     "tags": [
       "информатика"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "informatika",
@@ -10084,6 +10268,10 @@
     "registration_url": "",
     "tags": [
       "информатика"
+    ],
+    "universities": [
+      "Сбер",
+      "Яндекс"
     ],
     "profiles": [
       {
@@ -10135,6 +10323,9 @@
       "физика",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -10358,6 +10549,9 @@
     "tags": [
       "химия"
     ],
+    "universities": [
+      "МГУ"
+    ],
     "profiles": [
       {
         "slug": "khimiya",
@@ -10407,6 +10601,9 @@
       "инженерия",
       "информатика",
       "физика"
+    ],
+    "universities": [
+      "Газпром"
     ],
     "profiles": [
       {
@@ -10530,6 +10727,9 @@
       "математика",
       "физика"
     ],
+    "universities": [
+      "Росатом"
+    ],
     "profiles": [
       {
         "slug": "informatika",
@@ -10650,6 +10850,9 @@
     "tags": [
       "биология"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "biologiya",
@@ -10697,6 +10900,9 @@
     "tags": [
       "экономика",
       "языки"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
@@ -10851,6 +11057,9 @@
       "обществознание",
       "языки"
     ],
+    "universities": [
+      "Другое"
+    ],
     "profiles": [
       {
         "slug": "inostrannyy-yazyk",
@@ -10933,6 +11142,9 @@
     "tags": [
       "олимпиада"
     ],
+    "universities": [
+      "СПбГУ"
+    ],
     "profiles": [
       {
         "slug": "astronomiya",
@@ -10981,6 +11193,9 @@
       "математика",
       "физика",
       "химия"
+    ],
+    "universities": [
+      "СПбГУ"
     ],
     "profiles": [
       {
@@ -11102,6 +11317,9 @@
     "tags": [
       "языки"
     ],
+    "universities": [
+      "СВФУ"
+    ],
     "profiles": [
       {
         "slug": "rodnye-yazyki",
@@ -11148,6 +11366,9 @@
     "registration_url": "",
     "tags": [
       "искусство"
+    ],
+    "universities": [
+      "МГХПА"
     ],
     "profiles": [
       {
@@ -11196,6 +11417,9 @@
     "tags": [
       "физика"
     ],
+    "universities": [
+      "МИФИ"
+    ],
     "profiles": [
       {
         "slug": "fizika",
@@ -11243,6 +11467,9 @@
     "tags": [
       "олимпиада"
     ],
+    "universities": [
+      "РАО"
+    ],
     "profiles": [
       {
         "slug": "gumanitarnye-i-sotsialnye-nauki",
@@ -11289,6 +11516,9 @@
     "registration_url": "",
     "tags": [
       "математика"
+    ],
+    "universities": [
+      "Другое"
     ],
     "profiles": [
       {
@@ -11342,6 +11572,9 @@
       "физика",
       "химия",
       "языки"
+    ],
+    "universities": [
+      "СПбГУ"
     ],
     "profiles": [
       {
@@ -11646,6 +11879,9 @@
       "физика",
       "химия"
     ],
+    "universities": [
+      "БФУ"
+    ],
     "profiles": [
       {
         "slug": "informatika",
@@ -11797,6 +12033,9 @@
     "registration_url": "",
     "tags": [
       "инженерия"
+    ],
+    "universities": [
+      "РАНХиГС"
     ],
     "profiles": [
       {
