@@ -542,13 +542,8 @@ def make_stages(level):
     ]
 
 def make_benefits(level):
-    """Default benefits based on level."""
-    if level == 1:
-        return {"БВИ": [], "100_баллов": []}
-    elif level == 2:
-        return {"100_баллов": []}
-    else:
-        return {"баллы_ДИ": []}
+    """Default benefits based on level. Empty = no benefits shown."""
+    return {}
 
 # Build JSON
 olympiads = []

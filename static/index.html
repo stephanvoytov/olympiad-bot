@@ -804,6 +804,17 @@
         groups[key].push(o);
       });
 
+      // Sort group order for benefits: БВИ first
+      if (catalogGroupBy === 'benefits') {
+        order.sort(function(a, b) {
+          if (a === 'БВИ') return -1;
+          if (b === 'БВИ') return 1;
+          if (a === '100 баллов') return -1;
+          if (b === '100 баллов') return 1;
+          return 0;
+        });
+      }
+
       return { groups: groups, order: order };
     }
 
@@ -863,23 +874,54 @@
 
       var items = catalog.slice();
       if (catalogDirectionFilter) {
-        items = items.filter(function(o) { return (o.tags || []).indexOf(catalogDirectionFilter) !== -1; });
+        var dirLower = catalogDirectionFilter.toLowerCase();
+        items = items.filter(function(o) { return (o.tags || []).some(function(t) { return t.toLowerCase() === dirLower; }); });
+        // Filter profiles to only show matching direction
+        items = items.map(function(o) {
+          var filteredProfiles = (o.profiles || []).filter(function(p) {
+            return (p.name || '').toLowerCase().indexOf(dirLower) !== -1;
+          });
+          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
+          return Object.assign({}, o, { profiles: filteredProfiles });
+        });
       }
       if (catalogUniFilter) {
-        items = items.filter(function(o) { return (o.universities || []).indexOf(catalogUniFilter) !== -1; });
+        var uniLower = catalogUniFilter.toLowerCase();
+        items = items.filter(function(o) { return (o.universities || []).some(function(u) { return u.toLowerCase() === uniLower; }); });
       }
       if (catalogProfileFilter) {
-        items = items.filter(function(o) { return profileMatchesFilter(o.profiles, catalogProfileFilter); });
+        var profLower = catalogProfileFilter.toLowerCase();
+        items = items.filter(function(o) { return (o.profiles || []).some(function(p) { return (p.name || '').toLowerCase().indexOf(profLower) !== -1; }); });
+        // Also filter profiles to only matching
+        items = items.map(function(o) {
+          var filteredProfiles = (o.profiles || []).filter(function(p) {
+            return (p.name || '').toLowerCase().indexOf(profLower) !== -1;
+          });
+          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
+          return Object.assign({}, o, { profiles: filteredProfiles });
+        });
       }
       if (catalogLevelFilter) {
         var lv = parseInt(catalogLevelFilter);
         items = items.filter(function(o) {
           return (o.profiles || []).some(function(p) { return p.level === lv; });
         });
+        // Filter profiles to only matching level
+        items = items.map(function(o) {
+          var filteredProfiles = (o.profiles || []).filter(function(p) { return p.level === lv; });
+          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
+          return Object.assign({}, o, { profiles: filteredProfiles });
+        });
       }
       if (catalogBenefitsOnly) {
         items = items.filter(function(o) {
           return (o.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ') || hasBenefit(p, '100_баллов'); });
+        });
+        // Filter profiles to only those with benefits
+        items = items.map(function(o) {
+          var filteredProfiles = (o.profiles || []).filter(function(p) { return hasBenefit(p, 'БВИ') || hasBenefit(p, '100_баллов'); });
+          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
+          return Object.assign({}, o, { profiles: filteredProfiles });
         });
       }
       if (q) {
@@ -892,17 +934,19 @@
         });
       }
 
-      // Sort
-      if (catalogGroupBy) {
-        items.sort(function(a, b) { return a.name.localeCompare(b.name); });
-      } else {
-        items.sort(function(a, b) {
-          var aHasBvi = (a.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
-          var bHasBvi = (b.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
-          if (aHasBvi !== bHasBvi) return bHasBvi - aHasBvi;
-          return a.name.localeCompare(b.name);
-        });
-      }
+      // Sort: БВИ first, then 100, then by level desc, then by name
+      items.sort(function(a, b) {
+        var aHasBvi = (a.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
+        var bHasBvi = (b.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
+        if (aHasBvi !== bHasBvi) return bHasBvi - aHasBvi;
+        var aHas100 = (a.profiles || []).some(function(p) { return hasBenefit(p, '100_баллов'); });
+        var bHas100 = (b.profiles || []).some(function(p) { return hasBenefit(p, '100_баллов'); });
+        if (aHas100 !== bHas100) return bHas100 - aHas100;
+        var aMaxLv = Math.max.apply(null, (a.profiles || []).map(function(p) { return p.level || 0; }).concat([0]));
+        var bMaxLv = Math.max.apply(null, (b.profiles || []).map(function(p) { return p.level || 0; }).concat([0]));
+        if (aMaxLv !== bMaxLv) return bMaxLv - aMaxLv;
+        return a.name.localeCompare(b.name);
+      });
 
       if (!items.length) {
         el.innerHTML = '<div class="empty-state"><h3>Ничего не найдено</h3></div>';
@@ -916,6 +960,19 @@
         var html = '';
         result.order.forEach(function(groupName) {
           var groupItems = result.groups[groupName];
+          // Sort within group: БВИ first, then 100, then level desc, then name
+          groupItems.sort(function(a, b) {
+            var aBvi = (a.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
+            var bBvi = (b.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ'); });
+            if (aBvi !== bBvi) return bBvi - aBvi;
+            var a100 = (a.profiles || []).some(function(p) { return hasBenefit(p, '100_баллов'); });
+            var b100 = (b.profiles || []).some(function(p) { return hasBenefit(p, '100_баллов'); });
+            if (a100 !== b100) return b100 - a100;
+            var aLv = Math.max.apply(null, (a.profiles || []).map(function(p) { return p.level || 0; }).concat([0]));
+            var bLv = Math.max.apply(null, (b.profiles || []).map(function(p) { return p.level || 0; }).concat([0]));
+            if (aLv !== bLv) return bLv - aLv;
+            return a.name.localeCompare(b.name);
+          });
           html += '<div class="group-header">' +
             '<span>' + esc(groupName) + '</span>' +
             '<span class="group-count">' + groupItems.length + '</span>' +
