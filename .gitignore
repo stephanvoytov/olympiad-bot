@@ -46,3 +46,7 @@ config.local.yaml
 config.local.json
 *.local.*
 settings*.cfg
+
+.playwright-mcp/
+
+4ege-perechen-26-27.md

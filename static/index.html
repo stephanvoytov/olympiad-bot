@@ -658,9 +658,27 @@
     async function init() {
       setupGlobalHandlers();
 
-      // Если нет Telegram и нет сохранённых данных — показываем форму входа
+      // Всегда грузим каталог (без авторизации)
+      showLoading('Загрузка каталога...');
+      try {
+        var catResp = await fetch(API + '/olympiads');
+        catalog = await catResp.json();
+        document.getElementById('catCount').textContent = catalog.length;
+      } catch(e) {
+        catalog = [];
+      }
+
+      // Если нет Telegram и нет сохранённых данных — показываем каталог без "Моих"
       if (!TELEGRAM_ID && !guestId) {
-        showLoginForm();
+        hideLoading();
+        document.getElementById('subtitle').textContent = 'Каталог олимпиад';
+        document.getElementById('myCount').textContent = '—';
+        // Скрываем вкладку "Мои"
+        document.querySelector('[data-tab="my"]').style.display = 'none';
+        // Ставим.active на "Каталог"
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        document.querySelector('[data-tab="catalog"]').classList.add('active');
+        renderTab('catalog');
         return;
       }
 
@@ -668,13 +686,17 @@
       try {
         var resp = await fetch(API + '/user/me', { headers: authHeaders() });
         if (!resp.ok) {
-          // Невалидные данные — очищаем и показываем форму входа
+          // Невалидные данные — очищаем и показываем каталог
           localStorage.removeItem('guest_telegram_id');
           localStorage.removeItem('guest_password');
           guestId = null;
           guestPassword = null;
           hideLoading();
-          showLoginForm();
+          document.getElementById('subtitle').textContent = 'Каталог олимпиад';
+          document.querySelector('[data-tab="my"]').style.display = 'none';
+          document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+          document.querySelector('[data-tab="catalog"]').classList.add('active');
+          renderTab('catalog');
           return;
         }
         tgUser = await resp.json();
@@ -683,7 +705,20 @@
           nameText += ' <span style="cursor:pointer;color:var(--text-muted);font-size:12px" onclick="doLogout()">[выйти]</span>';
         }
         document.getElementById('subtitle').innerHTML = nameText;
-        await loadData();
+        // Грузим "Мои" и дашборд только для залогиненных
+        try {
+          const h = authHeaders();
+          const [myResp, dashResp] = await Promise.all([
+            fetch(API + '/my-olympiads', { headers: h }),
+            fetch(API + '/dashboard', { headers: h })
+          ]);
+          myOlympiads = await myResp.json();
+          var dash = await dashResp.json();
+          document.getElementById('myCount').textContent = myOlympiads.length;
+          renderStats(dash);
+        } catch(e) {
+          myOlympiads = [];
+        }
         hideLoading();
         renderTab('my');
         if (isTelegram) { try { haptic('light'); } catch(e) {} }
@@ -818,6 +853,11 @@
       const container = document.getElementById('tabContent');
       container.innerHTML =
         '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию..." oninput="debouncedSearch()"></div>' +
+        (isLoggedIn ? '' : '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:12px">' +
+          '<div style="font-size:24px">👋</div>' +
+          '<div style="flex:1"><div style="font-size:14px;font-weight:600">Хотите добавлять олимпиады?</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">Войдите через Telegram-бот, чтобы отслеживать свои олимпиады</div></div>' +
+          '<button class="btn btn-primary btn-sm" onclick="showLoginForm()">Войти</button>' +
+          '</div>') +
         '<div id="catalogResults"></div>' +
         '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:12px 0 20px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(15,15,26,0) 0%, rgba(15,15,26,1) 40%)">' +
           '<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedFromCatalog()">+ Добавить выбранные</button>' +
@@ -1134,6 +1174,7 @@
     async function addSelectedFromCatalog() {
       var checked = document.querySelectorAll('#catalogResults .profile-chk:checked');
       if (checked.length === 0) { showToast('Выберите хотя бы один профиль'); return; }
+      if (!isLoggedIn) { showLoginForm(); return; }
       haptic('medium');
       await batchAddProfiles(checked);
     }
