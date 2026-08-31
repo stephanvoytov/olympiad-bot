@@ -1,0 +1,1007 @@
+[
+  {
+    "id": 180,
+    "name": "Всероссийская олимпиада для старшеклассников по финансовой грамотности (Финатлон для старшеклассников)",
+    "url": "https://olimpiada.ru/activity/180",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-01",
+        "date_end": "2027-01-22",
+        "raw": "1 сен...22 янв"
+      },
+      {
+        "name": "Отборочный этап",
+        "date_start": "2026-09-01",
+        "date_end": "2027-01-22",
+        "raw": "1 сен...22 янв"
+      },
+      {
+        "name": "Финал",
+        "date_start": "2027-03-06",
+        "date_end": "2027-03-06",
+        "raw": "6 мар"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5619,
+    "name": "Олимпиада «Формула Единства»/«Третье тысячелетие»",
+    "url": "https://olimpiada.ru/activity/5619",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 177,
+    "name": "Южно-Российская межрегиональная олимпиада школьников «Архитектура и искусство»",
+    "url": "https://olimpiada.ru/activity/177",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 6945,
+    "name": "Всероссийская академическая олимпиада школьников имени В.И. Вернадского",
+    "url": "https://olimpiada.ru/activity/6945",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5369,
+    "name": "Всероссийская междисциплинарная олимпиада школьников 8-11 классов «Национальная технологическая олимпиада»",
+    "url": "https://olimpiada.ru/activity/5369",
+    "stages": [
+      {
+        "name": "Первый отборочный этап",
+        "date_start": "2026-09-17",
+        "date_end": "2026-10-23",
+        "raw": "17 сен...23 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": null,
+        "raw": "До 22 окт"
+      },
+      {
+        "name": "Второй отборочный этап",
+        "date_start": "2026-11-05",
+        "date_end": "2026-12-11",
+        "raw": "5 ноя...11 дек"
+      },
+      {
+        "name": "Заключительный этап",
+        "date_start": "2027-02-15",
+        "date_end": "2027-04-15",
+        "raw": "15 фев...15 апр"
+      }
+    ],
+    "status": "registration_open",
+    "notes": []
+  },
+  {
+    "id": 5854,
+    "name": "Всероссийская олимпиада по агрогенетике «Иннагрика»",
+    "url": "https://olimpiada.ru/activity/5854",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5825,
+    "name": "Всероссийская олимпиада по искусственному интеллекту",
+    "url": "https://olimpiada.ru/activity/5825",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-07",
+        "date_end": "2026-10-06",
+        "raw": "7 сен...6 окт"
+      },
+      {
+        "name": "Тренировочный этап",
+        "date_start": null,
+        "date_end": null,
+        "raw": "До 21 сен"
+      },
+      {
+        "name": "Отборочный этап",
+        "date_start": "2026-09-21",
+        "date_end": "2026-10-06",
+        "raw": "21 сен...6 окт"
+      },
+      {
+        "name": "Основной этап",
+        "date_start": null,
+        "date_end": "2026-10-21",
+        "raw": "15...21 окт"
+      },
+      {
+        "name": "Заключительный этап",
+        "date_start": null,
+        "date_end": "2026-11-20",
+        "raw": "16...20 ноя"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 22,
+    "name": "Олимпиада «Высшая проба»",
+    "url": "https://olimpiada.ru/activity/22",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-08-31",
+        "date_end": "2026-09-21",
+        "raw": "31 авг...21 сен"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-08-31",
+        "date_end": "2026-10-21",
+        "raw": "31 авг...21 окт"
+      }
+    ],
+    "status": "registration_open",
+    "notes": []
+  },
+  {
+    "id": 182,
+    "name": "Олимпиада «Миссия выполнима. Твое призвание – финансист!»",
+    "url": "https://olimpiada.ru/activity/182",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 5864,
+    "name": "Олимпиада «Юридические высоты!»",
+    "url": "https://olimpiada.ru/activity/5864",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5150,
+    "name": "Всероссийская Сеченовская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5150",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5150\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5429,
+    "name": "Всероссийская Толстовская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5429",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5429\", waiting until \"load\"\n"
+  },
+  {
+    "id": 181,
+    "name": "Всероссийский конкурс научных работ школьников «Юниор»",
+    "url": "https://olimpiada.ru/activity/181",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 125,
+    "name": "Всесибирская открытая олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/125",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-28",
+        "date_end": "2026-10-23",
+        "raw": "28 сен...23 окт"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2026-10-25",
+        "date_end": "2026-10-25",
+        "raw": "25 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2027-02-01",
+        "date_end": "2027-03-05",
+        "raw": "1 фев...5 мар"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-03-07",
+        "date_end": "2027-03-07",
+        "raw": "7 мар"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-28",
+        "date_end": "2026-10-16",
+        "raw": "28 сен...16 окт"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2026-10-18",
+        "date_end": "2026-10-18",
+        "raw": "18 окт"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-14",
+        "date_end": "2027-02-14",
+        "raw": "14 фев"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-26",
+        "date_end": "2026-11-13",
+        "raw": "26 окт...13 ноя"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2026-11-15",
+        "date_end": "2026-11-15",
+        "raw": "15 ноя"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2027-02-01",
+        "date_end": "2027-03-12",
+        "raw": "1 фев...12 мар"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-03-14",
+        "date_end": "2027-03-14",
+        "raw": "14 мар"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-26",
+        "date_end": "2026-11-20",
+        "raw": "26 окт...20 ноя"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2026-11-22",
+        "date_end": "2026-11-22",
+        "raw": "22 ноя"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": "2027-02-26",
+        "raw": "1...26 фев"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-28",
+        "date_end": "2027-02-28",
+        "raw": "28 фев"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5022,
+    "name": "Герценовская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5022",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5022\", waiting until \"load\"\n"
+  },
+  {
+    "id": 282,
+    "name": "Инженерная олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/282",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 57,
+    "name": "Интернет-олимпиада школьников по физике",
+    "url": "https://olimpiada.ru/activity/57",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 199,
+    "name": "Кутафинская олимпиада школьников по праву",
+    "url": "https://olimpiada.ru/activity/199",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5023,
+    "name": "Международная музыкальная олимпиада",
+    "url": "https://olimpiada.ru/activity/5023",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5237,
+    "name": "Международная олимпиада Innopolis Open",
+    "url": "https://olimpiada.ru/activity/5237",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 5795,
+    "name": "Международная олимпиада по финансовой безопасности",
+    "url": "https://olimpiada.ru/activity/5795",
+    "stages": [
+      {
+        "name": "Квалификационный этап",
+        "date_start": null,
+        "date_end": "2026-09-03",
+        "raw": "2...3 сен"
+      },
+      {
+        "name": "Финальный этап",
+        "date_start": "2026-09-27",
+        "date_end": "2026-10-02",
+        "raw": "27 сен...2 окт"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5003,
+    "name": "Международная олимпиада «Евразийская лингвистическая олимпиада»",
+    "url": "https://olimpiada.ru/activity/5003",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-11-16",
+        "date_end": "2026-12-30",
+        "raw": "16 ноя...30 дек"
+      },
+      {
+        "name": "Отборочный этап",
+        "date_start": "2026-11-16",
+        "date_end": "2027-01-14",
+        "raw": "16 ноя...14 янв"
+      },
+      {
+        "name": "Заключительный этап",
+        "date_start": "2027-02-14",
+        "date_end": "2027-02-14",
+        "raw": "14 фев"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5420,
+    "name": "Международная олимпиада школьников «Искусство графики»",
+    "url": "https://olimpiada.ru/activity/5420",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5392,
+    "name": "Международная олимпиада УрФУ для школьников «Изумруд»",
+    "url": "https://olimpiada.ru/activity/5392",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-01",
+        "date_end": "2027-01-19",
+        "raw": "1 сен...19 янв"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-01-31",
+        "date_end": "2027-02-02",
+        "raw": "31 янв...2 фев"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 185,
+    "name": "Межрегиональная олимпиада по праву «Фемида»",
+    "url": "https://olimpiada.ru/activity/185",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5278,
+    "name": "Межрегиональная олимпиада «Архитектура и искусство» по комплексу предметов",
+    "url": "https://olimpiada.ru/activity/5278",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 193,
+    "name": "Олимпиада «Будущие исследователи - будущее науки»",
+    "url": "https://olimpiada.ru/activity/193",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5298,
+    "name": "Межрегиональная олимпиада имени В. Е. Татлина",
+    "url": "https://olimpiada.ru/activity/5298",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 6949,
+    "name": "Межрегиональная олимпиада школьников имени И.Я. Верченко",
+    "url": "https://olimpiada.ru/activity/6949",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 322,
+    "name": "Олимпиада школьников на базе ведомственных образовательных организаций",
+    "url": "https://olimpiada.ru/activity/322",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 225,
+    "name": "Химическая олимпиада имени академика П. Д. Саркисова",
+    "url": "https://olimpiada.ru/activity/225",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 203,
+    "name": "Межрегиональные предметные олимпиады федерального государственного автономного образовательного учреждения высшего образования «Казанский (Приволжский) федеральный университет»",
+    "url": "https://olimpiada.ru/activity/203",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/203\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/203\", waiting until \"load\"\n"
+  },
+  {
+    "id": 240,
+    "name": "Многопредметная олимпиада «Юные таланты»",
+    "url": "https://olimpiada.ru/activity/240",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/240\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/240\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5018,
+    "name": "Многопрофильная инженерная олимпиада «Звезда»",
+    "url": "https://olimpiada.ru/activity/5018",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5018\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5018\", waiting until \"load\"\n"
+  },
+  {
+    "id": 130,
+    "name": "Московская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/130",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/130\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/130\", waiting until \"load\"\n"
+  },
+  {
+    "id": 58,
+    "name": "Московская открытая олимпиада по геологии",
+    "url": "https://olimpiada.ru/activity/58",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5405,
+    "name": "Научно-практическая олимпиада имени Н.А. Умова по физике",
+    "url": "https://olimpiada.ru/activity/5405",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 6936,
+    "name": "Оборонно-техническая олимпиада по направлению «Техника и технологии»",
+    "url": "https://olimpiada.ru/activity/6936",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 194,
+    "name": "Олимпиада школьников «Основы православной культуры»",
+    "url": "https://olimpiada.ru/activity/194",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 6943,
+    "name": "Объединенная межвузовская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/6943",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 257,
+    "name": "Олимпиада «Курчатов»",
+    "url": "https://olimpiada.ru/activity/257",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5005,
+    "name": "Олимпиада МГИМО(У) МИД России для школьников",
+    "url": "https://olimpiada.ru/activity/5005",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 234,
+    "name": "Олимпиада по комплексу предметов «Культура и искусство»",
+    "url": "https://olimpiada.ru/activity/234",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-20",
+        "date_end": "2027-01-31",
+        "raw": "20 окт...31 янв"
+      },
+      {
+        "name": "eoch",
+        "date_start": null,
+        "date_end": "2027-03-31",
+        "raw": "20...31 мар"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 6944,
+    "name": "Олимпиада школьников по химии и химической технологии «Потомки Менделеева»",
+    "url": "https://olimpiada.ru/activity/6944",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 242,
+    "name": "Олимпиада по экономике в рамках международного экономического фестиваля школьников «Сибириада. Шаг в мечту»",
+    "url": "https://olimpiada.ru/activity/242",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/242\", waiting until \"load\"\n"
+  },
+  {
+    "id": 176,
+    "name": "Олимпиада РГГУ для школьников",
+    "url": "https://olimpiada.ru/activity/176",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-12-01",
+        "date_end": "2027-01-11",
+        "raw": "1 дек...11 янв"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": "2027-01-27",
+        "raw": "13...27 янв"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": "2027-02-22",
+        "raw": "21...22 фев"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5457,
+    "name": "Олимпиада «Гранит науки»",
+    "url": "https://olimpiada.ru/activity/5457",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-05",
+        "date_end": "2027-01-13",
+        "raw": "5 окт...13 янв"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-13",
+        "date_end": "2027-02-13",
+        "raw": "13 фев"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-06",
+        "date_end": "2027-02-06",
+        "raw": "6 фев"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-21",
+        "date_end": "2027-02-21",
+        "raw": "21 фев"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 146,
+    "name": "Олимпиада школьников «Ломоносов»",
+    "url": "https://olimpiada.ru/activity/146",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_TIMED_OUT at https://olimpiada.ru/activity/146\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/146\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5332,
+    "name": "Олимпиада школьников «Надежда энергетики»",
+    "url": "https://olimpiada.ru/activity/5332",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5332\", waiting until \"load\"\n"
+  },
+  {
+    "id": 357,
+    "name": "Олимпиада «Покори Воробьевы горы!»",
+    "url": "https://olimpiada.ru/activity/357",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 123,
+    "name": "Олимпиада школьников «Физтех»",
+    "url": "https://olimpiada.ru/activity/123",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-08-31",
+        "date_end": "2026-12-30",
+        "raw": "31 авг...30 дек"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-03-27",
+        "date_end": "2027-04-04",
+        "raw": "27 мар...4 апр"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-07",
+        "date_end": "2026-10-10",
+        "raw": "7 сен...10 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-11",
+        "date_end": "2026-10-11",
+        "raw": "11 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-11-07",
+        "date_end": "2026-11-07",
+        "raw": "7 ноя"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-14",
+        "date_end": "2027-02-14",
+        "raw": "14 фев"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-07",
+        "date_end": "2026-10-30",
+        "raw": "7 сен...30 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-11-08",
+        "date_end": "2026-12-08",
+        "raw": "8 ноя...8 дек"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-02-13",
+        "date_end": "2027-02-13",
+        "raw": "13 фев"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-09-07",
+        "date_end": "2026-10-03",
+        "raw": "7 сен...3 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-04",
+        "date_end": "2026-10-04",
+        "raw": "4 окт"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": "2026-11-08",
+        "date_end": "2026-11-08",
+        "raw": "8 ноя"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 196,
+    "name": "Олимпиада школьников «Шаг в будущее»",
+    "url": "https://olimpiada.ru/activity/196",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/196\", waiting until \"load\"\n"
+  },
+  {
+    "id": 4337,
+    "name": "Олимпиада школьников по информатике и программированию",
+    "url": "https://olimpiada.ru/activity/4337",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5371,
+    "name": "Олимпиада школьников по программированию «ТехноКубок»",
+    "url": "https://olimpiada.ru/activity/5371",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5371\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5006,
+    "name": "Олимпиада РАНХиГС",
+    "url": "https://olimpiada.ru/activity/5006",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 233,
+    "name": "Олимпиада СПбГУ",
+    "url": "https://olimpiada.ru/activity/233",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5726,
+    "name": "Олимпиада школьников федерального государственного бюджетного образовательного учреждения высшего образования «Всероссийский государственный университет юстиции (РПА Минюста России)» «В мир права»",
+    "url": "https://olimpiada.ru/activity/5726",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5726\", waiting until \"load\"\n"
+  },
+  {
+    "id": 66,
+    "name": "Олимпиада Юношеской математической школы",
+    "url": "https://olimpiada.ru/activity/66",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/66\", waiting until \"load\"\n"
+  },
+  {
+    "id": 237,
+    "name": "Открытая межвузовская олимпиада школьников «Будущее Сибири»",
+    "url": "https://olimpiada.ru/activity/237",
+    "stages": [
+      {
+        "name": "Регистрация",
+        "date_start": "2026-10-01",
+        "date_end": "2026-12-01",
+        "raw": "1 окт...1 дек"
+      },
+      {
+        "name": "Регистрация",
+        "date_start": null,
+        "date_end": "2026-12-28",
+        "raw": "1...28 дек"
+      },
+      {
+        "name": "eoch",
+        "date_start": "2027-01-25",
+        "date_end": "2027-03-15",
+        "raw": "25 янв...15 мар"
+      }
+    ],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5177,
+    "name": "Открытая олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5177",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: Timeout 60000ms exceeded.\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5177\", waiting until \"load\"\n"
+  },
+  {
+    "id": 23,
+    "name": "Открытая олимпиада по программированию",
+    "url": "https://olimpiada.ru/activity/23",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5185,
+    "name": "Открытая олимпиада по программированию «Когнитивные технологии»",
+    "url": "https://olimpiada.ru/activity/5185",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 243,
+    "name": "Открытая региональная межвузовская олимпиада школьников (ОРМО) с международным участием",
+    "url": "https://olimpiada.ru/activity/243",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/243\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/243\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5353,
+    "name": "Открытая химическая олимпиада",
+    "url": "https://olimpiada.ru/activity/5353",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5353\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5353\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5516,
+    "name": "Олимпиада «Газпром»",
+    "url": "https://olimpiada.ru/activity/5516",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 201,
+    "name": "Физико-математическая олимпиада «Росатом»",
+    "url": "https://olimpiada.ru/activity/201",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 5777,
+    "name": "Пироговская олимпиада по биологии",
+    "url": "https://olimpiada.ru/activity/5777",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 5011,
+    "name": "Плехановская олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5011",
+    "stages": [],
+    "status": "not_held",
+    "notes": []
+  },
+  {
+    "id": 244,
+    "name": "Региональный конкурс школьников Челябинского университетского образовательного округа",
+    "url": "https://olimpiada.ru/activity/244",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/244\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/244\", waiting until \"load\"\n"
+  },
+  {
+    "id": 287,
+    "name": "Санкт-Петербургская астрономическая олимпиада",
+    "url": "https://olimpiada.ru/activity/287",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 246,
+    "name": "Санкт-Петербургская олимпиада школьников по математике",
+    "url": "https://olimpiada.ru/activity/246",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5793,
+    "name": "Северо-Восточная олимпиада школьников",
+    "url": "https://olimpiada.ru/activity/5793",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_TIMED_OUT at https://olimpiada.ru/activity/5793\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5793\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5352,
+    "name": "Строгановская олимпиада",
+    "url": "https://olimpiada.ru/activity/5352",
+    "stages": [],
+    "status": "error",
+    "error": "Page.goto: net::ERR_CONNECTION_RESET at https://olimpiada.ru/activity/5352\nCall log:\n  - navigating to \"https://olimpiada.ru/activity/5352\", waiting until \"load\"\n"
+  },
+  {
+    "id": 5894,
+    "name": "Олимпиада «Твой путь в настоящую науку»",
+    "url": "https://olimpiada.ru/activity/5894",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 206,
+    "name": "Телевизионная гуманитарная олимпиада школьников «Умницы и умники»",
+    "url": "https://olimpiada.ru/activity/206",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 5,
+    "name": "Турнир городов",
+    "url": "https://olimpiada.ru/activity/5",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 4,
+    "name": "Турнир Ломоносова",
+    "url": "https://olimpiada.ru/activity/4",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  },
+  {
+    "id": 249,
+    "name": "Университетская олимпиада школьников «Бельчонок»",
+    "url": "https://olimpiada.ru/activity/249",
+    "stages": [],
+    "status": "schedule_upcoming",
+    "notes": []
+  },
+  {
+    "id": 6990,
+    "name": "Всероссийская олимпиада по инновационному предпринимательству «Будущее бизнеса»",
+    "url": "https://olimpiada.ru/activity/6990",
+    "stages": [],
+    "status": "unknown",
+    "notes": []
+  }
+]
