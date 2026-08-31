@@ -723,7 +723,46 @@ async def update_stage(
     return {"id": stage.id, "status": "updated"}
 
 
-@app.post("/api/my-olympiads/{entry_id}/status")
+@app.patch("/api/my-olympiads/{entry_id}/stage/{stage_id}/field")
+@limiter.limit("60/minute")
+async def update_stage_field(
+    entry_id: int,
+    stage_id: int,
+    body: dict,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Partial update — only one field at a time. For inline date/completion edits."""
+    telegram_id = _get_telegram_id(request)
+    uo = db.query(UserOlympiad).filter(UserOlympiad.id == entry_id).first()
+    if not uo:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    user = db.query(User).filter(User.telegram_id == telegram_id).first()
+    if not user or uo.user_id != user.id:
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    stage = db.query(Stage).filter(Stage.id == stage_id, Stage.user_olympiad_id == entry_id).first()
+    if not stage:
+        raise HTTPException(status_code=404, detail="Stage not found")
+
+    field = body.get("field")
+    value = body.get("value")
+
+    if field == "date_start":
+        stage.date_start = datetime.fromisoformat(value) if value else None
+    elif field == "date_end":
+        stage.date_end = datetime.fromisoformat(value) if value else None
+    elif field == "is_completed":
+        stage.is_completed = bool(value)
+    elif field == "result":
+        stage.result = value or None
+    elif field == "name":
+        stage.name = value or None
+    else:
+        raise HTTPException(status_code=400, detail=f"Unknown field: {field}")
+
+    db.commit()
+    return {"id": stage.id, "field": field, "status": "updated"}
 @limiter.limit("30/minute")
 async def update_status(
     entry_id: int,

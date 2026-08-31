@@ -217,6 +217,17 @@
     .stage-item .date { color: var(--text-3); font-size: var(--font-size-00); white-space: nowrap; }
     .stage-item .stage-name { display: flex; align-items: center; gap: var(--size-1); flex: 1; min-width: 0; }
 
+    .days-badge {
+      font-size: var(--font-size-00);
+      font-weight: var(--font-weight-6);
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      margin-left: var(--size-1);
+    }
+    .days-urgent { background: var(--danger-bg, #ff4d4f33); color: var(--danger, #ff4d4f); }
+    .days-warning { background: var(--warning-bg, #ffa94033); color: var(--warning, #ffa940); }
+    .days-later { background: var(--success-bg, #52c41a33); color: var(--success, #52c41a); }
+
     .empty-state { text-align: center; padding: var(--size-8) var(--size-3); color: var(--text-2); }
     .empty-state h3 { font-size: var(--font-size-3); font-weight: var(--font-weight-7); margin-bottom: var(--size-1); color: var(--text-1); }
     .empty-state p { font-size: var(--font-size-0); color: var(--text-3); line-height: var(--font-lineheight-3); }
@@ -1105,26 +1116,36 @@ container.innerHTML = sorted.map(function(o) {
       currentDetailEntryId = entryId;
       var drawer = document.getElementById('detailDrawer');
       drawer.label = o.name;
-      // Build stages html with Shoelace buttons
+      // Build stages html — каждый этап с inline date picker и кнопками
       var stagesHtml = o.stages.map(function(s) {
-        var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' - ');
+        var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' — ') || 'без дат';
         var days = s.date_end ? daysUntil(s.date_end) : null;
         var daysStr = '';
+        var daysClass = 'days-later';
         if (days !== null && !s.is_completed) {
-          if (days < 0) daysStr = '<span style="color:var(--danger);font-size: var(--font-size-00);">Просрочено</span>';
-          else if (days <= 7) daysStr = '<span style="color:var(--danger);font-size: var(--font-size-00);">' + days + ' дн.</span>';
-          else daysStr = '<span style="color:var(--text-2);font-size: var(--font-size-00);">' + days + ' дн.</span>';
+          if (days < 0) { daysStr = 'просрочено'; daysClass = 'days-urgent'; }
+          else if (days <= 3) { daysStr = days + ' дн.'; daysClass = 'days-urgent'; }
+          else if (days <= 7) { daysStr = days + ' дн.'; daysClass = 'days-warning'; }
+          else { daysStr = days + ' дн.'; daysClass = 'days-later'; }
         }
-        return '<div class="stage-item">' +
-          '<div class="stage-name">' +
-          '<span style="color:' + (s.is_completed ? 'var(--success)' : 'var(--warning)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' +
-          esc(s.name) + (s.result ? ' <span style="color:var(--success);font-size: var(--font-size-00);">(' + esc(s.result) + ')</span>' : '') +
+        var checkedAttr = s.is_completed ? 'checked' : '';
+        var completedStyle = s.is_completed ? 'opacity:0.55;text-decoration:line-through;' : '';
+        return '<div class="stage-item" style="' + completedStyle + '">' +
+          '<div style="display:flex;align-items:flex-start;gap: var(--size-2);">' +
+            '<sl-checkbox ' + checkedAttr + ' data-stage-id="' + s.id + '" data-entry-id="' + o.id + '" data-field="is_completed" onsl-change="quickUpdateStage(' + o.id + ', ' + s.id + ', this)" style="margin-top:2px;flex-shrink:0;"></sl-checkbox>' +
+            '<div style="flex:1;min-width:0;">' +
+              '<div style="font-weight:var(--font-weight-5);margin-bottom: var(--size-1);">' + esc(s.name) + (s.result ? ' <span style="color:var(--success);font-size: var(--font-size-00);font-weight:var(--font-weight-4);">(' + esc(s.result) + ')</span>' : '') + '</div>' +
+              '<div style="display:flex;gap: var(--size-1);flex-wrap:wrap;align-items:center;margin-bottom: var(--size-1);">' +
+                '<sl-input type="date" size="small" value="' + (s.date_start ? s.date_start.slice(0,10) : '') + '" data-stage-id="' + s.id + '" data-entry-id="' + o.id + '" data-field="date_start" placeholder="начало" style="width: 140px;" onsl-change="quickUpdateStage(' + o.id + ', ' + s.id + ', this)"></sl-input>' +
+                '<span style="color:var(--text-3);">—</span>' +
+                '<sl-input type="date" size="small" value="' + (s.date_end ? s.date_end.slice(0,10) : '') + '" data-stage-id="' + s.id + '" data-entry-id="' + o.id + '" data-field="date_end" placeholder="конец" style="width: 140px;" onsl-change="quickUpdateStage(' + o.id + ', ' + s.id + ', this)"></sl-input>' +
+                (daysStr ? '<span class="days-badge ' + daysClass + '">' + daysStr + '</span>' : '') +
+              '</div>' +
+            '</div>' +
+            '<sl-button size="small" variant="text" onclick="event.stopPropagation(); openEditStageDrawer(' + o.id + ', ' + s.id + ')" title="Подробнее">⋯</sl-button>' +
+            '<sl-button size="small" variant="text" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" title="Удалить" style="--sl-color-primary-600: var(--danger);">✕</sl-button>' +
           '</div>' +
-          '<div style="text-align:right;display:flex;align-items:center;gap: var(--size-1);">' +
-          '<sl-button size="small" variant="text" onclick="event.stopPropagation(); openEditStageDrawer(' + o.id + ', ' + s.id + ')">✎</sl-button>' +
-          '<sl-button size="small" variant="text" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" style="--sl-color-primary-600: var(--danger);">✕</sl-button>' +
-          '<div><div class="date">' + (dateStr || '-') + '</div>' + daysStr + '</div>' +
-          '</div></div>';
+        '</div>';
       }).join('');
 
       document.getElementById('modalBody').innerHTML =
@@ -1141,9 +1162,9 @@ container.innerHTML = sorted.map(function(o) {
         ['planned','registered','participating','passed_round','won'].map(function(key) {
           return '<button class="status-btn ' + (o.status === key ? 'active' : '') + '" onclick="updateStatus(' + o.id + ", '" + key + "')" + '">' + statusLabel(key) + '</button>';
         }).join('') + '</div>' +
-        '<div class="section-title">Этапы</div>' +
-        '<div style="margin: var(--size-1) 0 var(--size-2);"><sl-button size="small" variant="default" onclick="openStageDrawer(' + o.id + ')"><sl-icon slot="prefix" name="plus-lg"></sl-icon> Добавить этап</sl-button></div>' +
-        (stagesHtml || '<div style="color:var(--text-2);font-size: var(--font-size-0);">Нет этапов</div>') +
+        '<div class="section-title">Этапы <span style="font-size: var(--font-size-00);color:var(--text-3);text-transform:none;letter-spacing:0;font-weight:var(--font-weight-4);">— нажмите дату чтобы изменить</span></div>' +
+        (stagesHtml || '<div style="color:var(--text-2);font-size: var(--font-size-0);padding: var(--size-2) 0;">Нет этапов. Добавьте даты вручную — кликните на «+» ниже.</div>') +
+        '<div style="margin-top: var(--size-2);"><sl-button size="medium" variant="primary" outline onclick="openStageDrawer(' + o.id + ')"><sl-icon slot="prefix" name="plus-lg"></sl-icon> Добавить этап</sl-button></div>' +
         '<div style="margin-top: var(--size-4);display:flex;gap: var(--size-2);flex-wrap:wrap;">' +
         '<sl-button size="small" variant="primary" onclick="syncToCalendar(' + o.id + ')"><sl-icon slot="prefix" name="calendar-event"></sl-icon> Календарь</sl-button>' +
         '<sl-button size="small" variant="danger" outline onclick="deleteOlympiad(' + o.id + ')"><sl-icon slot="prefix" name="trash"></sl-icon> Удалить</sl-button></div>';
@@ -1269,6 +1290,30 @@ container.innerHTML = sorted.map(function(o) {
         openDetail(currentDetailEntryId);
         hapticNotify('success');
       } catch(e) { showToast('Ошибка при сохранении этапа', 'danger'); }
+    }
+
+    async function quickUpdateStage(entryId, stageId, el) {
+      var field = el.dataset.field;
+      var value = el.value;
+      if (field === 'is_completed') value = el.checked;
+      if (field === 'date_start' || field === 'date_end') value = value || null;
+      try {
+        await fetch(API + '/my-olympiads/' + entryId + '/stage/' + stageId + '/field', {
+          method: 'PATCH',
+          headers: Object.assign({}, h, {'Content-Type': 'application/json'}),
+          body: JSON.stringify({ field: field, value: value })
+        });
+        // silently update local data — no full reload needed
+        var o = myOlympiads.find(function(x) { return x.id == entryId; });
+        if (o) {
+          var s = o.stages.find(function(st) { return st.id == stageId; });
+          if (s) {
+            if (field === 'is_completed') s.is_completed = value;
+            else if (field === 'date_start') s.date_start = value;
+            else if (field === 'date_end') s.date_end = value;
+          }
+        }
+      } catch(e) { showToast('Ошибка сохранения', 'danger'); }
     }
 
     async function deleteStage(entryId, stageId) {
