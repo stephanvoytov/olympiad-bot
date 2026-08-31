@@ -1,309 +1,287 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" class="sl-theme-dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Олимпиады</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <!-- Design System: Open Props -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-props@1.6.18/open-props.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-props@1.6.18/normalize.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-props@1.6.18/buttons.min.css">
+  <!-- Component Library: Shoelace -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/themes/dark.css">
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.16.0/cdn/shoelace-autoloader.js"></script>
   <style>
+    /* ========== DESIGN TOKENS — Open Props + Shoelace mapping ========== */
     :root {
+      /* Surfaces */
       --bg: #111116;
-      --surface: #1a1a22;
-      --surface-hover: #222230;
-      --surface-raised: #1e1e28;
-      --primary: #5b6abf;
-      --primary-dim: #4a58a8;
-      --green: #4ade80;
-      --green-bg: rgba(74,222,128,0.12);
-      --yellow: #facc15;
-      --yellow-bg: rgba(250,204,21,0.12);
+      --surface-1: #1a1a22;
+      --surface-2: #1e1e28;
+      --surface-3: #222230;
+      --surface-hover: #252536;
+      --border: #2a2a36;
+      --border-hover: #343448;
+
+      /* Text — alias Open Props naming */
+      --text-1: #e5e5ea;
+      --text-2: #8e8ea0;
+      --text-3: #555566;
+
+      /* Brand */
+      --brand: #5b6abf;
+      --brand-hover: #4a58a8;
+      --brand-bg: rgba(91,106,191,0.15);
+      --success: #4ade80;
+      --success-bg: rgba(74,222,128,0.12);
+      --warning: #facc15;
+      --warning-bg: rgba(250,204,21,0.12);
       --orange: #fb923c;
       --orange-bg: rgba(251,146,60,0.12);
-      --red: #f87171;
-      --red-bg: rgba(248,113,113,0.12);
-      --text: #e5e5ea;
-      --text-dim: #8e8ea0;
-      --text-muted: #555566;
-      --border: #2a2a36;
-      --radius: 12px;
-      --radius-sm: 8px;
+      --danger: #f87171;
+      --danger-bg: rgba(248,113,113,0.12);
+
+      /* Open Props aliases for reuse */
+      --radius-sm: var(--radius-2);
+      --radius-md: var(--radius-3);
+      --radius-pill: var(--radius-round);
+      --shadow-sm: var(--shadow-2);
+      --shadow-md: var(--shadow-3);
+      --ease: var(--ease-3);
+      --ease-spring: var(--ease-spring-3);
+
+      /* Shoelace theming — map to our tokens */
+      --sl-color-primary-600: var(--brand);
+      --sl-color-primary-500: #6b7ac8;
+      --sl-color-primary-700: var(--brand-hover);
+      --sl-color-success-600: var(--success);
+      --sl-color-warning-600: var(--warning);
+      --sl-color-danger-600: var(--danger);
+      --sl-color-neutral-0: var(--surface-1);
+      --sl-color-neutral-50: var(--surface-2);
+      --sl-color-neutral-100: var(--surface-3);
+      --sl-color-neutral-200: var(--border);
+      --sl-color-neutral-300: #3a3a4a;
+      --sl-color-neutral-600: var(--text-2);
+      --sl-color-neutral-700: var(--text-2);
+      --sl-color-neutral-800: var(--text-1);
+      --sl-color-neutral-900: #f5f5f5;
+      --sl-input-background-color: var(--surface-1);
+      --sl-input-background-color-hover: var(--surface-1);
+      --sl-input-border-color: var(--border);
+      --sl-input-border-color-hover: var(--border-hover);
+      --sl-input-border-color-focus: var(--brand);
+      --sl-input-color: var(--text-1);
+      --sl-input-placeholder-color: var(--text-3);
+      --sl-input-help-text-color: var(--text-2);
+      --sl-input-label-color: var(--text-2);
+      --sl-panel-background-color: var(--surface-1);
+      --sl-z-index-dialog: 100;
+      --sl-z-index-drawer: 100;
+      --sl-font-sans: var(--font-sans);
+      --sl-font-mono: var(--font-mono);
+      --sl-border-radius-medium: var(--radius-sm);
+      --sl-border-radius-large: var(--radius-md);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-pill); }
+    html { scrollbar-gutter: stable; }
     body {
-      font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif);
+      font-family: var(--font-sans);
+      font-size: var(--font-size-1);
+      line-height: var(--font-lineheight-3);
       background: var(--bg);
-      color: var(--text);
+      color: var(--text-1);
       min-height: 100vh;
       padding-bottom: 90px;
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Header — Open Props spacing */
     .header {
-      padding: 20px 16px 12px;
-      position: sticky; top: 0; z-index: 10;
+      padding: var(--size-4) var(--size-3) var(--size-3);
+      position: sticky; top: 0; z-index: var(--layer-2);
       background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      border-bottom: var(--border-size-1) solid var(--border);
     }
     .header h1 {
-      font-size: 22px; font-weight: 700;
-      letter-spacing: -0.3px;
+      font-size: var(--font-size-5);
+      font-weight: var(--font-weight-7);
+      letter-spacing: var(--font-letterspacing-0);
+      line-height: var(--font-lineheight-1);
     }
-    .header .subtitle { color: var(--text-dim); font-size: 13px; margin-top: 2px; }
+    .header .subtitle { color: var(--text-2); font-size: var(--font-size-0); margin-top: var(--size-1); }
 
+    /* Stats — Open Props shadow + radius */
     .stats-row {
-      display: flex; gap: 6px; padding: 12px 16px;
+      display: flex; gap: var(--size-2); padding: var(--size-3) var(--size-3);
       overflow-x: auto; scrollbar-width: none;
     }
     .stats-row::-webkit-scrollbar { display: none; }
     .stat-card {
-      background: var(--surface); border-radius: var(--radius-sm);
-      padding: 10px 14px; min-width: 68px; text-align: center;
-      flex-shrink: 0; border: 1px solid var(--border);
+      background: var(--surface-1); border-radius: var(--radius-sm);
+      padding: var(--size-2) var(--size-3); min-width: 68px; text-align: center;
+      flex-shrink: 0; border: var(--border-size-1) solid var(--border);
+      box-shadow: var(--shadow-sm);
     }
-    .stat-card .num { font-size: 18px; font-weight: 700; }
+    .stat-card .num { font-size: var(--font-size-4); font-weight: var(--font-weight-7); }
     .stat-card .label {
-      font-size: 10px; color: var(--text-dim); margin-top: 2px;
-      text-transform: uppercase; letter-spacing: 0.4px;
+      font-size: var(--font-size-00); color: var(--text-2); margin-top: var(--size-1);
+      text-transform: uppercase; letter-spacing: var(--font-letterspacing-2);
     }
 
-    .tabs { display: flex; gap: 6px; padding: 0 16px 12px; }
+    /* Tabs — custom but token-driven */
+    .tabs { display: flex; gap: var(--size-1); padding: 0 var(--size-3) var(--size-3); }
     .tab {
-      flex: 1; text-align: center; padding: 10px;
-      border-radius: var(--radius-sm); background: var(--surface);
-      cursor: pointer; font-size: 13px; font-weight: 600;
-      border: 1px solid var(--border); color: var(--text-dim);
-      transition: all 0.15s;
+      flex: 1; text-align: center; padding: var(--size-2) var(--size-2);
+      border-radius: var(--radius-sm); background: var(--surface-1);
+      cursor: pointer; font-size: var(--font-size-1); font-weight: var(--font-weight-6);
+      border: var(--border-size-1) solid var(--border); color: var(--text-2);
+      transition: background 150ms var(--ease), border-color 150ms var(--ease), transform 100ms var(--ease);
+      display: inline-flex; align-items: center; justify-content: center; gap: var(--size-1);
     }
     .tab:active { transform: scale(0.97); }
-    .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
-    .tab .count {
-      display: inline-block; background: rgba(255,255,255,0.12);
-      border-radius: 8px; padding: 0 6px; font-size: 11px; margin-left: 4px;
-    }
-    .tab.active .count { background: rgba(255,255,255,0.2); }
+    .tab.active { background: var(--brand); color: white; border-color: var(--brand); box-shadow: var(--shadow-sm); }
+    .tab sl-badge { --sl-color-neutral-600: rgba(255,255,255,0.9); }
+    .tab.active sl-badge::part(base) { background: rgba(255,255,255,0.2); border-color: transparent; color: white; }
 
-    .content { padding: 0 16px; }
+    .content { padding: 0 var(--size-3); }
 
-    .search-bar { display: flex; gap: 6px; margin-bottom: 10px; }
-    .search-bar input {
-      flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      font-size: 14px; outline: none; transition: border-color 0.15s;
-    }
-    .search-bar input::placeholder { color: var(--text-muted); }
-    .search-bar input:focus { border-color: var(--primary); }
+    /* Shoelace inputs/selects — ensure full width handling */
+    sl-input, sl-select { display: block; }
+    sl-input::part(base), sl-select::part(combobox) { background: var(--surface-1); }
+    .search-bar { margin-bottom: var(--size-3); }
+    .search-bar sl-input { --sl-input-border-radius-medium: var(--radius-sm); }
 
-    .catalog-filters { display: flex; gap: 6px; margin-bottom: 10px; flex-direction: column; }
-    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
-    .filter-select {
-      flex: 1; padding: 8px 10px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--surface);
-      color: var(--text); font-size: 12px; outline: none; cursor: pointer;
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238e8ea0' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 8px center;
-      background-size: 12px;
-    }
-    .filter-select:focus { border-color: var(--primary); }
-    .filter-select option { background: var(--surface); color: var(--text); }
+    .catalog-filters { display: flex; gap: var(--size-2); margin-bottom: var(--size-3); flex-direction: column; }
+    .filter-row { display: flex; gap: var(--size-2); flex-wrap: wrap; align-items: center; }
+    .filter-row sl-select { flex: 1; min-width: 140px; }
+    .filter-row sl-select::part(combobox) { font-size: var(--font-size-0); }
 
-    .chip {
-      padding: 5px 12px; border-radius: 16px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text-dim); cursor: pointer;
-      font-size: 11px; font-weight: 500; transition: all 0.15s;
-      white-space: nowrap; flex-shrink: 0;
-    }
-    .chip:hover { border-color: var(--text-muted); color: var(--text); }
-    .chip:active { transform: scale(0.96); }
-    .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
-
+    /* Olympiad cards — use Open Props shadow/radius, Shoelace card part */
     .olympiad-card {
-      background: var(--surface); border-radius: var(--radius);
-      padding: 14px; margin-bottom: 8px; cursor: pointer;
-      border: 1px solid var(--border); transition: border-color 0.15s;
+      background: var(--surface-1); border-radius: var(--radius-md);
+      padding: var(--size-3); margin-bottom: var(--size-2); cursor: pointer;
+      border: var(--border-size-1) solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: border-color 150ms var(--ease), box-shadow 150ms var(--ease);
     }
+    .olympiad-card:hover { border-color: var(--border-hover); box-shadow: var(--shadow-md); }
     .olympiad-card:active { transform: scale(0.99); }
-    .olympiad-card:hover { border-color: #3a3a4a; }
     .olympiad-card .row1 {
-      display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: var(--size-2);
     }
     .olympiad-card .row1 > div:first-child { flex: 1; min-width: 0; }
-    .olympiad-card .name { font-size: 15px; font-weight: 600; line-height: 1.3; }
-    .olympiad-card .organizer { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-    .olympiad-card .meta { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
+    .olympiad-card .name { font-size: var(--font-size-2); font-weight: var(--font-weight-6); line-height: var(--font-lineheight-2); }
+    .olympiad-card .organizer { font-size: var(--font-size-0); color: var(--text-3); margin-top: var(--size-1); }
+    .olympiad-card .meta { display: flex; gap: var(--size-1); margin-top: var(--size-2); flex-wrap: wrap; align-items: center; }
     .olympiad-card .deadline-badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      margin-top: 8px; padding: 4px 10px; border-radius: var(--radius-sm);
-      font-size: 11px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: var(--size-1);
+      margin-top: var(--size-2); padding: var(--size-1) var(--size-2); border-radius: var(--radius-sm);
+      font-size: var(--font-size-00); font-weight: var(--font-weight-6);
     }
-    .deadline-urgent { background: var(--red-bg); color: var(--red); }
-    .deadline-soon { background: var(--yellow-bg); color: var(--yellow); }
-    .deadline-later { background: var(--green-bg); color: var(--green); }
+    .deadline-urgent { background: var(--danger-bg); color: var(--danger); }
+    .deadline-soon { background: var(--warning-bg); color: var(--warning); }
+    .deadline-later { background: var(--success-bg); color: var(--success); }
 
-    .badge {
-      font-size: 10px; padding: 2px 7px; border-radius: 10px;
-      font-weight: 600; white-space: nowrap;
+    /* Shoelace badges — map semantic variants */
+    sl-badge[variant="primary"]::part(base) { background: var(--brand); border-color: var(--brand); }
+    sl-badge[variant="success"]::part(base) { background: var(--success-bg); color: var(--success); border-color: transparent; }
+    sl-badge[variant="warning"]::part(base) { background: var(--orange-bg); color: var(--orange); border-color: transparent; }
+    sl-badge[variant="neutral"]::part(base) { background: rgba(142,142,160,0.12); color: var(--text-2); border-color: transparent; }
+
+    sl-tag::part(base) { font-size: var(--font-size-00); }
+
+    .profile-checkbox-row {
+      display: flex; align-items: center; gap: var(--size-2);
+      padding: var(--size-1) 0; font-size: var(--font-size-0);
     }
-    .badge.level { background: var(--primary); color: #fff; }
-    .badge.bvi { background: var(--green-bg); color: var(--green); }
-    .badge.points { background: var(--orange-bg); color: var(--orange); }
-    .badge.extra { background: rgba(142,142,160,0.12); color: var(--text-dim); }
-
-    .profile-checkbox { border-radius: 6px; }
-    .profile-checkbox:hover { background: var(--surface-hover); }
+    .profile-checkbox-row:hover { background: var(--surface-hover); border-radius: var(--radius-1); }
 
     .status-indicator {
-      display: inline-flex; align-items: center; gap: 5px;
-      font-size: 12px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: var(--size-1);
+      font-size: var(--font-size-0); font-weight: var(--font-weight-5);
     }
     .status-indicator svg { flex-shrink: 0; }
 
     .stage-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 9px 0; border-bottom: 1px solid var(--border);
-      font-size: 13px; gap: 8px;
+      padding: var(--size-2) 0; border-bottom: var(--border-size-1) solid var(--border);
+      font-size: var(--font-size-0); gap: var(--size-2);
     }
     .stage-item:last-child { border: none; }
-    .stage-item .date { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
-    .stage-item .stage-name { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+    .stage-item .date { color: var(--text-3); font-size: var(--font-size-00); white-space: nowrap; }
+    .stage-item .stage-name { display: flex; align-items: center; gap: var(--size-1); flex: 1; min-width: 0; }
 
-    .empty-state { text-align: center; padding: 40px 16px; color: var(--text-dim); }
-    .empty-state h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
-    .empty-state p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 8px 16px; border-radius: var(--radius-sm);
-      border: none; cursor: pointer; font-size: 13px; font-weight: 600;
-      transition: all 0.15s;
-    }
-    .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-primary:hover { background: var(--primary-dim); }
-    .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
-    .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
-    .btn-sm { padding: 6px 12px; font-size: 12px; }
-    .btn-link {
-      display: inline-flex; align-items: center; gap: 4px;
-      color: var(--primary); text-decoration: none; font-size: 12px; font-weight: 500;
-    }
-
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); z-index: 100;
-      justify-content: center; align-items: flex-end;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal-overlay.open .modal { animation: slideUp 0.25s ease-out; }
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    .modal {
-      background: var(--surface); border-radius: var(--radius) var(--radius) 0 0;
-      padding: 16px; width: 100%; max-width: 480px;
-      max-height: 85vh; overflow-y: auto;
-      border-top: 1px solid var(--border);
-    }
-    .modal-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
-    }
-    .modal-header h2 { font-size: 18px; font-weight: 700; }
-    .modal-close {
-      background: var(--surface-hover); border: none; color: var(--text-dim);
-      cursor: pointer; padding: 6px; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .modal-close:hover { color: var(--text); }
-
-    .status-selector { display: flex; gap: 5px; flex-wrap: wrap; margin: 10px 0; }
-    .status-btn {
-      padding: 6px 12px; border-radius: 14px; border: 1px solid var(--border);
-      background: var(--surface); color: var(--text-dim); cursor: pointer;
-      font-size: 11px; font-weight: 500; transition: all 0.15s;
-    }
-    .status-btn:active { transform: scale(0.96); }
-    .status-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .empty-state { text-align: center; padding: var(--size-8) var(--size-3); color: var(--text-2); }
+    .empty-state h3 { font-size: var(--font-size-3); font-weight: var(--font-weight-7); margin-bottom: var(--size-1); color: var(--text-1); }
+    .empty-state p { font-size: var(--font-size-0); color: var(--text-3); line-height: var(--font-lineheight-3); }
 
     .section-title {
-      font-size: 12px; font-weight: 700; margin: 14px 0 8px;
-      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim);
+      font-size: var(--font-size-00); font-weight: var(--font-weight-7); margin: var(--size-3) 0 var(--size-2);
+      text-transform: uppercase; letter-spacing: var(--font-letterspacing-2); color: var(--text-2);
     }
 
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 3px; font-weight: 500; }
-    .form-group input, .form-group select {
-      width: 100%; padding: 10px; border-radius: var(--radius-sm);
-      border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      font-size: 14px; outline: none; transition: border-color 0.15s;
+    .status-selector { display: flex; gap: var(--size-1); flex-wrap: wrap; margin: var(--size-2) 0; }
+    .status-btn {
+      padding: var(--size-1) var(--size-3); border-radius: var(--radius-pill); border: var(--border-size-1) solid var(--border);
+      background: var(--surface-1); color: var(--text-2); cursor: pointer;
+      font-size: var(--font-size-00); font-weight: var(--font-weight-5); transition: all 150ms var(--ease);
     }
-    .form-group input:focus { border-color: var(--primary); }
-    .form-group input[type="date"] { color-scheme: dark; }
+    .status-btn:active { transform: scale(0.96); }
+    .status-btn.active { background: var(--brand); border-color: var(--brand); color: white; box-shadow: var(--shadow-sm); }
 
-    .toast {
-      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
-      background: var(--surface-raised); color: var(--text);
-      padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500;
-      z-index: 200; display: none; white-space: nowrap;
-      border: 1px solid var(--border);
-    }
-    .toast.show { display: block; animation: toastIn 0.2s ease-out; }
-    @keyframes toastIn {
-      from { transform: translateX(-50%) translateY(8px); opacity: 0; }
-      to { transform: translateX(-50%) translateY(0); opacity: 1; }
-    }
-
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
-    .info-item { font-size: 13px; }
-    .info-item .label { color: var(--text-dim); font-size: 11px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--size-2); margin: var(--size-2) 0; }
+    .info-item { font-size: var(--font-size-0); }
+    .info-item .label { color: var(--text-2); font-size: var(--font-size-00); }
 
     .group-header {
-      display: flex; align-items: center; gap: 8px;
-      padding: 10px 0 6px; margin-top: 6px;
-      font-size: 12px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim);
-      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: var(--size-2);
+      padding: var(--size-2) 0 var(--size-1); margin-top: var(--size-2);
+      font-size: var(--font-size-00); font-weight: var(--font-weight-7);
+      text-transform: uppercase; letter-spacing: var(--font-letterspacing-2); color: var(--text-2);
+      border-bottom: var(--border-size-1) solid var(--border);
     }
     .group-header:first-child { margin-top: 0; }
     .group-header .group-icon {
-      width: 24px; height: 24px; border-radius: 6px;
+      width: 24px; height: 24px; border-radius: var(--radius-1);
       background: var(--surface-hover); display: flex; align-items: center; justify-content: center;
-      font-size: 12px; flex-shrink: 0;
+      font-size: var(--font-size-0); flex-shrink: 0;
     }
     .group-header .group-count {
       margin-left: auto; background: var(--surface-hover);
-      padding: 1px 6px; border-radius: 8px; font-size: 10px;
-      color: var(--text-dim); font-weight: 600;
+      padding: 1px var(--size-2); border-radius: var(--radius-pill); font-size: var(--font-size-00);
+      color: var(--text-2); font-weight: var(--font-weight-6);
     }
 
     .loading-overlay {
-      position: fixed; inset: 0; z-index: 300;
+      position: fixed; inset: 0; z-index: var(--layer-5);
       background: rgba(17,17,22,0.8);
       display: none; align-items: center; justify-content: center;
-      flex-direction: column; gap: 8px;
+      flex-direction: column; gap: var(--size-2);
     }
     .loading-overlay.show { display: flex; }
-    .spinner {
-      width: 28px; height: 28px; border: 2px solid var(--border);
-      border-top-color: var(--primary); border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-dim); font-size: 13px; }
+    .loading-text { color: var(--text-2); font-size: var(--font-size-0); }
 
-    .add-btn {
-      position: fixed; bottom: 20px; right: 20px;
-      width: 48px; height: 48px; border-radius: 50%;
-      background: var(--primary); color: #fff; border: none;
-      cursor: pointer; display: flex; align-items: center; justify-content: center;
-      z-index: 5; transition: transform 0.15s;
+    /* Shoelace dialog/drawer theming */
+    sl-dialog::part(panel), sl-drawer::part(panel) {
+      background: var(--surface-1);
+      border: var(--border-size-1) solid var(--border);
     }
-    .add-btn:active { transform: scale(0.92); }
+    sl-dialog::part(header), sl-drawer::part(header) { border-bottom: var(--border-size-1) solid var(--border); }
+    sl-dialog::part(footer), sl-drawer::part(footer) { border-top: var(--border-size-1) solid var(--border); background: var(--surface-1); }
+    sl-dialog::part(title), sl-drawer::part(title) { font-weight: var(--font-weight-7); font-size: var(--font-size-3); }
+    sl-dialog::part(close-button), sl-drawer::part(close-button) { color: var(--text-2); }
+
+    /* Drawer as bottom sheet */
+    sl-drawer[placement="bottom"]::part(panel) {
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      max-height: 85vh;
+    }
   </style>
 </head>
 <body>
@@ -315,91 +293,48 @@
   <div class="stats-row" id="statsRow"></div>
 
   <div class="tabs">
-    <button class="tab active" data-tab="my">Мои <span class="count" id="myCount">0</span></button>
-    <button class="tab" data-tab="catalog">Каталог <span class="count" id="catCount">0</span></button>
+    <button class="tab active" data-tab="my">Мои <sl-badge id="myCount" variant="neutral" pill>0</sl-badge></button>
+    <button class="tab" data-tab="catalog">Каталог <sl-badge id="catCount" variant="neutral" pill>0</sl-badge></button>
   </div>
 
   <div class="content" id="tabContent"></div>
 
-  <div class="toast" id="toast"></div>
-
   <div class="loading-overlay" id="loadingOverlay">
-    <div class="spinner"></div>
+    <sl-spinner style="font-size: 28px; --indicator-color: var(--brand); --track-color: var(--border);"></sl-spinner>
     <div class="loading-text" id="loadingText">Загрузка...</div>
   </div>
 
-  <!-- Confirm modal -->
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="confirmTitle">Подтверждение</h2>
-        <button class="modal-close" onclick="closeConfirmModal()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div id="confirmBody" style="font-size:13px;color:var(--text-dim);margin-bottom:14px;line-height:1.5"></div>
-      <div style="display:flex;gap:6px">
-        <button class="btn btn-danger" id="confirmYesBtn" style="flex:1;justify-content:center"></button>
-        <button class="btn btn-outline" onclick="closeConfirmModal()" style="flex:1;justify-content:center">Отмена</button>
-      </div>
-    </div>
-  </div>
+  <!-- Shoelace: Confirm dialog -->
+  <sl-dialog id="confirmDialog" label="Подтверждение" style="--width: 420px;">
+    <div id="confirmBody" style="font-size: var(--font-size-1); color: var(--text-2); line-height: var(--font-lineheight-3);"></div>
+    <sl-button slot="footer" variant="text" onclick="closeConfirmDialog()">Отмена</sl-button>
+    <sl-button slot="footer" variant="danger" id="confirmYesBtn"></sl-button>
+  </sl-dialog>
 
-  <!-- Detail modal -->
-  <div class="modal-overlay" id="detailModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalTitle">Олимпиада</h2>
-        <button class="modal-close" onclick="closeModal()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-      </div>
-      <div id="modalBody"></div>
-    </div>
-  </div>
+  <!-- Shoelace: Detail drawer (bottom sheet) -->
+  <sl-drawer id="detailDrawer" placement="bottom" style="--size: 85vh;" label="Олимпиада">
+    <div id="modalBody"></div>
+  </sl-drawer>
 
-  <!-- Stage modal -->
-  <div class="modal-overlay" id="stageModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2>Добавить этап</h2>
-        <button class="modal-close" onclick="closeStageModal()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+  <!-- Shoelace: Stage drawer (bottom sheet) -->
+  <sl-drawer id="stageDrawer" placement="bottom" style="--size: auto;" label="Добавить этап">
+    <div id="stageModalBody">
+      <sl-input id="stageNameInput" label="Название этапа" placeholder="Регистрация, Отборочный тур..." clearable></sl-input>
+      <div class="info-grid" style="margin-top: var(--size-3);">
+        <sl-input id="stageStartInput" label="Дата начала" type="date" help-text="необязательно"></sl-input>
+        <sl-input id="stageEndInput" label="Дата окончания" type="date" help-text="необязательно"></sl-input>
       </div>
-      <div id="stageModalBody">
-        <div class="form-group">
-          <label>Название этапа</label>
-          <input type="text" id="stageNameInput" placeholder="Регистрация, Отборочный тур...">
-        </div>
-        <div class="info-grid">
-          <div class="form-group">
-            <label>Дата начала <span style="color:var(--text-muted)">(необяз.)</span></label>
-            <input type="date" id="stageStartInput">
-          </div>
-          <div class="form-group">
-            <label>Дата окончания <span style="color:var(--text-muted)">(необяз.)</span></label>
-            <input type="date" id="stageEndInput">
-          </div>
-        </div>
-        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
-          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
-            <input type="checkbox" id="stageCompletedInput" style="accent-color:var(--green);width:16px;height:16px"> Завершён
-          </label>
-          <div class="form-group" style="flex:1;margin-bottom:0">
-            <input type="text" id="stageResultInput" placeholder="Результат (диплом, баллы...)" style="font-size:13px">
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;margin-top:14px">
-          <button class="btn btn-primary" onclick="submitStage()" style="flex:1;justify-content:center">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Сохранить
-          </button>
-          <button class="btn btn-outline" onclick="closeStageModal()" style="flex:1;justify-content:center">Отмена</button>
-        </div>
-        <div id="stageError" style="color:var(--red);font-size:12px;margin-top:6px;display:none"></div>
+      <div style="display:flex; gap: var(--size-3); align-items: flex-end; margin-top: var(--size-3);">
+        <sl-checkbox id="stageCompletedInput">Завершён</sl-checkbox>
+        <sl-input id="stageResultInput" placeholder="Результат (диплом, баллы...)" style="flex:1;" size="small" clearable></sl-input>
       </div>
+      <div id="stageError" style="color: var(--danger); font-size: var(--font-size-00); margin-top: var(--size-1); display:none;"></div>
     </div>
-  </div>
+    <sl-button slot="footer" variant="text" onclick="closeStageDrawer()">Отмена</sl-button>
+    <sl-button slot="footer" variant="primary" onclick="submitStage()">
+      <sl-icon slot="prefix" name="check-lg"></sl-icon> Сохранить
+    </sl-button>
+  </sl-drawer>
 
   <script>
     // ========== TELEGRAM DETECTION ==========
@@ -464,47 +399,42 @@
     }
 
     function openConfirm(title, body, btnText, onConfirm) {
-      document.getElementById('confirmTitle').textContent = title;
+      var dlg = document.getElementById('confirmDialog');
+      dlg.label = title;
       document.getElementById('confirmBody').textContent = body;
       var btn = document.getElementById('confirmYesBtn');
       btn.textContent = btnText || 'Подтвердить';
-      btn.onclick = function() { closeConfirmModal(); if (onConfirm) onConfirm(); };
-      document.getElementById('confirmModal').classList.add('open');
-      bodyScrollLock(true);
+      // Remove old handler and set new one
+      var newBtn = btn.cloneNode(true);
+      btn.parentNode.replaceChild(newBtn, btn);
+      newBtn.id = 'confirmYesBtn';
+      newBtn.addEventListener('click', function() {
+        dlg.hide();
+        if (onConfirm) onConfirm();
+      });
+      dlg.show();
     }
 
-    function closeConfirmModal() {
-      document.getElementById('confirmModal').classList.remove('open');
-      bodyScrollLock(false);
+    function closeConfirmDialog() {
+      document.getElementById('confirmDialog').hide();
     }
 
     function bodyScrollLock(lock) {
+      // Shoelace drawers/dialogs handle scroll lock themselves; keep for compatibility
       if (lock) { document.body.style.overflow = 'hidden'; }
-      else { if (!document.querySelectorAll('.modal-overlay.open').length) document.body.style.overflow = ''; }
+      else { document.body.style.overflow = ''; }
     }
 
     function setupGlobalHandlers() {
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-          var openModals = document.querySelectorAll('.modal-overlay.open');
-          if (openModals.length) {
-            var last = openModals[openModals.length - 1];
-            if (last.id === 'detailModal') closeModal();
-            else if (last.id === 'stageModal') closeStageModal();
-            else if (last.id === 'confirmModal') closeConfirmModal();
-            e.preventDefault();
-          }
-        }
-      });
+      // Shoelace dialogs/drawers handle Esc automatically; keep Telegram BackButton logic
       try {
         if (isTelegram) Telegram.WebApp.BackButton.onClick(function() {
-          var openModals = document.querySelectorAll('.modal-overlay.open');
-          if (openModals.length) {
-            var last = openModals[openModals.length - 1];
-            if (last.id === 'detailModal') closeModal();
-            else if (last.id === 'stageModal') closeStageModal();
-            else if (last.id === 'confirmModal') closeConfirmModal();
-          }
+          var detailDrawer = document.getElementById('detailDrawer');
+          var stageDrawer = document.getElementById('stageDrawer');
+          var confirmDlg = document.getElementById('confirmDialog');
+          if (confirmDlg && confirmDlg.open) { confirmDlg.hide(); }
+          else if (stageDrawer && stageDrawer.open) { stageDrawer.hide(); }
+          else if (detailDrawer && detailDrawer.open) { detailDrawer.hide(); }
         });
       } catch(e) {}
     }
@@ -512,7 +442,8 @@
     function updateBackButton() {
       if (!isTelegram) return;
       try {
-        if (document.querySelectorAll('.modal-overlay.open').length) Telegram.WebApp.BackButton.show();
+        var anyOpen = (document.getElementById('detailDrawer')?.open || document.getElementById('stageDrawer')?.open || document.getElementById('confirmDialog')?.open);
+        if (anyOpen) Telegram.WebApp.BackButton.show();
         else Telegram.WebApp.BackButton.hide();
       } catch(e) {}
     }
@@ -524,7 +455,7 @@
     }
 
     function statusIcon(status) {
-      return '<span class="status-indicator" style="color:var(--' + (status === 'won' ? 'green' : status === 'registered' ? 'primary' : status === 'participating' ? 'yellow' : status === 'passed_round' ? 'orange' : 'text-dim') + ')">' + (ICONS[status] || ICONS.planned) + ' ' + statusLabel(status) + '</span>';
+      return '<span class="status-indicator" style="color:var(--' + (status === 'won' ? 'success' : status === 'registered' ? 'brand' : status === 'participating' ? 'warning' : status === 'passed_round' ? 'orange' : 'text-2') + ')">' + (ICONS[status] || ICONS.planned) + ' ' + statusLabel(status) + '</span>';
     }
 
     function statusLabel(s) {
@@ -583,7 +514,7 @@
         tgUser = await resp.json();
         var nameText = tgUser.full_name || tgUser.username || ('ID: ' + tgUser.telegram_id);
         if (!TELEGRAM_ID && guestId) {
-          nameText += ' <span style="cursor:pointer;color:var(--text-muted);font-size:11px" onclick="doLogout()">выйти</span>';
+          nameText += ' <span style="cursor:pointer;color:var(--text-3);font-size: var(--font-size-00);" onclick="doLogout()">выйти</span>';
         }
         document.getElementById('subtitle').innerHTML = nameText;
         try {
@@ -610,24 +541,33 @@
       document.getElementById('subtitle').textContent = 'Вход на сайт';
       document.getElementById('statsRow').innerHTML = '';
       document.getElementById('tabContent').innerHTML =
-        '<div style="max-width:340px;margin:32px auto 0;text-align:center">' +
-          '<h2 style="font-size:18px;font-weight:700;margin-bottom:6px">Вход по ID и паролю</h2>' +
-          '<p style="color:var(--text-dim);font-size:13px;margin-bottom:20px;line-height:1.5">' +
+        '<div style="max-width:340px;margin: var(--size-6) auto 0;text-align:center">' +
+          '<h2 style="font-size: var(--font-size-4);font-weight: var(--font-weight-7);margin-bottom: var(--size-1);">Вход по ID и паролю</h2>' +
+          '<p style="color:var(--text-2);font-size: var(--font-size-0);margin-bottom: var(--size-4);line-height: var(--font-lineheight-3);">' +
             'Получите ID и пароль в Telegram-боте.<br>Нажмите <b>/start</b> в боте.' +
           '</p>' +
-          '<div class="form-group" style="text-align:left"><label>Telegram ID</label>' +
-            '<input type="number" id="loginIdInput" placeholder="123456789" inputmode="numeric"></div>' +
-          '<div class="form-group" style="text-align:left"><label>Пароль</label>' +
-            '<input type="text" id="loginPasswordInput" placeholder="6 цифр" inputmode="numeric" maxlength="6"></div>' +
-          '<button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px" onclick="doLogin()">Войти</button>' +
-          '<div id="loginError" style="color:var(--red);font-size:12px;margin-top:10px;display:none"></div>' +
+          '<sl-input id="loginIdInput" label="Telegram ID" placeholder="123456789" type="number" clearable></sl-input>' +
+          '<sl-input id="loginPasswordInput" label="Пароль" placeholder="6 цифр" type="password" maxlength="6" clearable style="margin-top: var(--size-3);"></sl-input>' +
+          '<sl-button id="loginBtn" variant="primary" style="width:100%;margin-top: var(--size-4);">Войти</sl-button>' +
+          '<div id="loginError" style="color:var(--danger);font-size: var(--font-size-0);margin-top: var(--size-2);display:none"></div>' +
         '</div>';
-      document.getElementById('loginIdInput').focus();
+      // Shoelace inputs need upgrade — attach handler after render
+      setTimeout(function() {
+        var idInput = document.getElementById('loginIdInput');
+        var pwdInput = document.getElementById('loginPasswordInput');
+        var btn = document.getElementById('loginBtn');
+        if (btn) btn.addEventListener('click', doLogin);
+        if (pwdInput) pwdInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+        if (idInput) idInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+        if (idInput && idInput.focus) idInput.focus();
+      }, 50);
     }
 
     async function doLogin() {
-      var id = document.getElementById('loginIdInput').value.trim();
-      var pwd = document.getElementById('loginPasswordInput').value.trim();
+      var idEl = document.getElementById('loginIdInput');
+      var pwdEl = document.getElementById('loginPasswordInput');
+      var id = (idEl ? idEl.value : '').trim();
+      var pwd = (pwdEl ? pwdEl.value : '').trim();
       var errEl = document.getElementById('loginError');
       if (!id || !pwd) { errEl.textContent = 'Заполните ID и пароль'; errEl.style.display = 'block'; return; }
       errEl.style.display = 'none';
@@ -706,6 +646,14 @@
       });
     });
 
+    // Also sync with Shoelace drawers: update Telegram BackButton visibility
+    document.getElementById('detailDrawer')?.addEventListener('sl-after-show', updateBackButton);
+    document.getElementById('detailDrawer')?.addEventListener('sl-after-hide', updateBackButton);
+    document.getElementById('stageDrawer')?.addEventListener('sl-after-show', updateBackButton);
+    document.getElementById('stageDrawer')?.addEventListener('sl-after-hide', updateBackButton);
+    document.getElementById('confirmDialog')?.addEventListener('sl-after-show', updateBackButton);
+    document.getElementById('confirmDialog')?.addEventListener('sl-after-hide', updateBackButton);
+
     function renderTab(tab) {
       if (tab === 'my') renderMyOlympiads();
       else renderCatalogContent();
@@ -716,15 +664,22 @@
       if (profileFilter !== undefined) catalogProfileFilter = profileFilter;
       const container = document.getElementById('tabContent');
       container.innerHTML =
-        '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию..." oninput="debouncedSearch()"></div>' +
-        (isLoggedIn ? '' : '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px">' +
-          '<div style="flex:1"><div style="font-size:13px;font-weight:600">Хотите добавлять олимпиады?</div><div style="font-size:11px;color:var(--text-dim);margin-top:2px">Войдите через Telegram-бот</div></div>' +
-          '<button class="btn btn-primary btn-sm" onclick="showLoginForm()">Войти</button>' +
-          '</div>') +
+        '<div class="search-bar"><sl-input id="searchInput" placeholder="Поиск по названию..." clearable size="medium"><sl-icon slot="prefix" name="search"></sl-icon></sl-input></div>' +
+        (isLoggedIn ? '' : '<sl-card style="margin-bottom: var(--size-3); --padding: var(--size-3);"><div style="display:flex;align-items:center;gap: var(--size-3);"><div style="flex:1"><div style="font-size: var(--font-size-1);font-weight: var(--font-weight-6);">Хотите добавлять олимпиады?</div><div style="font-size: var(--font-size-00);color:var(--text-2);margin-top:2px">Войдите через Telegram-бот</div></div><sl-button variant="primary" size="small" id="loginPromptBtn">Войти</sl-button></div></sl-card>') +
         '<div id="catalogResults"></div>' +
-        '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:10px 0 16px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(17,17,22,0) 0%, var(--bg) 40%)">' +
-          '<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedFromCatalog()">+ Добавить выбранные</button>' +
-        '</div>';
+        '<div id="catalogTabFooter" style="display:none;padding: var(--size-3) 0 var(--size-4);position:sticky;bottom:0;background: linear-gradient(180deg, transparent 0%, var(--bg) 40%);"><sl-button variant="primary" style="width:100%;" id="addSelectedBtn">Добавить выбранные</sl-button></div>';
+      // Attach shoelace search handler
+      setTimeout(function() {
+        var searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+          searchInput.addEventListener('sl-input', debouncedSearch);
+          searchInput.addEventListener('sl-clear', function() { renderCatalogResults(); });
+        }
+        var loginPromptBtn = document.getElementById('loginPromptBtn');
+        if (loginPromptBtn) loginPromptBtn.addEventListener('click', showLoginForm);
+        var addSelectedBtn = document.getElementById('addSelectedBtn');
+        if (addSelectedBtn) addSelectedBtn.addEventListener('click', addSelectedFromCatalog);
+      }, 50);
       renderCatalogFilter();
       renderCatalogResults();
     }
@@ -742,54 +697,68 @@
       var dirList = Array.from(directions).sort();
       var uniList = Array.from(unis).sort();
 
-      var dirOptions = '<option value="">Все направления</option>' +
-        dirList.map(function(d) { return '<option value="' + esc(d) + '"' + (catalogDirectionFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('');
-      var uniOptions = '<option value="">Все вузы</option>' +
-        uniList.map(function(u) { return '<option value="' + esc(u) + '"' + (catalogUniFilter === u ? ' selected' : '') + '>' + esc(u) + '</option>'; }).join('');
-
       var profiles = new Set();
       catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
       var profileList = Array.from(profiles).sort();
-      var profileOptions = '<option value="">Все профили</option>' +
-        profileList.map(function(p) { return '<option value="' + esc(p) + '"' + (catalogProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('');
 
-      var levelOptions = ['', 1, 2, 3].map(function(l) {
-        return '<option value="' + l + '"' + (catalogLevelFilter === String(l) ? ' selected' : '') + '>' + (l ? 'Ур. ' + l : 'Любой уровень') + '</option>';
-      }).join('');
-
+      var levelOptions = ['', 1, 2, 3];
       var groupOptions = [
         { val: '', label: 'Без группировки' },
         { val: 'direction', label: 'По направлению' },
         { val: 'university', label: 'По вузу' },
         { val: 'level', label: 'По уровню' },
         { val: 'benefits', label: 'По льготам' },
-      ].map(function(g) {
-        return '<option value="' + g.val + '"' + (catalogGroupBy === g.val ? ' selected' : '') + '>' + g.label + '</option>';
-      }).join('');
+      ];
 
       var filterHtml =
-        '<div class="catalog-filters">' +
+        '<div class="catalog-filters" id="catalogFilters">' +
           '<div class="filter-row">' +
-            '<select class="filter-select" onchange="filterCatalogDirection(this.value)">' + dirOptions + '</select>' +
-            '<select class="filter-select" onchange="filterCatalogUni(this.value)">' + uniOptions + '</select>' +
+            '<sl-select id="directionSelect" placeholder="Все направления" clearable size="small">' +
+              '<sl-option value="">Все направления</sl-option>' +
+              dirList.map(function(d) { return '<sl-option value="' + esc(d) + '">' + esc(d) + '</sl-option>'; }).join('') +
+            '</sl-select>' +
+            '<sl-select id="uniSelect" placeholder="Все вузы" clearable size="small">' +
+              '<sl-option value="">Все вузы</sl-option>' +
+              uniList.map(function(u) { return '<sl-option value="' + esc(u) + '">' + esc(u) + '</sl-option>'; }).join('') +
+            '</sl-select>' +
           '</div>' +
           '<div class="filter-row">' +
-            '<select class="filter-select" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
-            '<select class="filter-select" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
+            '<sl-select id="profileSelect" placeholder="Все профили" clearable size="small">' +
+              '<sl-option value="">Все профили</sl-option>' +
+              profileList.map(function(p) { return '<sl-option value="' + esc(p) + '">' + esc(p) + '</sl-option>'; }).join('') +
+            '</sl-select>' +
+            '<sl-select id="levelSelect" placeholder="Любой уровень" clearable size="small">' +
+              levelOptions.map(function(l) { return '<sl-option value="' + l + '">' + (l ? 'Ур. ' + l : 'Любой уровень') + '</sl-option>'; }).join('') +
+            '</sl-select>' +
           '</div>' +
-          '<div class="filter-row" style="align-items:center">' +
-            '<span class="chip' + (catalogBenefitsOnly ? ' active' : '') + '" onclick="toggleBenefitsOnly()">' +
-              (catalogBenefitsOnly ? ICONS.check + ' ' : '') + 'Только с льготами</span>' +
-            '<select class="filter-select" style="flex:none;width:auto;padding:6px 24px 6px 8px" onchange="filterCatalogGroup(this.value)">' +
-              groupOptions + '</select>' +
+          '<div class="filter-row">' +
+            '<sl-button id="benefitsChip" size="small" pill variant="' + (catalogBenefitsOnly ? 'primary' : 'neutral') + '">' + (catalogBenefitsOnly ? '✓ ' : '') + 'Только с льготами</sl-button>' +
+            '<sl-select id="groupSelect" placeholder="Без группировки" size="small" style="flex:1; max-width: 200px;">' +
+              groupOptions.map(function(g) { return '<sl-option value="' + g.val + '">' + g.label + '</sl-option>'; }).join('') +
+            '</sl-select>' +
           '</div>' +
         '</div>';
 
       var searchBar = container.querySelector('.search-bar');
       if (searchBar) {
-        var existing = container.querySelector('.catalog-filters');
+        var existing = container.querySelector('#catalogFilters');
         if (existing) existing.remove();
         searchBar.insertAdjacentHTML('afterend', filterHtml);
+        // Restore values and attach shoelace listeners
+        setTimeout(function() {
+          var dirSel = document.getElementById('directionSelect');
+          var uniSel = document.getElementById('uniSelect');
+          var profSel = document.getElementById('profileSelect');
+          var lvlSel = document.getElementById('levelSelect');
+          var grpSel = document.getElementById('groupSelect');
+          var benChip = document.getElementById('benefitsChip');
+          if (dirSel) { dirSel.value = catalogDirectionFilter; dirSel.addEventListener('sl-change', function() { filterCatalogDirection(this.value); }); }
+          if (uniSel) { uniSel.value = catalogUniFilter; uniSel.addEventListener('sl-change', function() { filterCatalogUni(this.value); }); }
+          if (profSel) { profSel.value = catalogProfileFilter; profSel.addEventListener('sl-change', function() { filterCatalogProfile(this.value); }); }
+          if (lvlSel) { lvlSel.value = catalogLevelFilter; lvlSel.addEventListener('sl-change', function() { filterCatalogLevel(this.value); }); }
+          if (grpSel) { grpSel.value = catalogGroupBy; grpSel.addEventListener('sl-change', function() { filterCatalogGroup(this.value); }); }
+          if (benChip) benChip.addEventListener('click', toggleBenefitsOnly);
+        }, 50);
       }
     }
 
@@ -840,14 +809,14 @@
       var hasBvi = allProfiles.some(function(p) { return p.benefits && p.benefits['БВИ']; });
       var has100 = allProfiles.some(function(p) { return p.benefits && p.benefits['100_баллов']; });
       var levels = [...new Set(allProfiles.map(function(p) { return p.level; }).filter(Boolean))].sort().join(', ');
-      var profHtml = '<div class="profiles-list" style="margin-top:8px">';
+      var profHtml = '<div class="profiles-list" style="margin-top: var(--size-2);">';
       allProfiles.forEach(function(p) {
-        var levelBadge = p.level ? '<span class="badge level">Ур. ' + p.level + '</span>' : '';
-        var bviBadge = p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '';
-        var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '';
-        profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:6px;padding:5px 0;font-size:12px;cursor:pointer">' +
-          '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color:var(--primary)"> ' +
-          '<span>' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
+        var levelBadge = p.level ? '<sl-badge variant="primary" pill>Ур. ' + p.level + '</sl-badge>' : '';
+        var bviBadge = p.benefits && p.benefits['БВИ'] ? '<sl-badge variant="success" pill>БВИ</sl-badge>' : '';
+        var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<sl-badge variant="warning" pill>100</sl-badge>' : '';
+        profHtml += '<label class="profile-checkbox-row">' +
+          '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color: var(--brand); width: 16px; height: 16px; flex-shrink:0;"> ' +
+          '<span style="flex:1; min-width:0;">' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
           '</label>';
       });
       profHtml += '</div>';
@@ -875,10 +844,10 @@
 
       return '<div class="olympiad-card" style="cursor:default">' +
         '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
-        (o.universities && o.universities.length ? '<div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">' + o.universities.map(function(u) { return '<span class="badge" style="background:var(--surface-hover);color:var(--text-dim);font-size:9px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
+        (o.universities && o.universities.length ? '<div style="margin-top: var(--size-1);display:flex;flex-wrap:wrap;gap: var(--size-1);">' + o.universities.map(function(u) { return '<sl-tag size="small" variant="neutral" pill>' + esc(u) + '</sl-tag>'; }).join('') + '</div>' : '') +
         '</div>' +
-        (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
-        (hasBvi || has100 ? '<div class="meta" style="margin-top:4px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
+        (levels ? '<div><sl-badge variant="primary" pill>Ур. ' + esc(levels) + '</sl-badge></div>' : '') + '</div>' +
+        (hasBvi || has100 ? '<div class="meta">' + (hasBvi ? '<sl-badge variant="success" pill>БВИ</sl-badge>' : '') + (has100 ? '<sl-badge variant="warning" pill>100 баллов</sl-badge>' : '') + '</div>' : '') +
         deadlineHtml + profHtml + '</div>';
     }
 
@@ -887,7 +856,7 @@
       if (!el) return;
       var q = '';
       var inp = document.getElementById('searchInput');
-      if (inp) q = inp.value.toLowerCase();
+      if (inp) q = (inp.value || '').toLowerCase();
 
       var items = catalog.slice();
       if (catalogDirectionFilter) {
@@ -990,7 +959,7 @@
           if (resp.ok) ok++; else fail++;
         } catch(e) { fail++; }
       }
-      showToast(fail === 0 ? 'Добавлено: ' + ok : 'Добавлено: ' + ok + ', ошибок: ' + fail);
+      showToast(fail === 0 ? 'Добавлено: ' + ok : 'Добавлено: ' + ok + ', ошибок: ' + fail, fail === 0 ? 'success' : 'warning');
       hapticNotify(fail === 0 ? 'success' : 'warning');
       await loadData();
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
@@ -1000,7 +969,7 @@
 
     async function addSelectedFromCatalog() {
       var checked = document.querySelectorAll('#catalogResults .profile-chk:checked');
-      if (checked.length === 0) { showToast('Выберите хотя бы один профиль'); return; }
+      if (checked.length === 0) { showToast('Выберите хотя бы один профиль', 'warning'); return; }
       if (!isLoggedIn) { showLoginForm(); return; }
       haptic('medium');
       await batchAddProfiles(checked);
@@ -1033,10 +1002,10 @@
           '<div class="row1"><div><div class="name">' + statusIcon(o.status) + ' ' + esc(o.name) + '</div>' +
           (o.profile_name ? '<div class="organizer">' + esc(o.profile_name) + '</div>' : '') +
           '<div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
-          '<div>' + (o.level ? '<span class="badge level">Ур. ' + esc(o.level) + '</span>' : '') + '</div></div>' +
+          '<div>' + (o.level ? '<sl-badge variant="primary" pill>Ур. ' + esc(o.level) + '</sl-badge>' : '') + '</div></div>' +
           '<div class="meta">' + renderBenefitBadges(o.benefits) + '</div>' +
           (nextStage ? renderNextStageInfo(nextStage, daysLeft) : '') +
-          (o.registration_url ? '<a class="btn-link" href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + ICONS.external + ' Регистрация</a>' : '') +
+          (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);margin-top: var(--size-1);">' + ICONS.external + ' Регистрация</a>' : '') +
           '</div>';
       }).join('');
     }
@@ -1063,55 +1032,54 @@
       return '<div class="deadline-badge ' + cls + '">' + ICONS.clock + ' ' + esc(stage.name) + ': ' + dateStr + (urgency ? ' (' + urgency + ')' : '') + '</div>';
     }
 
-    // ========== DETAIL MODAL ==========
+    // ========== DETAIL DRAWER ==========
     async function openDetail(entryId) {
       var o = myOlympiads.find(function(x) { return x.id == entryId; });
       if (!o) return;
       currentDetailEntryId = entryId;
-      document.getElementById('modalTitle').textContent = o.name;
-      document.getElementById('detailModal').classList.add('open');
-      bodyScrollLock(true);
-      updateBackButton();
-
+      var drawer = document.getElementById('detailDrawer');
+      drawer.label = o.name;
+      // Build stages html with Shoelace buttons
       var stagesHtml = o.stages.map(function(s) {
         var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' - ');
         var days = s.date_start ? daysUntil(s.date_start) : null;
         var daysStr = '';
         if (days !== null && !s.is_completed) {
-          if (days < 0) daysStr = '<span style="color:var(--red);font-size:10px">Просрочено</span>';
-          else if (days <= 7) daysStr = '<span style="color:var(--red);font-size:10px">' + days + ' дн.</span>';
-          else daysStr = '<span style="color:var(--text-dim);font-size:10px">' + days + ' дн.</span>';
+          if (days < 0) daysStr = '<span style="color:var(--danger);font-size: var(--font-size-00);">Просрочено</span>';
+          else if (days <= 7) daysStr = '<span style="color:var(--danger);font-size: var(--font-size-00);">' + days + ' дн.</span>';
+          else daysStr = '<span style="color:var(--text-2);font-size: var(--font-size-00);">' + days + ' дн.</span>';
         }
-        var editBtn = '<button class="btn-link" style="font-size:10px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + s.id + ')">✎</button>';
-        var delBtn = '<button class="btn-link" style="font-size:10px;color:var(--red)" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')">✕</button>';
         return '<div class="stage-item">' +
           '<div class="stage-name">' +
-          '<span style="color:' + (s.is_completed ? 'var(--green)' : 'var(--yellow)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' +
-          esc(s.name) + (s.result ? ' <span style="color:var(--green);font-size:10px">(' + esc(s.result) + ')</span>' : '') +
+          '<span style="color:' + (s.is_completed ? 'var(--success)' : 'var(--warning)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' +
+          esc(s.name) + (s.result ? ' <span style="color:var(--success);font-size: var(--font-size-00);">(' + esc(s.result) + ')</span>' : '') +
           '</div>' +
-          '<div style="text-align:right;display:flex;align-items:center;gap:3px">' +
-          editBtn + delBtn +
+          '<div style="text-align:right;display:flex;align-items:center;gap: var(--size-1);">' +
+          '<sl-button size="small" variant="text" onclick="event.stopPropagation(); openEditStageDrawer(' + o.id + ', ' + s.id + ')">✎</sl-button>' +
+          '<sl-button size="small" variant="text" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" style="--sl-color-primary-600: var(--danger);">✕</sl-button>' +
           '<div><div class="date">' + (dateStr || '-') + '</div>' + daysStr + '</div>' +
           '</div></div>';
       }).join('');
 
       document.getElementById('modalBody').innerHTML =
-        '<div style="margin-bottom:8px">' +
-        (o.level ? '<span class="badge level">Ур. ' + esc(o.level) + '</span>' : '') +
-        (o.profile_name ? '<span class="badge" style="background:var(--surface-hover);color:var(--text)">' + esc(o.profile_name) + '</span>' : '') +
+        '<div style="margin-bottom: var(--size-2); display:flex; gap: var(--size-1); flex-wrap:wrap; align-items:center;">' +
+        (o.level ? '<sl-badge variant="primary" pill>Ур. ' + esc(o.level) + '</sl-badge>' : '') +
+        (o.profile_name ? '<sl-tag size="small" pill>' + esc(o.profile_name) + '</sl-tag>' : '') +
         renderBenefitBadges(o.benefits) + '</div>' +
-        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">' + esc(o.organizer || '') + '</div>' +
-        (o.registration_url ? '<a class="btn-link" href="' + esc(o.registration_url) + '" target="_blank" rel="noopener">' + ICONS.external + ' Ссылка на регистрацию</a>' : '') +
+        '<div style="font-size: var(--font-size-00);color:var(--text-3);margin-bottom: var(--size-1);">' + esc(o.organizer || '') + '</div>' +
+        (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Ссылка на регистрацию</a>' : '') +
         '<div class="section-title">Статус</div><div class="status-selector">' +
         ['planned','registered','participating','passed_round','won'].map(function(key) {
           return '<button class="status-btn ' + (o.status === key ? 'active' : '') + '" onclick="updateStatus(' + o.id + ", '" + key + "')" + '">' + statusLabel(key) + '</button>';
         }).join('') + '</div>' +
         '<div class="section-title">Этапы</div>' +
-        '<div style="margin:4px 0 8px"><button class="btn btn-outline btn-sm" onclick="openStageModal(' + o.id + ')">' + ICONS.plus + ' Добавить этап</button></div>' +
-        (stagesHtml || '<div style="color:var(--text-dim);font-size:12px">Нет этапов</div>') +
-        '<div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">' +
-        '<button class="btn btn-primary btn-sm" onclick="syncToCalendar(' + o.id + ')">' + ICONS.calendar + ' Календарь</button>' +
-        '<button class="btn btn-danger btn-sm" onclick="deleteOlympiad(' + o.id + ')">' + ICONS.delete + ' Удалить</button></div>';
+        '<div style="margin: var(--size-1) 0 var(--size-2);"><sl-button size="small" variant="default" onclick="openStageDrawer(' + o.id + ')"><sl-icon slot="prefix" name="plus-lg"></sl-icon> Добавить этап</sl-button></div>' +
+        (stagesHtml || '<div style="color:var(--text-2);font-size: var(--font-size-0);">Нет этапов</div>') +
+        '<div style="margin-top: var(--size-4);display:flex;gap: var(--size-2);flex-wrap:wrap;">' +
+        '<sl-button size="small" variant="primary" onclick="syncToCalendar(' + o.id + ')"><sl-icon slot="prefix" name="calendar-event"></sl-icon> Календарь</sl-button>' +
+        '<sl-button size="small" variant="danger" outline onclick="deleteOlympiad(' + o.id + ')"><sl-icon slot="prefix" name="trash"></sl-icon> Удалить</sl-button></div>';
+      drawer.show();
+      updateBackButton();
     }
 
     async function updateStatus(entryId, status) {
@@ -1125,12 +1093,12 @@
           body: JSON.stringify({ status: status })
         });
         hideLoading();
-        if (!resp.ok) { showToast('Ошибка обновления'); return; }
-        showToast('Статус обновлён');
+        if (!resp.ok) { showToast('Ошибка обновления', 'danger'); return; }
+        showToast('Статус обновлён', 'success');
         hapticNotify('success');
         await loadData();
         openDetail(entryId);
-      } catch(e) { hideLoading(); showToast('Ошибка'); }
+      } catch(e) { hideLoading(); showToast('Ошибка', 'danger'); }
     }
 
     async function deleteOlympiad(entryId) {
@@ -1139,37 +1107,41 @@
           const h = authHeaders();
           h['Content-Type'] = 'application/json';
           await fetch(API + '/my-olympiads/' + entryId, { method: 'DELETE', headers: h });
-          showToast('Удалено');
-          closeModal();
+          showToast('Удалено', 'success');
+          document.getElementById('detailDrawer').hide();
           await loadData();
           renderTab('my');
           hapticNotify('success');
-        } catch(e) { showToast('Ошибка при удалении'); }
+        } catch(e) { showToast('Ошибка при удалении', 'danger'); }
       });
     }
 
-    // ========== STAGE MODAL ==========
-    function openStageModal(entryId) {
+    // ========== STAGE DRAWER ==========
+    function openStageDrawer(entryId) {
       currentDetailEntryId = entryId;
+      var drawer = document.getElementById('stageDrawer');
+      drawer.label = 'Добавить этап';
       document.getElementById('stageNameInput').value = '';
       document.getElementById('stageStartInput').value = '';
       document.getElementById('stageEndInput').value = '';
-      var existingCompleted = document.getElementById('stageCompletedInput');
-      if (existingCompleted) existingCompleted.checked = false;
-      var existingResult = document.getElementById('stageResultInput');
-      if (existingResult) existingResult.value = '';
-      document.getElementById('stageModal').classList.add('open');
-      bodyScrollLock(true);
+      var sc = document.getElementById('stageCompletedInput');
+      if (sc) { sc.checked = false; delete sc.dataset.editStageId; delete sc.dataset.editEntryId; }
+      var sr = document.getElementById('stageResultInput');
+      if (sr) sr.value = '';
+      document.getElementById('stageError').style.display = 'none';
+      drawer.show();
       updateBackButton();
-      document.getElementById('stageNameInput').focus();
+      setTimeout(function(){ document.getElementById('stageNameInput').focus(); }, 250);
     }
 
-    function openEditStageModal(entryId, stageId) {
+    function openEditStageDrawer(entryId, stageId) {
       var o = myOlympiads.find(function(x) { return x.id == entryId; });
       if (!o) return;
       var s = o.stages.find(function(st) { return st.id == stageId; });
       if (!s) return;
       currentDetailEntryId = entryId;
+      var drawer = document.getElementById('stageDrawer');
+      drawer.label = 'Редактировать этап';
       document.getElementById('stageNameInput').value = s.name;
       document.getElementById('stageStartInput').value = s.date_start ? s.date_start.slice(0,10) : '';
       document.getElementById('stageEndInput').value = s.date_end ? s.date_end.slice(0,10) : '';
@@ -1177,28 +1149,31 @@
       if (sc) { sc.checked = s.is_completed || false; sc.dataset.editStageId = s.id; sc.dataset.editEntryId = entryId; }
       var sr = document.getElementById('stageResultInput');
       if (sr) sr.value = s.result || '';
-      document.getElementById('stageModal').classList.add('open');
-      bodyScrollLock(true);
+      document.getElementById('stageError').style.display = 'none';
+      drawer.show();
       updateBackButton();
     }
 
-    function closeStageModal() {
-      document.getElementById('stageModal').classList.remove('open');
-      bodyScrollLock(false);
+    function closeStageDrawer() {
+      document.getElementById('stageDrawer').hide();
       updateBackButton();
     }
 
     async function submitStage() {
-      var name = document.getElementById('stageNameInput').value.trim();
-      if (!name) { showToast('Введите название этапа'); return; }
-      var start = document.getElementById('stageStartInput').value || null;
-      var end = document.getElementById('stageEndInput').value || null;
-      var isCompleted = document.getElementById('stageCompletedInput').checked;
-      var result = document.getElementById('stageResultInput').value.trim() || null;
-
-      if (start && end && start > end) { showToast('Дата начала не может быть позже даты окончания'); return; }
-
+      var nameEl = document.getElementById('stageNameInput');
+      var name = (nameEl ? nameEl.value : '').trim();
+      if (!name) { showToast('Введите название этапа', 'warning'); return; }
+      var startEl = document.getElementById('stageStartInput');
+      var endEl = document.getElementById('stageEndInput');
+      var start = (startEl ? startEl.value : '') || null;
+      var end = (endEl ? endEl.value : '') || null;
       var sc = document.getElementById('stageCompletedInput');
+      var isCompleted = sc ? sc.checked : false;
+      var srEl = document.getElementById('stageResultInput');
+      var result = (srEl ? srEl.value : '').trim() || null;
+
+      if (start && end && start > end) { showToast('Дата начала не может быть позже даты окончания', 'warning'); return; }
+
       var editStageId = sc ? sc.dataset.editStageId : undefined;
       var editEntryId = sc ? sc.dataset.editEntryId : undefined;
       var isEdit = editStageId !== undefined && editStageId !== '';
@@ -1212,19 +1187,19 @@
           await fetch(API + '/my-olympiads/' + editEntryId + '/stage/' + editStageId, {
             method: 'PATCH', headers: h, body: JSON.stringify(body)
           });
-          showToast('Этап обновлён');
+          showToast('Этап обновлён', 'success');
         } else {
           await fetch(API + '/my-olympiads/' + currentDetailEntryId + '/stage', {
             method: 'POST', headers: h, body: JSON.stringify(body)
           });
-          showToast('Этап добавлен');
+          showToast('Этап добавлен', 'success');
         }
         if (sc) { delete sc.dataset.editStageId; delete sc.dataset.editEntryId; }
-        closeStageModal();
+        closeStageDrawer();
         await loadData();
         openDetail(currentDetailEntryId);
         hapticNotify('success');
-      } catch(e) { showToast('Ошибка при сохранении этапа'); }
+      } catch(e) { showToast('Ошибка при сохранении этапа', 'danger'); }
     }
 
     async function deleteStage(entryId, stageId) {
@@ -1233,31 +1208,31 @@
           const h = authHeaders();
           h['Content-Type'] = 'application/json';
           await fetch(API + '/my-olympiads/' + entryId + '/stage/' + stageId, { method: 'DELETE', headers: h });
-          showToast('Этап удалён');
+          showToast('Этап удалён', 'success');
           await loadData();
           openDetail(entryId);
           hapticNotify('success');
-        } catch(e) { showToast('Ошибка при удалении этапа'); }
+        } catch(e) { showToast('Ошибка при удалении этапа', 'danger'); }
       });
     }
 
-    function closeModal() {
-      document.getElementById('detailModal').classList.remove('open');
-      bodyScrollLock(false);
-      updateBackButton();
-    }
+    // Legacy aliases for inline handlers that still reference old ids
+    function closeModal() { document.getElementById('detailDrawer').hide(); updateBackButton(); }
+    function closeStageModal() { closeStageDrawer(); }
+    function openStageModal(id) { openStageDrawer(id); }
+    function openEditStageModal(a,b) { openEditStageDrawer(a,b); }
 
     async function syncToCalendar(entryId) {
-      showToast('Google Calendar будет добавлен позже');
+      showToast('Google Calendar будет добавлен позже', 'warning');
     }
 
     // ========== UTILS ==========
     function renderBenefitBadges(benefits) {
       if (!benefits) return '';
       var html = '';
-      if (benefits['БВИ']) html += '<span class="badge bvi">БВИ</span>';
-      if (benefits['100_баллов']) html += '<span class="badge points">100 баллов</span>';
-      if (benefits['баллы_ДИ']) html += '<span class="badge extra">+ баллы</span>';
+      if (benefits['БВИ']) html += '<sl-badge variant="success" pill>БВИ</sl-badge> ';
+      if (benefits['100_баллов']) html += '<sl-badge variant="warning" pill>100 баллов</sl-badge> ';
+      if (benefits['баллы_ДИ']) html += '<sl-badge variant="neutral" pill>+ баллы</sl-badge> ';
       return html;
     }
 
@@ -1278,12 +1253,41 @@
       } catch(e) { return null; }
     }
 
-    function showToast(msg) {
-      var el = document.getElementById('toast');
-      el.textContent = msg;
-      el.classList.add('show');
-      clearTimeout(el._t);
-      el._t = setTimeout(function() { el.classList.remove('show'); }, 3500);
+    function showToast(msg, variant) {
+      variant = variant || 'primary';
+      // Use Shoelace sl-alert toast if available, fallback to custom
+      try {
+        var alert = Object.assign(document.createElement('sl-alert'), {
+          variant: variant,
+          closable: true,
+          duration: 3500
+        });
+        // Use textContent to avoid XSS, but allow simple HTML via innerHTML with esc
+        alert.innerHTML = esc(msg);
+        document.body.append(alert);
+        // Shoelace toast() shows as stacked toast
+        if (typeof alert.toast === 'function') { alert.toast(); }
+        else {
+          alert.style.position = 'fixed';
+          alert.style.bottom = '80px';
+          alert.style.left = '50%';
+          alert.style.transform = 'translateX(-50%)';
+          alert.style.zIndex = '200';
+          setTimeout(function(){ try{ alert.hide(); }catch(e){ alert.remove(); } }, 3500);
+        }
+        // Also fallback custom toast if shoelace not upgraded
+        setTimeout(function(){ if (!alert.toast) alert.remove(); }, 4000);
+        return;
+      } catch(e) {
+        // Fallback DOM toast
+        var el = document.getElementById('toast');
+        if (el) {
+          el.textContent = msg;
+          el.classList.add('show');
+          clearTimeout(el._t);
+          el._t = setTimeout(function() { el.classList.remove('show'); }, 3500);
+        }
+      }
     }
 
     // ========== START ==========
