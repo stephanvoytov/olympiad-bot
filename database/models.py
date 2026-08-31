@@ -23,6 +23,7 @@ class User(Base):
     telegram_id = Column(Integer, unique=True, nullable=False, index=True)
     username = Column(String(128), nullable=True)
     full_name = Column(String(256), nullable=True)
+    site_password = Column(String(256), nullable=True)
     created_at = Column(DateTime, default=lambda: datetime.now(UTC))
     notify_enabled = Column(Boolean, default=True)
     notify_days_before = Column(Integer, default=3)

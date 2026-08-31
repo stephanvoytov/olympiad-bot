@@ -465,8 +465,20 @@
   </div>
 
   <script>
-    const initData = Telegram.WebApp.initData;
-    const TELEGRAM_ID = Telegram.WebApp.initDataUnsafe?.user?.id;
+    // ========== TELEGRAM DETECTION ==========
+    var isTelegram = typeof Telegram !== 'undefined' && Telegram.WebApp;
+    var initData = '';
+    var TELEGRAM_ID = null;
+    if (isTelegram) {
+      try { initData = Telegram.WebApp.initData || ''; } catch(e) {}
+      try { TELEGRAM_ID = Telegram.WebApp.initDataUnsafe?.user?.id; } catch(e) {}
+    }
+
+    // ========== GUEST MODE (localStorage) ==========
+    var guestId = localStorage.getItem('guest_telegram_id');
+    var guestPassword = localStorage.getItem('guest_password');
+    var isLoggedIn = !!TELEGRAM_ID || (!!guestId && !!guestPassword);
+
     const API = '/api';
 
     let tgUser = null;
@@ -504,10 +516,12 @@
     }
 
     function haptic(style) {
+      if (!isTelegram) return;
       try { Telegram.WebApp.HapticFeedback.impactOccurred(style || 'light'); } catch(e) {}
     }
 
     function hapticNotify(type) {
+      if (!isTelegram) return;
       try { Telegram.WebApp.HapticFeedback.notificationOccurred(type || 'success'); } catch(e) {}
     }
 
@@ -556,7 +570,7 @@
       });
 
       try {
-        Telegram.WebApp.BackButton.onClick(function() {
+        if (isTelegram) Telegram.WebApp.BackButton.onClick(function() {
           var openModals = document.querySelectorAll('.modal-overlay.open');
           if (openModals.length) {
             var last = openModals[openModals.length - 1];
@@ -570,6 +584,7 @@
 
     // Отслеживание открытых модалок для BackButton
     function updateBackButton() {
+      if (!isTelegram) return;
       try {
         var openModals = document.querySelectorAll('.modal-overlay.open');
         if (openModals.length) {
@@ -601,35 +616,127 @@
     // ========== ОБЩИЙ ЗАГОЛОВОК ==========
     function authHeaders() {
       var h = {};
-      if (initData) h['X-Telegram-Init-Data'] = initData;
+      if (initData) {
+        h['X-Telegram-Init-Data'] = initData;
+      } else if (guestId && guestPassword) {
+        h['X-Telegram-ID'] = guestId;
+        h['X-Telegram-Password'] = guestPassword;
+      }
       return h;
     }
 
     // ========== INIT ==========
-    Telegram.WebApp.ready();
-    Telegram.WebApp.expand();
+    if (isTelegram) {
+      try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch(e) {}
+    }
 
     async function init() {
       setupGlobalHandlers();
 
-      if (!TELEGRAM_ID) {
-        document.getElementById('subtitle').textContent = 'Ошибка: не удалось получить данные Telegram';
+      // Если нет Telegram и нет сохранённых данных — показываем форму входа
+      if (!TELEGRAM_ID && !guestId) {
+        showLoginForm();
         return;
       }
+
       showLoading('Загрузка...');
       try {
-        const resp = await fetch(API + '/user/me', { headers: authHeaders() });
+        var resp = await fetch(API + '/user/me', { headers: authHeaders() });
+        if (!resp.ok) {
+          // Невалидные данные — очищаем и показываем форму входа
+          localStorage.removeItem('guest_telegram_id');
+          localStorage.removeItem('guest_password');
+          guestId = null;
+          guestPassword = null;
+          hideLoading();
+          showLoginForm();
+          return;
+        }
         tgUser = await resp.json();
-        document.getElementById('subtitle').textContent = tgUser.full_name || tgUser.username || '';
+        var nameText = tgUser.full_name || tgUser.username || ('ID: ' + tgUser.telegram_id);
+        if (!TELEGRAM_ID && guestId) {
+          nameText += ' <span style="cursor:pointer;color:var(--text-muted);font-size:12px" onclick="doLogout()">[выйти]</span>';
+        }
+        document.getElementById('subtitle').innerHTML = nameText;
         await loadData();
         hideLoading();
         renderTab('my');
-        haptic('light');
+        if (isTelegram) { try { haptic('light'); } catch(e) {} }
       } catch(e) {
         hideLoading();
         console.error('Init error:', e);
         document.getElementById('subtitle').textContent = 'Ошибка загрузки';
       }
+    }
+
+    function showLoginForm() {
+      document.getElementById('subtitle').textContent = 'Вход на сайт';
+      document.getElementById('statsRow').innerHTML = '';
+      document.getElementById('tabContent').innerHTML = `
+        <div style="max-width:360px;margin:40px auto 0;text-align:center">
+          <div style="font-size:48px;margin-bottom:16px">🔐</div>
+          <h2 style="font-size:20px;font-weight:700;margin-bottom:8px">Вход по ID и паролю</h2>
+          <p style="color:var(--text-dim);font-size:14px;margin-bottom:24px;line-height:1.5">
+            Получите ID и пароль в Telegram-боте.<br>Нажмите <b>/start</b> в боте.
+          </p>
+          <div class="form-group" style="text-align:left">
+            <label>Telegram ID</label>
+            <input type="number" id="loginIdInput" placeholder="123456789" inputmode="numeric">
+          </div>
+          <div class="form-group" style="text-align:left">
+            <label>Пароль</label>
+            <input type="text" id="loginPasswordInput" placeholder="6 цифр" inputmode="numeric" maxlength="6">
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">
+            Войти
+          </button>
+          <div id="loginError" style="color:var(--red);font-size:13px;margin-top:12px;display:none"></div>
+        </div>`;
+      document.getElementById('loginIdInput').focus();
+    }
+
+    async function doLogin() {
+      var id = document.getElementById('loginIdInput').value.trim();
+      var pwd = document.getElementById('loginPasswordInput').value.trim();
+      var errEl = document.getElementById('loginError');
+      if (!id || !pwd) { errEl.textContent = 'Заполните ID и пароль'; errEl.style.display = 'block'; return; }
+      errEl.style.display = 'none';
+      showLoading('Вход...');
+      try {
+        var resp = await fetch(API + '/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ telegram_id: parseInt(id), password: pwd })
+        });
+        hideLoading();
+        if (!resp.ok) {
+          var data = await resp.json().catch(function() { return {}; });
+          errEl.textContent = data.detail || 'Неверный ID или пароль';
+          errEl.style.display = 'block';
+          return;
+        }
+        // Успешный вход — сохраняем
+        guestId = id;
+        guestPassword = pwd;
+        localStorage.setItem('guest_telegram_id', id);
+        localStorage.setItem('guest_password', pwd);
+        isLoggedIn = true;
+        // Перезапускаем init
+        init();
+      } catch(e) {
+        hideLoading();
+        errEl.textContent = 'Ошибка сети';
+        errEl.style.display = 'block';
+      }
+    }
+
+    function doLogout() {
+      localStorage.removeItem('guest_telegram_id');
+      localStorage.removeItem('guest_password');
+      guestId = null;
+      guestPassword = null;
+      isLoggedIn = false;
+      location.reload();
     }
 
     async function loadData() {

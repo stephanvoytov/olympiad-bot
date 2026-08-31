@@ -7,6 +7,7 @@ import hmac
 import json
 import logging
 import os
+import secrets
 import time
 from contextlib import asynccontextmanager
 from datetime import datetime
@@ -100,6 +101,7 @@ def _make_cache_headers(etag: str | None = None, max_age: int = 0) -> dict:
 async def lifespan(application: FastAPI):
     """Lifespan: seed data on startup, preload minimal caches."""
     _seed_olympiads()
+    _invalidate_catalog_cache()
     # Preload index.html only (tiny, ~30KB)
     _load_index_html()
     yield
@@ -118,8 +120,8 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
-    allow_headers=["X-Telegram-Init-Data", "Content-Type"],
+    allow_methods=["GET", "POST", "DELETE", "PATCH", "PUT", "OPTIONS"],
+    allow_headers=["X-Telegram-Init-Data", "X-Telegram-ID", "X-Telegram-Password", "Content-Type"],
 )
 
 # Rate limiter: 60 запросов/мин с одного IP
@@ -172,6 +174,11 @@ class HealthResponse(BaseModel):
     version: str
 
 
+class LoginRequest(BaseModel):
+    telegram_id: int
+    password: str
+
+
 # ─────────────────────────────── AUTH ───────────────────────────────
 
 
@@ -216,7 +223,27 @@ def get_telegram_user_from_init_data(request: Request) -> dict:
 
 
 def _get_telegram_id(request: Request) -> int:
-    """Получить telegram_id из initData."""
+    """Получить telegram_id: по initData (Telegram) или по ID+пароль (сайт)."""
+    # Сначала проверяем пароль-авторизацию (сайт без Telegram)
+    tid_header = request.headers.get("X-Telegram-ID")
+    pwd_header = request.headers.get("X-Telegram-Password")
+    if tid_header and pwd_header:
+        try:
+            telegram_id = int(tid_header)
+        except ValueError:
+            raise HTTPException(status_code=401, detail="Invalid telegram ID")
+        from database.db import SessionLocal as _SL
+        db = _SL()
+        try:
+            user = db.query(User).filter(User.telegram_id == telegram_id).first()
+            if not user or not user.site_password:
+                raise HTTPException(status_code=401, detail="User not found or no password set")
+            if not secrets.compare_digest(user.site_password, pwd_header):
+                raise HTTPException(status_code=401, detail="Invalid password")
+            return telegram_id
+        finally:
+            db.close()
+    # Fallback: Telegram initData
     tg_info = get_telegram_user_from_init_data(request)
     tid = tg_info.get("id")
     if not tid:
@@ -307,22 +334,35 @@ async def get_user(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    tg_info = get_telegram_user_from_init_data(request)
-    telegram_id = tg_info.get("id")
-    if not telegram_id:
-        raise HTTPException(status_code=401, detail="Unauthorized")
+    telegram_id = _get_telegram_id(request)
 
     user = db.query(User).filter(User.telegram_id == telegram_id).first()
     if not user:
-        user = User(
-            telegram_id=telegram_id,
-            username=tg_info.get("username"),
-            full_name=f"{tg_info.get('first_name', '')} {tg_info.get('last_name', '')}".strip(),
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
+        raise HTTPException(status_code=401, detail="User not found")
 
+    return UserResponse(
+        id=user.id,
+        telegram_id=user.telegram_id,
+        username=user.username,
+        full_name=user.full_name,
+        notify_enabled=user.notify_enabled,
+        notify_days_before=user.notify_days_before,
+    )
+
+
+@app.post("/api/login")
+@limiter.limit("10/minute")
+async def login_site(
+    body: LoginRequest,
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Вход на сайт по Telegram ID + пароль (без Telegram WebApp)."""
+    user = db.query(User).filter(User.telegram_id == body.telegram_id).first()
+    if not user or not user.site_password:
+        raise HTTPException(status_code=401, detail="Пользователь не найден или пароль не установлен. Откройте бота в Telegram.")
+    if not secrets.compare_digest(user.site_password, body.password):
+        raise HTTPException(status_code=401, detail="Неверный пароль")
     return UserResponse(
         id=user.id,
         telegram_id=user.telegram_id,
@@ -766,36 +806,68 @@ def _seed_olympiads():
 
     db = SessionLocal()
     try:
-        if db.query(Olympiad).count() > 0:
-            return
         with open("data/olympiads.json", encoding="utf-8") as f:
             olympiads_data = json.load(f)
         total_profiles = 0
+        updated = 0
+        created = 0
         for data in olympiads_data:
-            olympiad = Olympiad(
-                id=data["id"],
-                name=data["name"],
-                organizer=data.get("organizer"),
-                url=data.get("url"),
-                registration_url=data.get("registration_url"),
-                tags=data.get("tags", []),
-            )
-            db.add(olympiad)
-            db.flush()
-            for prof in data.get("profiles", []):
-                profile = OlympiadProfile(
-                    olympiad_id=olympiad.id,
-                    slug=prof["slug"],
-                    name=prof["name"],
-                    level=prof.get("level"),
-                    benefits=prof.get("benefits", {}),
-                    typical_stages=prof.get("stages", []),
+            existing = db.query(Olympiad).filter(Olympiad.id == data["id"]).first()
+            if existing:
+                # Update existing
+                existing.name = data["name"]
+                existing.organizer = data.get("organizer")
+                existing.url = data.get("url")
+                existing.registration_url = data.get("registration_url")
+                existing.tags = data.get("tags", [])
+                updated += 1
+            else:
+                # Create new
+                existing = Olympiad(
+                    id=data["id"],
+                    name=data["name"],
+                    organizer=data.get("organizer"),
+                    url=data.get("url"),
+                    registration_url=data.get("registration_url"),
+                    tags=data.get("tags", []),
                 )
-                db.add(profile)
+                db.add(existing)
+                created += 1
+            db.flush()
+
+            # Upsert profiles: update existing, create new, delete removed
+            existing_profiles = {
+                p.slug: p for p in existing.olympiad_profiles
+            }
+            seen_slugs = set()
+            for prof in data.get("profiles", []):
+                seen_slugs.add(prof["slug"])
+                if prof["slug"] in existing_profiles:
+                    p = existing_profiles[prof["slug"]]
+                    p.name = prof["name"]
+                    p.level = prof.get("level")
+                    p.benefits = prof.get("benefits", {})
+                    p.typical_stages = prof.get("stages", [])
+                else:
+                    p = OlympiadProfile(
+                        olympiad_id=existing.id,
+                        slug=prof["slug"],
+                        name=prof["name"],
+                        level=prof.get("level"),
+                        benefits=prof.get("benefits", {}),
+                        typical_stages=prof.get("stages", []),
+                    )
+                    db.add(p)
                 total_profiles += 1
+            # Remove profiles no longer in data
+            for slug, p in existing_profiles.items():
+                if slug not in seen_slugs:
+                    db.delete(p)
+
         db.commit()
-        logger.info(f"Seeded {len(olympiads_data)} olympiads, {total_profiles} profiles")
+        logger.info(f"Seeded: {created} new, {updated} updated olympiads, {total_profiles} profiles")
     except Exception as e:
         logger.error(f"Seed error: {e}")
+        db.rollback()
     finally:
         db.close()

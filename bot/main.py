@@ -4,6 +4,7 @@ Telegram Bot — точка входа.
 
 import asyncio
 import logging
+import secrets
 
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import CommandStart
@@ -11,11 +12,44 @@ from aiogram.types import InlineKeyboardButton, WebAppInfo
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.config import APP_URL, BOT_TOKEN, USE_WEBHOOK, WEBHOOK_SECRET, WEBHOOK_URL
+from database.db import SessionLocal
+from database.models import User
 
 logger = logging.getLogger(__name__)
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
+
+
+def generate_site_password() -> str:
+    """6-значный числовой пароль — простой, легко ввести."""
+    return str(secrets.randbelow(900000) + 100000)
+
+
+def get_or_create_user(telegram_id: int, username: str | None = None, full_name: str | None = None) -> tuple:
+    """Получить или создать пользователя. Возвращает (user, password)."""
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.telegram_id == telegram_id).first()
+        if not user:
+            pwd = generate_site_password()
+            user = User(
+                telegram_id=telegram_id,
+                username=username,
+                full_name=full_name,
+                site_password=pwd,
+            )
+            db.add(user)
+            db.commit()
+            return user, pwd
+        if not user.site_password:
+            pwd = generate_site_password()
+            user.site_password = pwd
+            db.commit()
+            return user, pwd
+        return user, user.site_password
+    finally:
+        db.close()
 
 
 def tg_keyboard():
@@ -37,17 +71,28 @@ def tg_keyboard():
 
 @dp.message(CommandStart())
 async def cmd_start(message: types.Message):
-    logger.info(f"User @{message.from_user.username} ({message.from_user.id}): /start")
+    user_id = message.from_user.id
+    logger.info(f"User @{message.from_user.username} ({user_id}): /start")
+
+    user, site_password = get_or_create_user(
+        telegram_id=user_id,
+        username=message.from_user.username,
+        full_name=f"{message.from_user.first_name or ''} {message.from_user.last_name or ''}".strip(),
+    )
+
     keyboard = tg_keyboard()
     text = (
-        f"{message.from_user.first_name}, добро пожаловать.\n\n"
+        f"👋 {message.from_user.first_name}, добро пожаловать!\n\n"
         "Бот отслеживает олимпиады: напоминает о регистрациях, этапах и дедлайнах.\n\n"
-        f"Панель управления: {APP_URL}/\n\n"
-        "Откройте в браузере, чтобы добавить олимпиады и настроить статусы."
+        f"🔐 Данные для входа на сайт:\n"
+        f"   ID: {user_id}\n"
+        f"   Пароль: {site_password}\n\n"
+        f"Откройте {APP_URL}/ и войдите по ID + пароль.\n\n"
+        "Панель управления:"
     )
     try:
         await message.answer(text, reply_markup=keyboard)
-        logger.info(f"Response sent to {message.from_user.id}")
+        logger.info(f"Response sent to {user_id}")
     except Exception as e:
         logger.error(f"Error sending message: {e}")
         try:
@@ -60,10 +105,17 @@ async def cmd_start(message: types.Message):
 async def fallback(message: types.Message):
     """Любое сообщение — отправляем ссылку на панель"""
     logger.info(f"Message from {message.from_user.id}: {message.text}")
+    user, site_password = get_or_create_user(
+        telegram_id=message.from_user.id,
+        username=message.from_user.username,
+        full_name=f"{message.from_user.first_name or ''} {message.from_user.last_name or ''}".strip(),
+    )
     try:
         await message.answer(
             f"Панель управления: {APP_URL}/\n\n"
-            "Добавляйте олимпиады, следите за этапами и статусами."
+            f"Ваш ID: {user.telegram_id}\n"
+            f"Пароль для сайта: {site_password}\n\n"
+            "Войдите на сайте по ID + пароль."
         )
         logger.info(f"Fallback response sent to {message.from_user.id}")
     except Exception as e:
