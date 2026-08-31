@@ -325,6 +325,8 @@ OLYMPIADS = [
 # Benefits depend on: university × profile × olympiad × winner/prizewinner
 # This is per-university rules — cannot be stored in catalog.
 # Level (1-4) from official перечень IS accurate.
+# Real data: official URLs (always set when known) + dates (only when verified).
+# Where dates are unknown — make_stages() is used as default placeholder.
 REAL_DATA = {
     # 1. Финатлон
     1: {
@@ -335,6 +337,31 @@ REAL_DATA = {
             {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
         ],
+    },
+    # 2. Формула единства / Третье тысячелетие
+    2: {
+        "url": "https://formulo.org/ru/olymp/",
+        "registration_url": "https://formulo.org/ru/olymp/",
+    },
+    # 3. Южно-Российская Архитектура
+    3: {
+        "url": "http://www.raai.sfedu.ru",
+        "registration_url": "http://www.raai.sfedu.ru",
+    },
+    # 4. Вернадского
+    4: {
+        "url": "https://vernadsky.online/",
+        "registration_url": "https://vernadsky.online/",
+    },
+    # 5. НТИ / Сириус
+    5: {
+        "url": "https://ntcontest.ru/",
+        "registration_url": "https://ntcontest.ru/",
+    },
+    # 6. Иннагрика
+    6: {
+        "url": "https://innagrika.ru",
+        "registration_url": "https://innagrika.ru",
     },
     # 7. Олимпиада по ИИ
     7: {
@@ -357,6 +384,66 @@ REAL_DATA = {
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
         ],
     },
+    # 9. Миссия выполнима
+    9: {
+        "url": "https://mission.fa.ru/",
+        "registration_url": "https://mission.fa.ru/",
+    },
+    # 10. Юридические высоты
+    10: {
+        "url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+        "registration_url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+    },
+    # 11. Сеченовская
+    11: {
+        "url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
+        "registration_url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
+    },
+    # 12. Толстовская
+    12: {
+        "url": "https://olymp.tsput.ru",
+        "registration_url": "https://olymp.tsput.ru",
+        "stages": [
+            {"name": "Регистрация", "date_start": "2025-12-01", "date_end": "2026-01-21"},
+            {"name": "Отборочный этап", "date_start": "2025-12-01", "date_end": "2026-01-21"},
+            {"name": "Заключительный этап", "date_start": "2026-01-25", "date_end": "2026-01-25"},
+        ],
+    },
+    # 13. Юниор
+    13: {
+        "url": "https://olymp.mephi.ru/junior",
+        "registration_url": "https://olymp.mephi.ru/junior",
+    },
+    # 14. Всесибирская
+    14: {
+        "url": "https://vsesib.nsu.ru/",
+        "registration_url": "https://vsesib.nsu.ru/",
+    },
+    # 15. Герценовская
+    15: {
+        "url": "https://olymp.herzen.spb.ru",
+        "registration_url": "https://olymp.herzen.spb.ru",
+    },
+    # 16. Инженерная олимпиада школьников
+    16: {
+        "url": "https://olymp.bmstu.ru/",
+        "registration_url": "https://olymp.bmstu.ru/",
+    },
+    # 17. Интернет-олимпиада по физике
+    17: {
+        "url": "https://olimpiada.ru/activity/68",
+        "registration_url": "https://olimpiada.ru/activity/68",
+    },
+    # 18. Кутафинская олимпиада по праву
+    18: {
+        "url": "http://olymp.msal.ru",
+        "registration_url": "http://olymp.msal.ru",
+    },
+    # 19. Международная музыкальная олимпиада
+    19: {
+        "url": "https://www.mosconsv.ru/",
+        "registration_url": "https://www.mosconsv.ru/",
+    },
     # 20. Иннополис
     20: {
         "url": "https://dovuz.innopolis.university/pre-olympiads/innopolis-open",
@@ -367,6 +454,76 @@ REAL_DATA = {
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-02-28"},
         ],
     },
+    # 21. Международная олимпиада по финансовой безопасности
+    21: {
+        "url": "https://rosfinolymp.ru/",
+        "registration_url": "https://rosfinolymp.ru/",
+    },
+    # 22. Евразийская лингвистическая олимпиада
+    22: {
+        "url": "https://elo.linguanet.ru/",
+        "registration_url": "https://elo.linguanet.ru/",
+    },
+    # 23. Международная олимпиада Искусство графики
+    23: {
+        "url": "https://mospolytech.ru/postupayushchim/olimpiady/olimpiada-iskusstvo-grafiki/",
+        "registration_url": "https://mospolytech.ru/postupayushchim/olimpiady/olimpiada-iskusstvo-grafiki/",
+    },
+    # 24. Олимпиада УрФУ
+    24: {
+        "url": "https://izumrud.urfu.ru/ru/",
+        "registration_url": "https://izumrud.urfu.ru/ru/",
+    },
+    # 25. Межрегиональная олимпиада ФЕМИДА
+    25: {
+        "url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+        "registration_url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+    },
+    # 26. Межрегиональная олимпиада Архитектура и искусство
+    26: {
+        "url": "http://www.raai.sfedu.ru",
+        "registration_url": "http://www.raai.sfedu.ru",
+    },
+    # 27. Будущие исследователи — будущее Крыма
+    27: {
+        "url": "https://cfuv.ru/olimpiady/federalnoe-gosudarstvennoe-avtonomnoe-obrazovatelnoe-uchrezhdenie-vysshego-obrazovaniya-krymskijj-federalnyjj-universitet-imeni-v-i-vernadskogo",
+        "registration_url": "https://cfuv.ru/olimpiady/federalnoe-gosudarstvennoe-avtonomnoe-obrazovatelnoe-uchrezhdenie-vysshego-obrazovaniya-krymskijj-federalnyjj-universitet-imeni-v-i-vernadskogo",
+    },
+    # 28. Межрегиональная олимпиада им. Татлина
+    28: {
+        "url": "http://tatlin.pguas.ru/",
+        "registration_url": "http://tatlin.pguas.ru/",
+    },
+    # 29. Межрегиональная олимпиада им. Верченко
+    29: {
+        "url": "https://ikb.mtuci.ru/",
+        "registration_url": "https://ikb.mtuci.ru/",
+    },
+    # 30. Межрегиональная олимпиада на базе ведомственных образовательных организаций
+    30: {
+        "url": "http://www.v-olymp.ru",
+        "registration_url": "http://www.v-olymp.ru",
+    },
+    # 31. Межрегиональная химическая олимпиада им. Сахарова
+    31: {
+        "url": "http://www.iseu.bsu.by",
+        "registration_url": "http://www.iseu.bsu.by",
+    },
+    # 32. Межрегиональные предметные олимпиады федерального уровня
+    32: {
+        "url": "https://minobrnauki.gov.ru",
+        "registration_url": "https://minobrnauki.gov.ru",
+    },
+    # 33. Многопредметная олимпиада Юные таланты
+    33: {
+        "url": "http://olymp.psu.ru/",
+        "registration_url": "http://olymp.psu.ru/",
+    },
+    # 34. Многопрофильная инженерная олимпиада Звезда
+    34: {
+        "url": "https://zv.susu.ru/",
+        "registration_url": "https://zv.susu.ru/",
+    },
     # 35. МОШ
     35: {
         "url": "https://mosolymp.ru/",
@@ -376,6 +533,66 @@ REAL_DATA = {
             {"name": "Отборочный этап", "date_start": "2026-10-16", "date_end": "2026-12-01"},
             {"name": "Заключительный этап", "date_start": "2027-01-15", "date_end": "2027-02-28"},
         ],
+    },
+    # 36. Московская открытая олимпиада по геологии
+    36: {
+        "url": "http://olympiad.web.ru",
+        "registration_url": "http://olympiad.web.ru",
+    },
+    # 37. Научно-практическая олимпиада им. Умова
+    37: {
+        "url": "https://olymp.bmstu.ru/",
+        "registration_url": "https://olymp.bmstu.ru/",
+    },
+    # 38. Оборонно-техническая олимпиада
+    38: {
+        "url": "https://pro.voenmeh.ru/oto",
+        "registration_url": "https://pro.voenmeh.ru/oto",
+    },
+    # 39. Основы православной культуры
+    39: {
+        "url": "http://opk.pravolimp.ru/",
+        "registration_url": "http://opk.pravolimp.ru/",
+    },
+    # 40. Объединенная межвузовская олимпиада школьников (ОММО)
+    40: {
+        "url": "https://olympiads.mccme.ru/ommo/",
+        "registration_url": "https://olympiads.mccme.ru/ommo/",
+    },
+    # 41. Олимпиада Курчатов
+    41: {
+        "url": "http://olimpiadakurchatov.ru",
+        "registration_url": "http://olimpiadakurchatov.ru",
+    },
+    # 42. Олимпиада МГИМО МИД России
+    42: {
+        "url": "http://olymp.mgimo.ru",
+        "registration_url": "http://olymp.mgimo.ru",
+    },
+    # 43. Олимпиада по комплексу предметов Культура и искусство
+    43: {
+        "url": "http://olimp.prouniver.ru/",
+        "registration_url": "http://olimp.prouniver.ru/",
+    },
+    # 44. Потомки Менделеева
+    44: {
+        "url": "https://malun.kpfu.ru/mendeleev",
+        "registration_url": "https://malun.kpfu.ru/mendeleev",
+    },
+    # 45. Олимпиада по экономике в рамках МЭФ
+    45: {
+        "url": "https://www.ranepa.ru/olymp/",
+        "registration_url": "https://www.ranepa.ru/olymp/",
+    },
+    # 46. Олимпиада РГГУ
+    46: {
+        "url": "https://www.rsuh.ru/",
+        "registration_url": "https://www.rsuh.ru/",
+    },
+    # 47. Гранит науки
+    47: {
+        "url": "https://zv.susu.ru/",
+        "registration_url": "https://zv.susu.ru/",
     },
     # 48. Ломоносов
     48: {
@@ -388,7 +605,17 @@ REAL_DATA = {
             {"name": "Заключительный этап", "date_start": "2027-02-15", "date_end": "2027-03-15"},
         ],
     },
-    # 51. Физтех — даты из офф. сайта
+    # 49. Надежда энергетики
+    49: {
+        "url": "https://energy-hope.ru",
+        "registration_url": "https://energy-hope.ru",
+    },
+    # 50. Покори Воробьёвы горы
+    50: {
+        "url": "https://pvg.mk.ru/",
+        "registration_url": "https://pvg.mk.ru/",
+    },
+    # 51. Физтех
     51: {
         "url": "https://olymp-online.mipt.ru/",
         "registration_url": "https://olymp-online.mipt.ru/pre-reg/",
@@ -399,6 +626,26 @@ REAL_DATA = {
             {"name": "Заключительный этап", "date_start": "2027-02-13", "date_end": "2027-02-14"},
         ],
     },
+    # 52. Шаг в будущее
+    52: {
+        "url": "https://www.step-into-the-future.ru/",
+        "registration_url": "https://www.step-into-the-future.ru/",
+    },
+    # 53. Олимпиада школьников по информатике и программированию
+    53: {
+        "url": "http://neerc.ifmo.ru/school/ioip/index.html",
+        "registration_url": "http://neerc.ifmo.ru/school/ioip/index.html",
+    },
+    # 54. ТехноКубок
+    54: {
+        "url": "https://technocup.mail.ru/",
+        "registration_url": "https://technocup.mail.ru/",
+    },
+    # 55. Олимпиада РАНХиГС
+    55: {
+        "url": "https://www.ranepa.ru/olymp/",
+        "registration_url": "https://www.ranepa.ru/olymp/",
+    },
     # 56. Олимпиада СПбГУ
     56: {
         "url": "https://olympiada.spbu.ru/",
@@ -408,6 +655,46 @@ REAL_DATA = {
             {"name": "Отборочный этап", "date_start": "2026-10-25", "date_end": "2026-12-14"},
             {"name": "Заключительный этап", "date_start": "2027-01-19", "date_end": "2027-03-09"},
         ],
+    },
+    # 57. Олимпиада ВШЭ
+    57: {
+        "url": "http://olymp.hse.ru/mmo",
+        "registration_url": "http://olymp.hse.ru/mmo",
+    },
+    # 58. Олимпиада Юношеской математической школы
+    58: {
+        "url": "https://yumsh.ru",
+        "registration_url": "https://yumsh.ru",
+    },
+    # 59. Будущее Сибири
+    59: {
+        "url": "http://olymp-sibir.nstu.ru",
+        "registration_url": "http://olymp-sibir.nstu.ru",
+    },
+    # 60. Открытая олимпиада школьников
+    60: {
+        "url": "https://vsesib.nsu.ru/",
+        "registration_url": "https://vsesib.nsu.ru/",
+    },
+    # 61. Открытая олимпиада по программированию
+    61: {
+        "url": "https://inf-open.ru",
+        "registration_url": "https://inf-open.ru",
+    },
+    # 62. Открытая олимпиада Когнитивные технологии
+    62: {
+        "url": "https://olymp.misis.ru/",
+        "registration_url": "https://olymp.misis.ru/",
+    },
+    # 63. ОРМО с международным участием
+    63: {
+        "url": "https://vsesib.nsu.ru/",
+        "registration_url": "https://vsesib.nsu.ru/",
+    },
+    # 64. Открытая химическая олимпиада
+    64: {
+        "url": "http://chem.mipt.ru/",
+        "registration_url": "http://chem.mipt.ru/",
     },
     # 65. Газпром
     65: {
@@ -428,6 +715,51 @@ REAL_DATA = {
             {"name": "Отборочный тур", "date_start": "2026-11-17", "date_end": "2026-12-21"},
             {"name": "Заключительный этап", "date_start": "2027-02-07", "date_end": "2027-02-08"},
         ],
+    },
+    # 67. Пироговская олимпиада по химии и биологии
+    67: {
+        "url": "https://rsmu.ru/academics/for-school-students/pirogov-olimpiada/",
+        "registration_url": "https://rsmu.ru/academics/for-school-students/pirogov-olimpiada/",
+    },
+    # 68. Плехановская олимпиада
+    68: {
+        "url": "https://www.rea.ru/pk/entrant/plehanovskaya-olimpiada-shkolnikov/",
+        "registration_url": "https://www.rea.ru/pk/entrant/plehanovskaya-olimpiada-shkolnikov/",
+    },
+    # 69. Региональный конкурс Челябинского университетского образовательного объединения
+    69: {
+        "url": "https://www.csu.ru/studying/pre-university-education/",
+        "registration_url": "https://www.csu.ru/studying/pre-university-education/",
+    },
+    # 70. Санкт-Петербургская Астрономическая олимпиада
+    70: {
+        "url": "https://olympiada.spbu.ru/",
+        "registration_url": "https://olympiada.spbu.ru/",
+    },
+    # 71. Санкт-Петербургская олимпиада школьников
+    71: {
+        "url": "https://olympiada.spbu.ru/",
+        "registration_url": "https://olympiada.spbu.ru/",
+    },
+    # 72. Северо-Восточная олимпиада школьников
+    72: {
+        "url": "https://olympiadsvosh.s-vfu.ru/",
+        "registration_url": "https://olympiadsvosh.s-vfu.ru/",
+    },
+    # 73. Строгановская олимпиада
+    73: {
+        "url": "https://stroganov-olympiada.ru/",
+        "registration_url": "https://stroganov-olympiada.ru/",
+    },
+    # 74. Твой путь в настоящую науку
+    74: {
+        "url": "https://minobrnauki.gov.ru",
+        "registration_url": "https://minobrnauki.gov.ru",
+    },
+    # 75. Умницы и умники
+    75: {
+        "url": "https://umniki.club/",
+        "registration_url": "https://umniki.club/",
     },
     # 76. Турнир городов
     76: {
@@ -450,6 +782,16 @@ REAL_DATA = {
             {"name": "Отборочный этап", "date_start": "2026-10-25", "date_end": "2026-12-14"},
             {"name": "Заключительный этап", "date_start": "2027-01-19", "date_end": "2027-03-09"},
         ],
+    },
+    # 78. Бельчонок
+    78: {
+        "url": "https://dovuz.sfu-kras.ru/abiturientu-sfu/olimpiady/belchonok/",
+        "registration_url": "https://dovuz.sfu-kras.ru/abiturientu-sfu/olimpiady/belchonok/",
+    },
+    # 79. Олимпиада по предпринимательству
+    79: {
+        "url": "https://www.ranepa.ru/olymp/",
+        "registration_url": "https://www.ranepa.ru/olymp/",
     },
 }
 

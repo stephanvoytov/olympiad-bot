@@ -839,7 +839,7 @@
       var now = Date.now();
       var nearestDeadline = null;
       allProfiles.forEach(function(p) {
-        (p.typical_stages || []).forEach(function(s) {
+        (p.stages || []).forEach(function(s) {
           if (s.date_end) {
             var ts = new Date(s.date_end).getTime();
             if (ts > now && (!nearestDeadline || ts < nearestDeadline.ts)) {
@@ -862,6 +862,10 @@
         '</div>' +
         (levels ? '<div><sl-badge variant="primary" pill>Ур. ' + esc(levels) + '</sl-badge></div>' : '') + '</div>' +
         (hasBvi || has100 ? '<div class="meta">' + (hasBvi ? '<sl-badge variant="success" pill>БВИ</sl-badge>' : '') + (has100 ? '<sl-badge variant="warning" pill>100 баллов</sl-badge>' : '') + '</div>' : '') +
+        (o.url || o.registration_url ? '<div style="display:flex;gap: var(--size-2);flex-wrap:wrap;margin-top: var(--size-1);">' +
+          (o.url ? '<a href="' + esc(o.url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Сайт</a>' : '') +
+          (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Регистрация</a>' : '') +
+        '</div>' : '') +
         deadlineHtml + profHtml + '</div>';
     }
 
@@ -1064,7 +1068,10 @@ container.innerHTML = sorted.map(function(o) {
             '<div>' + (o.level ? '<sl-badge variant="primary" pill>Ур. ' + esc(o.level) + '</sl-badge>' : '') + '</div></div>' +
             '<div class="meta">' + renderBenefitBadges(o.benefits) + '</div>' +
             (nextStage ? renderNextStageInfo(nextStage, daysLeft) : '') +
-            (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);margin-top: var(--size-1);">' + ICONS.external + ' Регистрация</a>' : '') +
+            (o.url || o.registration_url ? '<div style="display:flex;gap: var(--size-2);flex-wrap:wrap;margin-top: var(--size-1);">' +
+              (o.url ? '<a href="' + esc(o.url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Сайт</a>' : '') +
+              (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Регистрация</a>' : '') +
+            '</div>' : '') +
             '</div>';
         }).join('');
     }
@@ -1126,7 +1133,10 @@ container.innerHTML = sorted.map(function(o) {
         (o.profile_name ? '<sl-tag size="small" pill>' + esc(o.profile_name) + '</sl-tag>' : '') +
         renderBenefitBadges(o.benefits) + '</div>' +
         '<div style="font-size: var(--font-size-00);color:var(--text-3);margin-bottom: var(--size-1);">' + esc(o.organizer || '') + '</div>' +
-        (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Ссылка на регистрацию</a>' : '') +
+        (o.url || o.registration_url ? '<div style="display:flex;gap: var(--size-2);flex-wrap:wrap;margin-bottom: var(--size-2);">' +
+          (o.url ? '<a href="' + esc(o.url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Сайт</a>' : '') +
+          (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);">' + ICONS.external + ' Регистрация</a>' : '') +
+        '</div>' : '') +
         '<div class="section-title">Статус</div><div class="status-selector">' +
         ['planned','registered','participating','passed_round','won'].map(function(key) {
           return '<button class="status-btn ' + (o.status === key ? 'active' : '') + '" onclick="updateStatus(' + o.id + ", '" + key + "')" + '">' + statusLabel(key) + '</button>';

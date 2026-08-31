@@ -40,8 +40,8 @@
     "id": "formula-edinstva-trete-tysyacheletie",
     "name": "Формула единства / Третье тысячелетие",
     "organizer": "СПбГЭТУ ЛЭТИ/РАНХиГС",
-    "url": "",
-    "registration_url": "",
+    "url": "https://formulo.org/ru/olymp/",
+    "registration_url": "https://formulo.org/ru/olymp/",
     "tags": [
       "математика",
       "физика"
@@ -100,8 +100,8 @@
     "id": "yuzhno-rossiyskaya-mezhregionalnaya-olimpiada-arkhitektura-i-iskusstvo",
     "name": "Южно-Российская межрегиональная олимпиада «Архитектура и искусство»",
     "organizer": "ЮФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://www.raai.sfedu.ru",
+    "registration_url": "http://www.raai.sfedu.ru",
     "tags": [
       "искусство"
     ],
@@ -137,8 +137,8 @@
     "id": "vserossiyskaya-akademicheskaya-olimpiada-im-v-i-vernadskogo",
     "name": "Всероссийская академическая олимпиада им. В.И. Вернадского",
     "organizer": "Финансовый университет/РАНХиГС",
-    "url": "",
-    "registration_url": "",
+    "url": "https://vernadsky.online/",
+    "registration_url": "https://vernadsky.online/",
     "tags": [
       "экономика"
     ],
@@ -196,8 +196,8 @@
     "id": "natsproekt-vserossiyskaya-mezhdistsiplinarnaya-olimpiada-8-11-kl",
     "name": "Нацпроект / Всероссийская междисциплинарная олимпиада 8–11 кл.",
     "organizer": "Сириус/НТИ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://ntcontest.ru/",
+    "registration_url": "https://ntcontest.ru/",
     "tags": [
       "биология",
       "инженерия",
@@ -678,8 +678,8 @@
     "id": "vserossiyskaya-olimpiada-po-agrogenetike-innagrika",
     "name": "Всероссийская олимпиада по агрогенетике «Иннагрика»",
     "organizer": "Минобрнауки",
-    "url": "",
-    "registration_url": "",
+    "url": "https://innagrika.ru",
+    "registration_url": "https://innagrika.ru",
     "tags": [
       "биология"
     ],
@@ -1332,8 +1332,8 @@
     "id": "missiya-vypolnima-tvoyo-prizvanie-otechestvo!",
     "name": "Миссия выполнима. Твоё призвание — Отечество!",
     "organizer": "Минобрнауки",
-    "url": "",
-    "registration_url": "",
+    "url": "https://mission.fa.ru/",
+    "registration_url": "https://mission.fa.ru/",
     "tags": [
       "история",
       "обществознание",
@@ -1460,8 +1460,8 @@
     "id": "yuridicheskie-vysoty!",
     "name": "Юридические высоты!",
     "organizer": "РГЮА им. О.Е. Кутафина",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+    "registration_url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
     "tags": [
       "обществознание"
     ],
@@ -1497,8 +1497,8 @@
     "id": "vserossiyskaya-sechenovskaya-olimpiada",
     "name": "Всероссийская Сеченовская олимпиада",
     "organizer": "Сеченовский университет",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
+    "registration_url": "https://www.sechenov.ru/univers/structure/facultie/dovuz/olimpiady/",
     "tags": [
       "биология",
       "химия"
@@ -1557,8 +1557,8 @@
     "id": "vserossiyskaya-tolstovskaya-olimpiada",
     "name": "Всероссийская Толстовская олимпиада",
     "organizer": "ТГУ/ЛГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.tsput.ru",
+    "registration_url": "https://olymp.tsput.ru",
     "tags": [
       "история",
       "обществознание",
@@ -1575,18 +1575,18 @@
         "stages": [
           {
             "name": "Регистрация",
-            "date_start": "2026-09-01",
-            "date_end": "2026-11-30"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Отборочный этап",
-            "date_start": "2026-12-01",
-            "date_end": "2027-01-31"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Заключительный этап",
-            "date_start": "2027-02-01",
-            "date_end": "2027-03-31"
+            "date_start": "2026-01-25",
+            "date_end": "2026-01-25"
           }
         ]
       },
@@ -1597,18 +1597,18 @@
         "stages": [
           {
             "name": "Регистрация",
-            "date_start": "2026-09-01",
-            "date_end": "2026-11-30"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Отборочный этап",
-            "date_start": "2026-12-01",
-            "date_end": "2027-01-31"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Заключительный этап",
-            "date_start": "2027-02-01",
-            "date_end": "2027-03-31"
+            "date_start": "2026-01-25",
+            "date_end": "2026-01-25"
           }
         ]
       },
@@ -1619,18 +1619,18 @@
         "stages": [
           {
             "name": "Регистрация",
-            "date_start": "2026-09-01",
-            "date_end": "2026-11-30"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Отборочный этап",
-            "date_start": "2026-12-01",
-            "date_end": "2027-01-31"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Заключительный этап",
-            "date_start": "2027-02-01",
-            "date_end": "2027-03-31"
+            "date_start": "2026-01-25",
+            "date_end": "2026-01-25"
           }
         ]
       },
@@ -1641,18 +1641,18 @@
         "stages": [
           {
             "name": "Регистрация",
-            "date_start": "2026-09-01",
-            "date_end": "2026-11-30"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Отборочный этап",
-            "date_start": "2026-12-01",
-            "date_end": "2027-01-31"
+            "date_start": "2025-12-01",
+            "date_end": "2026-01-21"
           },
           {
             "name": "Заключительный этап",
-            "date_start": "2027-02-01",
-            "date_end": "2027-03-31"
+            "date_start": "2026-01-25",
+            "date_end": "2026-01-25"
           }
         ]
       }
@@ -1662,8 +1662,8 @@
     "id": "vserossiyskiy-konkurs-nauchnykh-rabot-shkolnikov-yunior",
     "name": "Всероссийский конкурс научных работ школьников «Юниор»",
     "organizer": "Российская академия наук",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.mephi.ru/junior",
+    "registration_url": "https://olymp.mephi.ru/junior",
     "tags": [
       "инженерия"
     ],
@@ -1721,8 +1721,8 @@
     "id": "vsesibirskaya-otkrytaya-olimpiada-shkolnikov",
     "name": "Всесибирская открытая олимпиада школьников",
     "organizer": "НГУ/ТГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://vsesib.nsu.ru/",
+    "registration_url": "https://vsesib.nsu.ru/",
     "tags": [
       "биология",
       "информатика",
@@ -1850,8 +1850,8 @@
     "id": "gertsenovskaya-olimpiada-shkolnikov",
     "name": "Герценовская олимпиада школьников",
     "organizer": "РГПУ им. А.И. Герцена",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.herzen.spb.ru",
+    "registration_url": "https://olymp.herzen.spb.ru",
     "tags": [
       "география",
       "языки"
@@ -1932,8 +1932,8 @@
     "id": "inzhenernaya-olimpiada-shkolnikov",
     "name": "Инженерная олимпиада школьников",
     "organizer": "МГТУ им. Н.Э. Баумана",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.bmstu.ru/",
+    "registration_url": "https://olymp.bmstu.ru/",
     "tags": [
       "физика"
     ],
@@ -1969,8 +1969,8 @@
     "id": "internet-olimpiada-shkolnikov-po-fizike",
     "name": "Интернет-олимпиада школьников по физике",
     "organizer": "ОмГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olimpiada.ru/activity/68",
+    "registration_url": "https://olimpiada.ru/activity/68",
     "tags": [
       "физика"
     ],
@@ -2006,8 +2006,8 @@
     "id": "kutafinskaya-olimpiada-shkolnikov-po-pravu",
     "name": "Кутафинская олимпиада школьников по праву",
     "organizer": "РГЮА им. О.Е. Кутафина",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olymp.msal.ru",
+    "registration_url": "http://olymp.msal.ru",
     "tags": [
       "обществознание"
     ],
@@ -2043,8 +2043,8 @@
     "id": "mezhdunarodnaya-muzykalnaya-olimpiada",
     "name": "Международная музыкальная олимпиада",
     "organizer": "МосКонсерватория",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.mosconsv.ru/",
+    "registration_url": "https://www.mosconsv.ru/",
     "tags": [
       "история"
     ],
@@ -2341,8 +2341,8 @@
     "id": "mezhdunarodnaya-olimpiada-po-finansovoy-bezopasnosti",
     "name": "Международная олимпиада по финансовой безопасности",
     "organizer": "Финансовый университет",
-    "url": "",
-    "registration_url": "",
+    "url": "https://rosfinolymp.ru/",
+    "registration_url": "https://rosfinolymp.ru/",
     "tags": [
       "экономика"
     ],
@@ -2378,8 +2378,8 @@
     "id": "evraziyskaya-lingvisticheskaya-olimpiada",
     "name": "Евразийская лингвистическая олимпиада",
     "organizer": "МГЛУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://elo.linguanet.ru/",
+    "registration_url": "https://elo.linguanet.ru/",
     "tags": [
       "языки"
     ],
@@ -2415,8 +2415,8 @@
     "id": "mezhdunarodnaya-olimpiada-iskusstvo-grafiki",
     "name": "Международная олимпиада «Искусство графики»",
     "organizer": "СПбГХПА",
-    "url": "",
-    "registration_url": "",
+    "url": "https://mospolytech.ru/postupayushchim/olimpiady/olimpiada-iskusstvo-grafiki/",
+    "registration_url": "https://mospolytech.ru/postupayushchim/olimpiady/olimpiada-iskusstvo-grafiki/",
     "tags": [
       "искусство"
     ],
@@ -2496,8 +2496,8 @@
     "id": "olimpiada-urfu",
     "name": "Олимпиада УрФУ",
     "organizer": "УрФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://izumrud.urfu.ru/ru/",
+    "registration_url": "https://izumrud.urfu.ru/ru/",
     "tags": [
       "информатика",
       "история",
@@ -2648,8 +2648,8 @@
     "id": "mezhregionalnaya-olimpiada-po-pravu-femida",
     "name": "Межрегиональная олимпиада по праву «ФЕМИДА»",
     "organizer": "УрФУ/ТГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
+    "registration_url": "https://www.usla.ru/entrance/olimp-yuridich-vysoty/",
     "tags": [
       "обществознание"
     ],
@@ -2685,8 +2685,8 @@
     "id": "mezhregionalnaya-olimpiada-arkhitektura-i-iskusstvo",
     "name": "Межрегиональная олимпиада «Архитектура и искусство»",
     "organizer": "ЮФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://www.raai.sfedu.ru",
+    "registration_url": "http://www.raai.sfedu.ru",
     "tags": [
       "искусство"
     ],
@@ -2722,8 +2722,8 @@
     "id": "budushchie-issledovateli-budushchee-kryma",
     "name": "Будущие исследователи — будущее Крыма",
     "organizer": "КФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://cfuv.ru/olimpiady/federalnoe-gosudarstvennoe-avtonomnoe-obrazovatelnoe-uchrezhdenie-vysshego-obrazovaniya-krymskijj-federalnyjj-universitet-imeni-v-i-vernadskogo",
+    "registration_url": "https://cfuv.ru/olimpiady/federalnoe-gosudarstvennoe-avtonomnoe-obrazovatelnoe-uchrezhdenie-vysshego-obrazovaniya-krymskijj-federalnyjj-universitet-imeni-v-i-vernadskogo",
     "tags": [
       "биология",
       "история",
@@ -2874,8 +2874,8 @@
     "id": "mezhregionalnaya-olimpiada-im-v-e-tatlina",
     "name": "Межрегиональная олимпиада им. В.Е. Татлина",
     "organizer": "НГАСУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://tatlin.pguas.ru/",
+    "registration_url": "http://tatlin.pguas.ru/",
     "tags": [
       "искусство"
     ],
@@ -2955,8 +2955,8 @@
     "id": "mezhregionalnaya-olimpiada-im-i-ya-verchenko",
     "name": "Межрегиональная олимпиада им. И.Я. Верченко",
     "organizer": "УрФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://ikb.mtuci.ru/",
+    "registration_url": "https://ikb.mtuci.ru/",
     "tags": [
       "информатика",
       "математика"
@@ -3015,8 +3015,8 @@
     "id": "mezhregionalnaya-olimpiada-na-baze-vedomstvennykh-obrazovatelnykh-organizatsiy",
     "name": "Межрегиональная олимпиада на базе ведомственных образовательных организаций",
     "organizer": "МВД/Минобороны",
-    "url": "",
-    "registration_url": "",
+    "url": "http://www.v-olymp.ru",
+    "registration_url": "http://www.v-olymp.ru",
     "tags": [
       "биология",
       "обществознание",
@@ -3143,8 +3143,8 @@
     "id": "mezhregionalnaya-khimicheskaya-olimpiada-im-p-d-sakharova",
     "name": "Межрегиональная химическая олимпиада им. П.Д. Сахарова",
     "organizer": "БГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://www.iseu.bsu.by",
+    "registration_url": "http://www.iseu.bsu.by",
     "tags": [
       "химия"
     ],
@@ -3180,8 +3180,8 @@
     "id": "mezhregionalnye-predmetnye-olimpiady-federalnogo-urovnya",
     "name": "Межрегиональные предметные олимпиады федерального уровня",
     "organizer": "Российская академия образования",
-    "url": "",
-    "registration_url": "",
+    "url": "https://minobrnauki.gov.ru",
+    "registration_url": "https://minobrnauki.gov.ru",
     "tags": [
       "биология",
       "искусство",
@@ -3377,8 +3377,8 @@
     "id": "mnogopredmetnaya-olimpiada-yunye-talanty",
     "name": "Многопредметная олимпиада «Юные таланты»",
     "organizer": "МГРИ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olymp.psu.ru/",
+    "registration_url": "http://olymp.psu.ru/",
     "tags": [
       "география",
       "химия"
@@ -3459,8 +3459,8 @@
     "id": "mnogoprofilnaya-inzhenernaya-olimpiada-zvezda",
     "name": "Многопрофильная инженерная олимпиада «Звезда»",
     "organizer": "РАЕН/НИУ МЭИ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://zv.susu.ru/",
+    "registration_url": "https://zv.susu.ru/",
     "tags": [
       "инженерия",
       "информатика"
@@ -3963,8 +3963,8 @@
     "id": "moskovskaya-otkrytaya-olimpiada-po-geologii",
     "name": "Московская открытая олимпиада по геологии",
     "organizer": "МГРИ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olympiad.web.ru",
+    "registration_url": "http://olympiad.web.ru",
     "tags": [
       "география"
     ],
@@ -4000,8 +4000,8 @@
     "id": "nauchno-prakticheskaya-olimpiada-im-n-a-umova",
     "name": "Научно-практическая олимпиада им. Н.А. Умова",
     "organizer": "МГТУ им. Баумана",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.bmstu.ru/",
+    "registration_url": "https://olymp.bmstu.ru/",
     "tags": [
       "физика"
     ],
@@ -4037,8 +4037,8 @@
     "id": "oboronno-tekhnicheskaya-olimpiada",
     "name": "Оборонно-техническая олимпиада",
     "organizer": "Минобороны/Военмех",
-    "url": "",
-    "registration_url": "",
+    "url": "https://pro.voenmeh.ru/oto",
+    "registration_url": "https://pro.voenmeh.ru/oto",
     "tags": [
       "инженерия",
       "информатика"
@@ -4075,8 +4075,8 @@
     "id": "osnovy-pravoslavnoy-kultury",
     "name": "Основы православной культуры",
     "organizer": "РПО/Российская академия образования",
-    "url": "",
-    "registration_url": "",
+    "url": "http://opk.pravolimp.ru/",
+    "registration_url": "http://opk.pravolimp.ru/",
     "tags": [
       "обществознание"
     ],
@@ -4112,8 +4112,8 @@
     "id": "obedinennaya-mezhvuzovskaya-olimpiada-shkolnikov",
     "name": "Объединенная межвузовская олимпиада школьников",
     "organizer": "РАН/МГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olympiads.mccme.ru/ommo/",
+    "registration_url": "https://olympiads.mccme.ru/ommo/",
     "tags": [
       "математика",
       "физика"
@@ -4172,8 +4172,8 @@
     "id": "olimpiada-kurchatov",
     "name": "Олимпиада Курчатов",
     "organizer": "НИЦ «Курчатовский институт»",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olimpiadakurchatov.ru",
+    "registration_url": "http://olimpiadakurchatov.ru",
     "tags": [
       "математика",
       "физика"
@@ -4232,8 +4232,8 @@
     "id": "olimpiada-mgimo-mid-rossii",
     "name": "Олимпиада МГИМО МИД России",
     "organizer": "МГИМО",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olymp.mgimo.ru",
+    "registration_url": "http://olymp.mgimo.ru",
     "tags": [
       "олимпиада"
     ],
@@ -4269,8 +4269,8 @@
     "id": "olimpiada-po-kompleksu-predmetov-kultura-i-iskusstvo",
     "name": "Олимпиада по комплексу предметов «Культура и искусство»",
     "organizer": "Российская академия художеств",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olimp.prouniver.ru/",
+    "registration_url": "http://olimp.prouniver.ru/",
     "tags": [
       "искусство"
     ],
@@ -4328,8 +4328,8 @@
     "id": "potomki-mendeleeva",
     "name": "Потомки Менделеева",
     "organizer": "РАХ/Российская академия образования",
-    "url": "",
-    "registration_url": "",
+    "url": "https://malun.kpfu.ru/mendeleev",
+    "registration_url": "https://malun.kpfu.ru/mendeleev",
     "tags": [
       "химия"
     ],
@@ -4365,8 +4365,8 @@
     "id": "olimpiada-po-ekonomike-v-ramkakh-mef",
     "name": "Олимпиада по экономике в рамках МЭФ",
     "organizer": "РАНХиГС",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.ranepa.ru/olymp/",
+    "registration_url": "https://www.ranepa.ru/olymp/",
     "tags": [
       "экономика"
     ],
@@ -4402,8 +4402,8 @@
     "id": "olimpiada-rggu",
     "name": "Олимпиада РГГУ",
     "organizer": "РГГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.rsuh.ru/",
+    "registration_url": "https://www.rsuh.ru/",
     "tags": [
       "история",
       "обществознание",
@@ -4529,8 +4529,8 @@
     "id": "granit-nauki",
     "name": "Гранит науки",
     "organizer": "УрФУ/УрО РАН",
-    "url": "",
-    "registration_url": "",
+    "url": "https://zv.susu.ru/",
+    "registration_url": "https://zv.susu.ru/",
     "tags": [
       "информатика"
     ],
@@ -5341,8 +5341,8 @@
     "id": "nadezhda-energetiki",
     "name": "Надежда энергетики",
     "organizer": "НИУ МЭИ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://energy-hope.ru",
+    "registration_url": "https://energy-hope.ru",
     "tags": [
       "физика"
     ],
@@ -5378,8 +5378,8 @@
     "id": "pokori-vorobevy-gory!",
     "name": "Покори Воробьевы горы!",
     "organizer": "МГТУ им. Баумана",
-    "url": "",
-    "registration_url": "",
+    "url": "https://pvg.mk.ru/",
+    "registration_url": "https://pvg.mk.ru/",
     "tags": [
       "география",
       "история",
@@ -5783,8 +5783,8 @@
     "id": "shag-v-budushchee",
     "name": "Шаг в будущее",
     "organizer": "МАИ/МАРШ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.step-into-the-future.ru/",
+    "registration_url": "https://www.step-into-the-future.ru/",
     "tags": [
       "инженерия",
       "информатика",
@@ -5935,8 +5935,8 @@
     "id": "olimpiada-shkolnikov-po-informatike-i-programmirovaniyu",
     "name": "Олимпиада школьников по информатике и программированию",
     "organizer": "Российская академия образования",
-    "url": "",
-    "registration_url": "",
+    "url": "http://neerc.ifmo.ru/school/ioip/index.html",
+    "registration_url": "http://neerc.ifmo.ru/school/ioip/index.html",
     "tags": [
       "информатика"
     ],
@@ -5972,8 +5972,8 @@
     "id": "tekhnokubok",
     "name": "ТехноКубок",
     "organizer": "Теньериф/НТИ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://technocup.mail.ru/",
+    "registration_url": "https://technocup.mail.ru/",
     "tags": [
       "информатика"
     ],
@@ -6009,8 +6009,8 @@
     "id": "olimpiada-rankhigs",
     "name": "Олимпиада РАНХиГС",
     "organizer": "РАНХиГС",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.ranepa.ru/olymp/",
+    "registration_url": "https://www.ranepa.ru/olymp/",
     "tags": [
       "история",
       "обществознание",
@@ -6668,8 +6668,8 @@
     "id": "olimpiada-vshe",
     "name": "Олимпиада ВШЭ",
     "organizer": "ВШЭ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olymp.hse.ru/mmo",
+    "registration_url": "http://olymp.hse.ru/mmo",
     "tags": [
       "обществознание"
     ],
@@ -6705,8 +6705,8 @@
     "id": "olimpiada-yunosheskoy-matematicheskoy-shkoly",
     "name": "Олимпиада Юношеской математической школы",
     "organizer": "ЮМШ/РАН",
-    "url": "",
-    "registration_url": "",
+    "url": "https://yumsh.ru",
+    "registration_url": "https://yumsh.ru",
     "tags": [
       "математика"
     ],
@@ -6742,8 +6742,8 @@
     "id": "budushchee-sibiri",
     "name": "Будущее Сибири",
     "organizer": "НГУ/ТГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://olymp-sibir.nstu.ru",
+    "registration_url": "http://olymp-sibir.nstu.ru",
     "tags": [
       "физика",
       "химия"
@@ -6802,8 +6802,8 @@
     "id": "otkrytaya-olimpiada-shkolnikov",
     "name": "Открытая олимпиада школьников",
     "organizer": "РАН/НГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://vsesib.nsu.ru/",
+    "registration_url": "https://vsesib.nsu.ru/",
     "tags": [
       "информатика",
       "математика",
@@ -6885,8 +6885,8 @@
     "id": "otkrytaya-olimpiada-po-programmirovaniyu",
     "name": "Открытая олимпиада по программированию",
     "organizer": "АКПИ/РАН",
-    "url": "",
-    "registration_url": "",
+    "url": "https://inf-open.ru",
+    "registration_url": "https://inf-open.ru",
     "tags": [
       "информатика"
     ],
@@ -6922,8 +6922,8 @@
     "id": "otkrytaya-olimpiada-kognitivnye-tekhnologii",
     "name": "Открытая олимпиада «Когнитивные технологии»",
     "organizer": "Яндекс/Сбер",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olymp.misis.ru/",
+    "registration_url": "https://olymp.misis.ru/",
     "tags": [
       "информатика"
     ],
@@ -6960,8 +6960,8 @@
     "id": "ormo-s-mezhdunarodnym-uchastiem",
     "name": "ОРМО с международным участием",
     "organizer": "БГУ/РАН",
-    "url": "",
-    "registration_url": "",
+    "url": "https://vsesib.nsu.ru/",
+    "registration_url": "https://vsesib.nsu.ru/",
     "tags": [
       "география",
       "история",
@@ -7111,8 +7111,8 @@
     "id": "otkrytaya-khimicheskaya-olimpiada",
     "name": "Открытая химическая олимпиада",
     "organizer": "РАН/МГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "http://chem.mipt.ru/",
+    "registration_url": "http://chem.mipt.ru/",
     "tags": [
       "химия"
     ],
@@ -7314,8 +7314,8 @@
     "id": "pirogovskaya-olimpiada-po-khimii-i-biologii",
     "name": "Пироговская олимпиада по химии и биологии",
     "organizer": "РНИМУ им. Н.И. Пирогова",
-    "url": "",
-    "registration_url": "",
+    "url": "https://rsmu.ru/academics/for-school-students/pirogov-olimpiada/",
+    "registration_url": "https://rsmu.ru/academics/for-school-students/pirogov-olimpiada/",
     "tags": [
       "биология"
     ],
@@ -7351,8 +7351,8 @@
     "id": "plekhanovskaya-olimpiada",
     "name": "Плехановская олимпиада",
     "organizer": "РАНХиГС/Плехановский университет",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.rea.ru/pk/entrant/plehanovskaya-olimpiada-shkolnikov/",
+    "registration_url": "https://www.rea.ru/pk/entrant/plehanovskaya-olimpiada-shkolnikov/",
     "tags": [
       "экономика",
       "языки"
@@ -7455,8 +7455,8 @@
     "id": "regionalnyy-konkurs-chelyabinskogo-universitetskogo-obrazovatelnogo-obedineniya",
     "name": "Региональный конкурс Челябинского университетского образовательного объединения",
     "organizer": "ЧелГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.csu.ru/studying/pre-university-education/",
+    "registration_url": "https://www.csu.ru/studying/pre-university-education/",
     "tags": [
       "обществознание",
       "языки"
@@ -7515,8 +7515,8 @@
     "id": "sankt-peterburgskaya-astronomicheskaya-olimpiada",
     "name": "Санкт-Петербургская Астрономическая олимпиада",
     "organizer": "СПбГУ/Пулковская обсерватория",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olympiada.spbu.ru/",
+    "registration_url": "https://olympiada.spbu.ru/",
     "tags": [
       "олимпиада"
     ],
@@ -7552,8 +7552,8 @@
     "id": "sankt-peterburgskaya-olimpiada-shkolnikov",
     "name": "Санкт-Петербургская олимпиада школьников",
     "organizer": "СПбГУ/Губернаторский фонд",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olympiada.spbu.ru/",
+    "registration_url": "https://olympiada.spbu.ru/",
     "tags": [
       "математика",
       "физика",
@@ -7635,8 +7635,8 @@
     "id": "severo-vostochnaya-olimpiada-shkolnikov",
     "name": "Северо-Восточная олимпиада школьников",
     "organizer": "СВФУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://olympiadsvosh.s-vfu.ru/",
+    "registration_url": "https://olympiadsvosh.s-vfu.ru/",
     "tags": [
       "языки"
     ],
@@ -7672,8 +7672,8 @@
     "id": "stroganovskaya-olimpiada",
     "name": "Строгановская олимпиада",
     "organizer": "МГХПА им. Строганова",
-    "url": "",
-    "registration_url": "",
+    "url": "https://stroganov-olympiada.ru/",
+    "registration_url": "https://stroganov-olympiada.ru/",
     "tags": [
       "искусство"
     ],
@@ -7709,8 +7709,8 @@
     "id": "tvoy-put-v-nastoyashchuyu-nauku",
     "name": "Твой путь в настоящую науку",
     "organizer": "РАН/НИЯУ МИФИ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://minobrnauki.gov.ru",
+    "registration_url": "https://minobrnauki.gov.ru",
     "tags": [
       "физика"
     ],
@@ -7746,8 +7746,8 @@
     "id": "umnitsy-i-umniki",
     "name": "Умницы и умники",
     "organizer": "ВГТРК/РАО",
-    "url": "",
-    "registration_url": "",
+    "url": "https://umniki.club/",
+    "registration_url": "https://umniki.club/",
     "tags": [
       "олимпиада"
     ],
@@ -8026,8 +8026,8 @@
     "id": "belchonok",
     "name": "Бельчонок",
     "organizer": "БФУ им. Канта/БГУ",
-    "url": "",
-    "registration_url": "",
+    "url": "https://dovuz.sfu-kras.ru/abiturientu-sfu/olimpiady/belchonok/",
+    "registration_url": "https://dovuz.sfu-kras.ru/abiturientu-sfu/olimpiady/belchonok/",
     "tags": [
       "информатика",
       "математика",
@@ -8132,8 +8132,8 @@
     "id": "olimpiada-po-predprinimatelstvu",
     "name": "Олимпиада по предпринимательству",
     "organizer": "РАНХиГС",
-    "url": "",
-    "registration_url": "",
+    "url": "https://www.ranepa.ru/olymp/",
+    "registration_url": "https://www.ranepa.ru/olymp/",
     "tags": [
       "инженерия"
     ],
