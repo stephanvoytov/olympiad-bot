@@ -5,388 +5,305 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Олимпиады</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/open-props@1.6.18/open-props.min.css">
   <style>
     :root {
-      --bg: #0f0f1a;
-      --surface: rgba(255,255,255,0.05);
-      --surface-hover: rgba(255,255,255,0.08);
-      --surface-raised: rgba(255,255,255,0.07);
-      --primary: #8b7cf7;
-      --primary-glow: rgba(139,124,247,0.3);
-      --primary-dim: #6d5ed6;
-      --green: #34d399;
-      --green-bg: rgba(52,211,153,0.12);
-      --yellow: #fbbf24;
-      --yellow-bg: rgba(251,191,36,0.12);
+      --bg: #111116;
+      --surface: #1a1a22;
+      --surface-hover: #222230;
+      --surface-raised: #1e1e28;
+      --primary: #5b6abf;
+      --primary-dim: #4a58a8;
+      --green: #4ade80;
+      --green-bg: rgba(74,222,128,0.12);
+      --yellow: #facc15;
+      --yellow-bg: rgba(250,204,21,0.12);
       --orange: #fb923c;
       --orange-bg: rgba(251,146,60,0.12);
       --red: #f87171;
       --red-bg: rgba(248,113,113,0.12);
-      --text: #f1f5f9;
-      --text-dim: #94a3b8;
-      --text-muted: #475569;
-      --border: rgba(255,255,255,0.06);
-      --radius: 16px;
-      --radius-sm: 10px;
-      --radius-xs: 8px;
+      --text: #e5e5ea;
+      --text-dim: #8e8ea0;
+      --text-muted: #555566;
+      --border: #2a2a36;
+      --radius: 12px;
+      --radius-sm: 8px;
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
     ::-webkit-scrollbar { width: 4px; height: 4px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif);
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       padding-bottom: 90px;
       -webkit-font-smoothing: antialiased;
-      background-image:
-        radial-gradient(ellipse 80% 60% at 50% -20%, rgba(139,124,247,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(52,211,153,0.05) 0%, transparent 50%);
     }
 
     .header {
-      padding: 24px 20px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: linear-gradient(180deg, rgba(15,15,26,1) 60%, rgba(15,15,26,0));
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      padding: 20px 16px 12px;
+      position: sticky; top: 0; z-index: 10;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
     }
     .header h1 {
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(135deg, #fff 40%, var(--primary) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: 22px; font-weight: 700;
+      letter-spacing: -0.3px;
     }
-    .header .subtitle { color: var(--text-dim); font-size: 14px; margin-top: 2px; font-weight: 400; }
+    .header .subtitle { color: var(--text-dim); font-size: 13px; margin-top: 2px; }
 
-    .stats-row { display: flex; gap: 8px; padding: 0 20px 16px; overflow-x: auto; scrollbar-width: none; }
+    .stats-row {
+      display: flex; gap: 6px; padding: 12px 16px;
+      overflow-x: auto; scrollbar-width: none;
+    }
     .stats-row::-webkit-scrollbar { display: none; }
     .stat-card {
-      background: var(--surface);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      min-width: 72px;
-      text-align: center;
-      flex-shrink: 0;
-      border: 1px solid var(--border);
+      background: var(--surface); border-radius: var(--radius-sm);
+      padding: 10px 14px; min-width: 68px; text-align: center;
+      flex-shrink: 0; border: 1px solid var(--border);
     }
-    .stat-card .num { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
-    .stat-card .label { font-size: 10px; color: var(--text-dim); margin-top: 1px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+    .stat-card .num { font-size: 18px; font-weight: 700; }
+    .stat-card .label {
+      font-size: 10px; color: var(--text-dim); margin-top: 2px;
+      text-transform: uppercase; letter-spacing: 0.4px;
+    }
 
-    .tabs {
-      display: flex; gap: 6px; padding: 0 20px 14px;
-    }
+    .tabs { display: flex; gap: 6px; padding: 0 16px 12px; }
     .tab {
-      flex: 1; text-align: center; padding: 11px; border-radius: var(--radius-sm);
-      background: var(--surface); cursor: pointer; font-size: 14px; font-weight: 600;
-      transition: all 0.25s ease; border: 1px solid var(--border); color: var(--text-dim);
-      position: relative; overflow: hidden;
+      flex: 1; text-align: center; padding: 10px;
+      border-radius: var(--radius-sm); background: var(--surface);
+      cursor: pointer; font-size: 13px; font-weight: 600;
+      border: 1px solid var(--border); color: var(--text-dim);
+      transition: all 0.15s;
     }
     .tab:active { transform: scale(0.97); }
-    .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 4px 20px var(--primary-glow); }
+    .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); }
     .tab .count {
       display: inline-block; background: rgba(255,255,255,0.12);
-      border-radius: 10px; padding: 0 7px; font-size: 11px; margin-left: 4px; font-weight: 600;
+      border-radius: 8px; padding: 0 6px; font-size: 11px; margin-left: 4px;
     }
-    .tab.active .count { background: rgba(255,255,255,0.25); }
+    .tab.active .count { background: rgba(255,255,255,0.2); }
 
-    .content { padding: 0 20px; }
+    .content { padding: 0 16px; }
 
-    .search-bar { display: flex; gap: 8px; margin-bottom: 14px; }
+    .search-bar { display: flex; gap: 6px; margin-bottom: 10px; }
     .search-bar input {
-      flex: 1; padding: 12px 16px; border-radius: var(--radius-sm);
+      flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
       border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      font-size: 15px; outline: none; transition: all 0.25s ease;
+      font-size: 14px; outline: none; transition: border-color 0.15s;
     }
     .search-bar input::placeholder { color: var(--text-muted); }
-    .search-bar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .search-bar input:focus { border-color: var(--primary); }
 
-    .catalog-filters {
-      display: flex; gap: 8px; margin-bottom: 12px;
-    }
+    .catalog-filters { display: flex; gap: 6px; margin-bottom: 10px; flex-direction: column; }
+    .filter-row { display: flex; gap: 6px; flex-wrap: wrap; }
     .filter-select {
-      flex: 1; padding: 10px 12px; border-radius: var(--radius-sm);
+      flex: 1; padding: 8px 10px; border-radius: var(--radius-sm);
       border: 1px solid var(--border); background: var(--surface);
-      color: var(--text); font-size: 13px; font-weight: 500;
-      outline: none; cursor: pointer; appearance: none;
-      -webkit-appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-      background-repeat: no-repeat; background-position: right 10px center;
-      background-size: 14px;
+      color: var(--text); font-size: 12px; outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238e8ea0' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 8px center;
+      background-size: 12px;
     }
-    .filter-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
-    .filter-select option { background: #1e1e32; color: var(--text); }
+    .filter-select:focus { border-color: var(--primary); }
+    .filter-select option { background: var(--surface); color: var(--text); }
+
     .chip {
-      padding: 6px 14px; border-radius: 20px; border: 1px solid var(--border);
+      padding: 5px 12px; border-radius: 16px; border: 1px solid var(--border);
       background: var(--surface); color: var(--text-dim); cursor: pointer;
-      font-size: 12px; font-weight: 500; transition: all 0.2s ease;
-      -webkit-tap-highlight-color: transparent; white-space: nowrap; flex-shrink: 0;
+      font-size: 11px; font-weight: 500; transition: all 0.15s;
+      white-space: nowrap; flex-shrink: 0;
     }
     .chip:hover { border-color: var(--text-muted); color: var(--text); }
     .chip:active { transform: scale(0.96); }
-    .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 2px 12px var(--primary-glow); }
+    .chip.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
     .olympiad-card {
-      background: var(--surface-raised);
-      border-radius: var(--radius);
-      padding: 16px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: all 0.25s ease;
-      border: 1px solid var(--border);
-      position: relative;
-      animation: cardIn 0.35s ease both;
-    }
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      background: var(--surface); border-radius: var(--radius);
+      padding: 14px; margin-bottom: 8px; cursor: pointer;
+      border: 1px solid var(--border); transition: border-color 0.15s;
     }
     .olympiad-card:active { transform: scale(0.99); }
-    .olympiad-card:hover { background: var(--surface-hover); border-color: rgba(255,255,255,0.1); }
+    .olympiad-card:hover { border-color: #3a3a4a; }
     .olympiad-card .row1 {
-      display: flex; justify-content: space-between; align-items: flex-start;
-      gap: 8px;
+      display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
     }
     .olympiad-card .row1 > div:first-child { flex: 1; min-width: 0; }
-    .olympiad-card .row1 > div:last-child { flex-shrink: 0; }
-    .olympiad-card .name { font-size: 16px; font-weight: 600; line-height: 1.3; }
-    .olympiad-card .organizer { font-size: 12px; color: var(--text-muted); margin-top: 3px; }
-    .olympiad-card .meta {
-      display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center;
-    }
+    .olympiad-card .name { font-size: 15px; font-weight: 600; line-height: 1.3; }
+    .olympiad-card .organizer { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .olympiad-card .meta { display: flex; gap: 4px; margin-top: 8px; flex-wrap: wrap; }
     .olympiad-card .deadline-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-top: 10px; padding: 5px 12px;
-      border-radius: var(--radius-xs); font-size: 11px; font-weight: 600;
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 8px; padding: 4px 10px; border-radius: var(--radius-sm);
+      font-size: 11px; font-weight: 600;
     }
     .deadline-urgent { background: var(--red-bg); color: var(--red); }
     .deadline-soon { background: var(--yellow-bg); color: var(--yellow); }
     .deadline-later { background: var(--green-bg); color: var(--green); }
 
     .badge {
-      font-size: 10px; padding: 3px 9px; border-radius: 20px;
-      font-weight: 600; letter-spacing: 0.2px;
-      white-space: nowrap;
+      font-size: 10px; padding: 2px 7px; border-radius: 10px;
+      font-weight: 600; white-space: nowrap;
     }
-    .badge.level { background: var(--primary-dim); color: #fff; }
+    .badge.level { background: var(--primary); color: #fff; }
     .badge.bvi { background: var(--green-bg); color: var(--green); }
-    .badge.points { background: rgba(251,146,60,0.15); color: var(--orange); }
-    .badge.extra { background: rgba(148,163,184,0.12); color: var(--text-dim); }
+    .badge.points { background: var(--orange-bg); color: var(--orange); }
+    .badge.extra { background: rgba(142,142,160,0.12); color: var(--text-dim); }
 
-    .profile-checkbox {
-      transition: background 0.15s ease; border-radius: 6px; padding: 6px 8px !important;
-    }
+    .profile-checkbox { border-radius: 6px; }
     .profile-checkbox:hover { background: var(--surface-hover); }
 
     .status-indicator {
-      display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 500;
     }
     .status-indicator svg { flex-shrink: 0; }
 
     .stage-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
+      padding: 9px 0; border-bottom: 1px solid var(--border);
       font-size: 13px; gap: 8px;
     }
     .stage-item:last-child { border: none; }
     .stage-item .date { color: var(--text-muted); font-size: 12px; white-space: nowrap; }
-    .stage-item .stage-name { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .stage-item .stage-name { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
 
-    .empty-state {
-      text-align: center; padding: 48px 20px; color: var(--text-dim);
-    }
-    .empty-state h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-    .empty-state p { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+    .empty-state { text-align: center; padding: 40px 16px; color: var(--text-dim); }
+    .empty-state h3 { font-size: 16px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .empty-state p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
 
     .btn {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 10px 20px; border-radius: var(--radius-sm);
-      border: none; cursor: pointer; font-size: 14px; font-weight: 600;
-      transition: all 0.2s ease; -webkit-tap-highlight-color: transparent;
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      border: none; cursor: pointer; font-size: 13px; font-weight: 600;
+      transition: all 0.15s;
     }
     .btn:active { transform: scale(0.97); }
-    .btn-primary { background: var(--primary); color: #fff; box-shadow: 0 2px 12px var(--primary-glow); }
-    .btn-primary:hover { background: var(--primary-dim); box-shadow: 0 4px 20px var(--primary-glow); }
-    .btn-outline {
-      background: transparent; border: 1px solid var(--primary); color: var(--primary);
-    }
-    .btn-outline:hover { background: var(--primary-glow); }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: var(--primary-dim); }
+    .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
     .btn-danger { background: var(--red-bg); color: var(--red); border: 1px solid rgba(248,113,113,0.2); }
-    .btn-danger:hover { background: rgba(248,113,113,0.2); }
-    .btn-success { background: var(--green-bg); color: var(--green); }
-    .btn-sm { padding: 7px 14px; font-size: 12px; border-radius: var(--radius-xs); }
+    .btn-sm { padding: 6px 12px; font-size: 12px; }
     .btn-link {
       display: inline-flex; align-items: center; gap: 4px;
-      color: var(--primary); text-decoration: none; font-size: 13px; font-weight: 500;
-      transition: opacity 0.2s;
+      color: var(--primary); text-decoration: none; font-size: 12px; font-weight: 500;
     }
-    .btn-link:hover { opacity: 0.8; }
-
-    .add-btn {
-      position: fixed; bottom: 24px; right: 24px;
-      width: 56px; height: 56px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dim) 100%);
-      color: #fff; border: none;
-      cursor: pointer; box-shadow: 0 6px 24px var(--primary-glow);
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.25s ease; z-index: 5;
-    }
-    .add-btn:hover { transform: scale(1.08); box-shadow: 0 8px 32px var(--primary-glow); }
-    .add-btn:active { transform: scale(0.95); }
 
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 100; justify-content: center; align-items: flex-end;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      opacity: 0; transition: opacity 0.25s ease;
+      background: rgba(0,0,0,0.6); z-index: 100;
+      justify-content: center; align-items: flex-end;
     }
-    .modal-overlay.open { display: flex; opacity: 1; }
-    .modal-overlay.open .modal {
-      animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    .modal-overlay.open { display: flex; }
+    .modal-overlay.open .modal { animation: slideUp 0.25s ease-out; }
     @keyframes slideUp {
-      from { transform: translateY(100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
     }
     .modal {
-      background: linear-gradient(180deg, rgba(30,30,50,1) 0%, rgba(20,20,35,1) 100%);
-      border-radius: var(--radius) var(--radius) 0 0;
-      padding: 20px; width: 100%; max-width: 500px;
+      background: var(--surface); border-radius: var(--radius) var(--radius) 0 0;
+      padding: 16px; width: 100%; max-width: 480px;
       max-height: 85vh; overflow-y: auto;
       border-top: 1px solid var(--border);
     }
     .modal-header {
-      display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+      display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
     }
-    .modal-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.3; }
+    .modal-header h2 { font-size: 18px; font-weight: 700; }
     .modal-close {
-      background: var(--surface); border: none; color: var(--text-dim);
-      cursor: pointer; padding: 8px; border-radius: var(--radius-xs);
-      transition: all 0.2s; line-height: 1;
+      background: var(--surface-hover); border: none; color: var(--text-dim);
+      cursor: pointer; padding: 6px; border-radius: 6px;
       display: flex; align-items: center; justify-content: center;
     }
-    .modal-close:hover { background: var(--surface-hover); color: var(--text); }
+    .modal-close:hover { color: var(--text); }
 
-    .catalog-footer {
-      padding: 12px 0 20px;
-      position: sticky; bottom: 0;
-      background: linear-gradient(180deg, rgba(15,15,26,0) 0%, rgba(15,15,26,1) 40%);
-    }
-
-    .status-selector {
-      display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0;
-    }
+    .status-selector { display: flex; gap: 5px; flex-wrap: wrap; margin: 10px 0; }
     .status-btn {
-      padding: 7px 16px; border-radius: 20px; border: 1px solid var(--border);
+      padding: 6px 12px; border-radius: 14px; border: 1px solid var(--border);
       background: var(--surface); color: var(--text-dim); cursor: pointer;
-      font-size: 12px; font-weight: 500; transition: all 0.2s ease;
-      -webkit-tap-highlight-color: transparent;
+      font-size: 11px; font-weight: 500; transition: all 0.15s;
     }
-    .status-btn:hover { border-color: var(--text-muted); color: var(--text); }
     .status-btn:active { transform: scale(0.96); }
-    .status-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 2px 12px var(--primary-glow); }
+    .status-btn.active { background: var(--primary); border-color: var(--primary); color: #fff; }
 
     .section-title {
-      font-size: 13px; font-weight: 700; margin: 16px 0 10px;
-      display: flex; align-items: center; gap: 6px;
-      text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-dim);
+      font-size: 12px; font-weight: 700; margin: 14px 0 8px;
+      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim);
     }
 
-    .form-group { margin-bottom: 14px; }
-    .form-group label { display: block; font-size: 13px; color: var(--text-dim); margin-bottom: 4px; font-weight: 500; }
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 3px; font-weight: 500; }
     .form-group input, .form-group select {
-      width: 100%; padding: 12px; border-radius: var(--radius-sm);
+      width: 100%; padding: 10px; border-radius: var(--radius-sm);
       border: 1px solid var(--border); background: var(--surface); color: var(--text);
-      font-size: 14px; outline: none; transition: all 0.25s;
+      font-size: 14px; outline: none; transition: border-color 0.15s;
     }
-    .form-group input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
+    .form-group input:focus { border-color: var(--primary); }
     .form-group input[type="date"] { color-scheme: dark; }
 
     .toast {
-      position: fixed; bottom: 88px; left: 50%; transform: translateX(-50%);
-      background: rgba(30,30,50,0.95);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      color: #fff; padding: 12px 24px;
-      border-radius: 24px; font-size: 13px; font-weight: 500;
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--surface-raised); color: var(--text);
+      padding: 10px 20px; border-radius: 20px; font-size: 13px; font-weight: 500;
       z-index: 200; display: none; white-space: nowrap;
       border: 1px solid var(--border);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
-    .toast.show {
-      display: block;
-      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    }
+    .toast.show { display: block; animation: toastIn 0.2s ease-out; }
     @keyframes toastIn {
-      from { transform: translateX(-50%) translateY(12px); opacity: 0; }
+      from { transform: translateX(-50%) translateY(8px); opacity: 0; }
       to { transform: translateX(-50%) translateY(0); opacity: 1; }
     }
 
-    .info-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0;
-    }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
     .info-item { font-size: 13px; }
     .info-item .label { color: var(--text-dim); font-size: 11px; }
 
-    .countdown { font-size: 12px; font-weight: 600; margin-top: 4px; }
-    .countdown.urgent { color: var(--red); }
-    .countdown.soon { color: var(--yellow); }
-    .countdown.normal { color: var(--green); }
-
-    /* Group headers in catalog */
     .group-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 14px 0 8px; margin-top: 8px;
-      font-size: 13px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.8px; color: var(--primary);
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 0 6px; margin-top: 6px;
+      font-size: 12px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-dim);
       border-bottom: 1px solid var(--border);
     }
     .group-header:first-child { margin-top: 0; }
     .group-header .group-icon {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: rgba(139,124,247,0.15);
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      width: 24px; height: 24px; border-radius: 6px;
+      background: var(--surface-hover); display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0;
     }
     .group-header .group-count {
-      margin-left: auto; background: rgba(139,124,247,0.15);
-      padding: 2px 8px; border-radius: 10px; font-size: 11px;
-      color: var(--primary); font-weight: 600;
+      margin-left: auto; background: var(--surface-hover);
+      padding: 1px 6px; border-radius: 8px; font-size: 10px;
+      color: var(--text-dim); font-weight: 600;
     }
 
-    /* Loading overlay */
     .loading-overlay {
       position: fixed; inset: 0; z-index: 300;
-      background: rgba(15,15,26,0.7);
+      background: rgba(17,17,22,0.8);
       display: none; align-items: center; justify-content: center;
-      flex-direction: column; gap: 10px;
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
+      flex-direction: column; gap: 8px;
     }
     .loading-overlay.show { display: flex; }
     .spinner {
-      width: 36px; height: 36px; border: 3px solid var(--border);
+      width: 28px; height: 28px; border: 2px solid var(--border);
       border-top-color: var(--primary); border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      animation: spin 0.6s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .loading-text { color: var(--text-dim); font-size: 14px; }
+    .loading-text { color: var(--text-dim); font-size: 13px; }
 
-    /* Edit stage / confirm modals */
-    .edit-stage-actions {
-      display: flex; gap: 8px; margin-top: 8px;
+    .add-btn {
+      position: fixed; bottom: 20px; right: 20px;
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--primary); color: #fff; border: none;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      z-index: 5; transition: transform 0.15s;
     }
-    .edit-stage-actions .btn { flex: 1; justify-content: center; }
-    #confirmModal .modal { max-width: 360px; }
+    .add-btn:active { transform: scale(0.92); }
   </style>
 </head>
 <body>
@@ -406,7 +323,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- Loading overlay -->
   <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
     <div class="loading-text" id="loadingText">Загрузка...</div>
@@ -418,37 +334,37 @@
       <div class="modal-header">
         <h2 id="confirmTitle">Подтверждение</h2>
         <button class="modal-close" onclick="closeConfirmModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
-      <div id="confirmBody" style="font-size:14px;color:var(--text-dim);margin-bottom:16px;line-height:1.5"></div>
-      <div style="display:flex;gap:8px">
+      <div id="confirmBody" style="font-size:13px;color:var(--text-dim);margin-bottom:14px;line-height:1.5"></div>
+      <div style="display:flex;gap:6px">
         <button class="btn btn-danger" id="confirmYesBtn" style="flex:1;justify-content:center"></button>
         <button class="btn btn-outline" onclick="closeConfirmModal()" style="flex:1;justify-content:center">Отмена</button>
       </div>
     </div>
   </div>
 
-  <!-- Детальная модалка -->
+  <!-- Detail modal -->
   <div class="modal-overlay" id="detailModal">
     <div class="modal">
       <div class="modal-header">
         <h2 id="modalTitle">Олимпиада</h2>
         <button class="modal-close" onclick="closeModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <div id="modalBody"></div>
     </div>
   </div>
 
-  <!-- Модалка добавления этапа -->
+  <!-- Stage modal -->
   <div class="modal-overlay" id="stageModal">
     <div class="modal">
       <div class="modal-header">
         <h2>Добавить этап</h2>
         <button class="modal-close" onclick="closeStageModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
       <div id="stageModalBody">
@@ -466,21 +382,21 @@
             <input type="date" id="stageEndInput">
           </div>
         </div>
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px">
-          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer">
-            <input type="checkbox" id="stageCompletedInput" style="accent-color:var(--green);width:18px;height:18px"> Завершён
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
+          <label style="display:flex;align-items:center;gap:5px;font-size:13px;cursor:pointer">
+            <input type="checkbox" id="stageCompletedInput" style="accent-color:var(--green);width:16px;height:16px"> Завершён
           </label>
           <div class="form-group" style="flex:1;margin-bottom:0">
             <input type="text" id="stageResultInput" placeholder="Результат (диплом, баллы...)" style="font-size:13px">
           </div>
         </div>
-        <div style="display:flex;gap:8px;margin-top:16px">
-          <button class="btn btn-primary" onclick="submitStage()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Сохранить
+        <div style="display:flex;gap:6px;margin-top:14px">
+          <button class="btn btn-primary" onclick="submitStage()" style="flex:1;justify-content:center">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Сохранить
           </button>
-          <button class="btn btn-outline" onclick="closeStageModal()">Отмена</button>
+          <button class="btn btn-outline" onclick="closeStageModal()" style="flex:1;justify-content:center">Отмена</button>
         </div>
-        <div id="stageError" style="color:var(--red);font-size:12px;margin-top:8px;display:none"></div>
+        <div id="stageError" style="color:var(--red);font-size:12px;margin-top:6px;display:none"></div>
       </div>
     </div>
   </div>
@@ -510,28 +426,25 @@
     let catalogDirectionFilter = '';
     let catalogUniFilter = '';
     let catalogBenefitsOnly = false;
-    let catalogGroupBy = ''; // '' | 'direction' | 'university' | 'level' | 'benefits'
+    let catalogGroupBy = '';
     let currentDetailEntryId = null;
 
     // ========== SVG ICONS ==========
     const ICONS = {
-      planned: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-      registered: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
-      participating: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
-      passed_round: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
-      won: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
-      external: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
-      calendar: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-      delete: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>',
-      plus: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
-      check: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
-      clock: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-      search: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
-      alert: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
-      close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+      planned: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      registered: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      participating: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+      passed_round: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+      won: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
+      external: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>',
+      calendar: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+      delete: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+      plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+      check: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>',
+      clock: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
     };
 
-    // ========== ХЕЛПЕРЫ ==========
+    // ========== HELPERS ==========
     function showLoading(msg) {
       document.getElementById('loadingText').textContent = msg || 'Загрузка...';
       document.getElementById('loadingOverlay').classList.add('show');
@@ -555,10 +468,7 @@
       document.getElementById('confirmBody').textContent = body;
       var btn = document.getElementById('confirmYesBtn');
       btn.textContent = btnText || 'Подтвердить';
-      btn.onclick = function() {
-        closeConfirmModal();
-        if (onConfirm) onConfirm();
-      };
+      btn.onclick = function() { closeConfirmModal(); if (onConfirm) onConfirm(); };
       document.getElementById('confirmModal').classList.add('open');
       bodyScrollLock(true);
     }
@@ -569,22 +479,15 @@
     }
 
     function bodyScrollLock(lock) {
-      if (lock) {
-        document.body.style.overflow = 'hidden';
-      } else {
-        // Проверяем, открыта ли ещё какая-то модалка
-        var anyOpen = document.querySelectorAll('.modal-overlay.open').length > 0;
-        if (!anyOpen) document.body.style.overflow = '';
-      }
+      if (lock) { document.body.style.overflow = 'hidden'; }
+      else { if (!document.querySelectorAll('.modal-overlay.open').length) document.body.style.overflow = ''; }
     }
 
-    // Глобальный Escape + Telegram BackButton
     function setupGlobalHandlers() {
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           var openModals = document.querySelectorAll('.modal-overlay.open');
           if (openModals.length) {
-            // Закрываем самую верхнюю
             var last = openModals[openModals.length - 1];
             if (last.id === 'detailModal') closeModal();
             else if (last.id === 'stageModal') closeStageModal();
@@ -593,7 +496,6 @@
           }
         }
       });
-
       try {
         if (isTelegram) Telegram.WebApp.BackButton.onClick(function() {
           var openModals = document.querySelectorAll('.modal-overlay.open');
@@ -607,23 +509,14 @@
       } catch(e) {}
     }
 
-    // Отслеживание открытых модалок для BackButton
     function updateBackButton() {
       if (!isTelegram) return;
       try {
-        var openModals = document.querySelectorAll('.modal-overlay.open');
-        if (openModals.length) {
-          Telegram.WebApp.BackButton.show();
-        } else {
-          Telegram.WebApp.BackButton.hide();
-        }
+        if (document.querySelectorAll('.modal-overlay.open').length) Telegram.WebApp.BackButton.show();
+        else Telegram.WebApp.BackButton.hide();
       } catch(e) {}
     }
 
-    // Обёртка для всех открытий модалок с блокировкой скролла
-    var _origOpenModalFns = [];
-
-    // ========== XSS ЗАЩИТА ==========
     function esc(str) {
       var d = document.createElement('div');
       d.appendChild(document.createTextNode(str || ''));
@@ -638,12 +531,10 @@
       return { planned: 'Запланировано', registered: 'Зарегистрирован', participating: 'Участвую', passed_round: 'Прошёл этап', won: 'Победа' }[s] || s;
     }
 
-    // ========== ОБЩИЙ ЗАГОЛОВОК ==========
     function authHeaders() {
       var h = {};
-      if (initData) {
-        h['X-Telegram-Init-Data'] = initData;
-      } else if (guestId && guestPassword) {
+      if (initData) { h['X-Telegram-Init-Data'] = initData; }
+      else if (guestId && guestPassword) {
         h['X-Telegram-ID'] = guestId;
         h['X-Telegram-Password'] = guestPassword;
       }
@@ -651,31 +542,23 @@
     }
 
     // ========== INIT ==========
-    if (isTelegram) {
-      try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch(e) {}
-    }
+    if (isTelegram) { try { Telegram.WebApp.ready(); Telegram.WebApp.expand(); } catch(e) {} }
 
     async function init() {
       setupGlobalHandlers();
 
-      // Всегда грузим каталог (без авторизации)
       showLoading('Загрузка каталога...');
       try {
         var catResp = await fetch(API + '/olympiads');
         catalog = await catResp.json();
         document.getElementById('catCount').textContent = catalog.length;
-      } catch(e) {
-        catalog = [];
-      }
+      } catch(e) { catalog = []; }
 
-      // Если нет Telegram и нет сохранённых данных — показываем каталог без "Моих"
       if (!TELEGRAM_ID && !guestId) {
         hideLoading();
         document.getElementById('subtitle').textContent = 'Каталог олимпиад';
         document.getElementById('myCount').textContent = '—';
-        // Скрываем вкладку "Мои"
         document.querySelector('[data-tab="my"]').style.display = 'none';
-        // Ставим.active на "Каталог"
         document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
         document.querySelector('[data-tab="catalog"]').classList.add('active');
         renderTab('catalog');
@@ -686,11 +569,9 @@
       try {
         var resp = await fetch(API + '/user/me', { headers: authHeaders() });
         if (!resp.ok) {
-          // Невалидные данные — очищаем и показываем каталог
           localStorage.removeItem('guest_telegram_id');
           localStorage.removeItem('guest_password');
-          guestId = null;
-          guestPassword = null;
+          guestId = null; guestPassword = null;
           hideLoading();
           document.getElementById('subtitle').textContent = 'Каталог олимпиад';
           document.querySelector('[data-tab="my"]').style.display = 'none';
@@ -702,10 +583,9 @@
         tgUser = await resp.json();
         var nameText = tgUser.full_name || tgUser.username || ('ID: ' + tgUser.telegram_id);
         if (!TELEGRAM_ID && guestId) {
-          nameText += ' <span style="cursor:pointer;color:var(--text-muted);font-size:12px" onclick="doLogout()">[выйти]</span>';
+          nameText += ' <span style="cursor:pointer;color:var(--text-muted);font-size:11px" onclick="doLogout()">выйти</span>';
         }
         document.getElementById('subtitle').innerHTML = nameText;
-        // Грузим "Мои" и дашборд только для залогиненных
         try {
           const h = authHeaders();
           const [myResp, dashResp] = await Promise.all([
@@ -716,15 +596,12 @@
           var dash = await dashResp.json();
           document.getElementById('myCount').textContent = myOlympiads.length;
           renderStats(dash);
-        } catch(e) {
-          myOlympiads = [];
-        }
+        } catch(e) { myOlympiads = []; }
         hideLoading();
         renderTab('my');
         if (isTelegram) { try { haptic('light'); } catch(e) {} }
       } catch(e) {
         hideLoading();
-        console.error('Init error:', e);
         document.getElementById('subtitle').textContent = 'Ошибка загрузки';
       }
     }
@@ -732,26 +609,19 @@
     function showLoginForm() {
       document.getElementById('subtitle').textContent = 'Вход на сайт';
       document.getElementById('statsRow').innerHTML = '';
-      document.getElementById('tabContent').innerHTML = `
-        <div style="max-width:360px;margin:40px auto 0;text-align:center">
-          <div style="font-size:48px;margin-bottom:16px">🔐</div>
-          <h2 style="font-size:20px;font-weight:700;margin-bottom:8px">Вход по ID и паролю</h2>
-          <p style="color:var(--text-dim);font-size:14px;margin-bottom:24px;line-height:1.5">
-            Получите ID и пароль в Telegram-боте.<br>Нажмите <b>/start</b> в боте.
-          </p>
-          <div class="form-group" style="text-align:left">
-            <label>Telegram ID</label>
-            <input type="number" id="loginIdInput" placeholder="123456789" inputmode="numeric">
-          </div>
-          <div class="form-group" style="text-align:left">
-            <label>Пароль</label>
-            <input type="text" id="loginPasswordInput" placeholder="6 цифр" inputmode="numeric" maxlength="6">
-          </div>
-          <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">
-            Войти
-          </button>
-          <div id="loginError" style="color:var(--red);font-size:13px;margin-top:12px;display:none"></div>
-        </div>`;
+      document.getElementById('tabContent').innerHTML =
+        '<div style="max-width:340px;margin:32px auto 0;text-align:center">' +
+          '<h2 style="font-size:18px;font-weight:700;margin-bottom:6px">Вход по ID и паролю</h2>' +
+          '<p style="color:var(--text-dim);font-size:13px;margin-bottom:20px;line-height:1.5">' +
+            'Получите ID и пароль в Telegram-боте.<br>Нажмите <b>/start</b> в боте.' +
+          '</p>' +
+          '<div class="form-group" style="text-align:left"><label>Telegram ID</label>' +
+            '<input type="number" id="loginIdInput" placeholder="123456789" inputmode="numeric"></div>' +
+          '<div class="form-group" style="text-align:left"><label>Пароль</label>' +
+            '<input type="text" id="loginPasswordInput" placeholder="6 цифр" inputmode="numeric" maxlength="6"></div>' +
+          '<button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:6px" onclick="doLogin()">Войти</button>' +
+          '<div id="loginError" style="color:var(--red);font-size:12px;margin-top:10px;display:none"></div>' +
+        '</div>';
       document.getElementById('loginIdInput').focus();
     }
 
@@ -775,27 +645,21 @@
           errEl.style.display = 'block';
           return;
         }
-        // Успешный вход — сохраняем
-        guestId = id;
-        guestPassword = pwd;
+        guestId = id; guestPassword = pwd;
         localStorage.setItem('guest_telegram_id', id);
         localStorage.setItem('guest_password', pwd);
         isLoggedIn = true;
-        // Перезапускаем init
         init();
       } catch(e) {
         hideLoading();
-        errEl.textContent = 'Ошибка сети';
-        errEl.style.display = 'block';
+        errEl.textContent = 'Ошибка сети'; errEl.style.display = 'block';
       }
     }
 
     function doLogout() {
       localStorage.removeItem('guest_telegram_id');
       localStorage.removeItem('guest_password');
-      guestId = null;
-      guestPassword = null;
-      isLoggedIn = false;
+      guestId = null; guestPassword = null; isLoggedIn = false;
       location.reload();
     }
 
@@ -819,7 +683,7 @@
       const row = document.getElementById('statsRow');
       const labels = {
         planned: 'Запланировано', registered: 'Зарегистрирован',
-        participating: 'Участвую', passed_round: 'Прошёл этап', won: 'Победа'
+        participating: 'Участвую', passed_round: 'Прошёл', won: 'Победа'
       };
       var html = '<div class="stat-card"><div class="num">' + dash.total + '</div><div class="label">Всего</div></div>';
       for (var key in labels) {
@@ -853,13 +717,12 @@
       const container = document.getElementById('tabContent');
       container.innerHTML =
         '<div class="search-bar"><input type="text" id="searchInput" placeholder="Поиск по названию..." oninput="debouncedSearch()"></div>' +
-        (isLoggedIn ? '' : '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:12px">' +
-          '<div style="font-size:24px">👋</div>' +
-          '<div style="flex:1"><div style="font-size:14px;font-weight:600">Хотите добавлять олимпиады?</div><div style="font-size:12px;color:var(--text-dim);margin-top:2px">Войдите через Telegram-бот, чтобы отслеживать свои олимпиады</div></div>' +
+        (isLoggedIn ? '' : '<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px">' +
+          '<div style="flex:1"><div style="font-size:13px;font-weight:600">Хотите добавлять олимпиады?</div><div style="font-size:11px;color:var(--text-dim);margin-top:2px">Войдите через Telegram-бот</div></div>' +
           '<button class="btn btn-primary btn-sm" onclick="showLoginForm()">Войти</button>' +
           '</div>') +
         '<div id="catalogResults"></div>' +
-        '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:12px 0 20px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(15,15,26,0) 0%, rgba(15,15,26,1) 40%)">' +
+        '<div class="catalog-footer" id="catalogTabFooter" style="display:none;padding:10px 0 16px;position:sticky;bottom:0;background:linear-gradient(180deg, rgba(17,17,22,0) 0%, var(--bg) 40%)">' +
           '<button class="btn btn-primary" style="width:100%;justify-content:center" onclick="addSelectedFromCatalog()">+ Добавить выбранные</button>' +
         '</div>';
       renderCatalogFilter();
@@ -881,20 +744,17 @@
 
       var dirOptions = '<option value="">Все направления</option>' +
         dirList.map(function(d) { return '<option value="' + esc(d) + '"' + (catalogDirectionFilter === d ? ' selected' : '') + '>' + esc(d) + '</option>'; }).join('');
-
       var uniOptions = '<option value="">Все вузы</option>' +
         uniList.map(function(u) { return '<option value="' + esc(u) + '"' + (catalogUniFilter === u ? ' selected' : '') + '>' + esc(u) + '</option>'; }).join('');
 
       var profiles = new Set();
       catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
       var profileList = Array.from(profiles).sort();
-
       var profileOptions = '<option value="">Все профили</option>' +
         profileList.map(function(p) { return '<option value="' + esc(p) + '"' + (catalogProfileFilter === p ? ' selected' : '') + '>' + esc(p) + '</option>'; }).join('');
 
       var levelOptions = ['', 1, 2, 3].map(function(l) {
-        var label = l ? 'Ур. ' + l : 'Любой уровень';
-        return '<option value="' + l + '"' + (catalogLevelFilter === String(l) ? ' selected' : '') + '>' + label + '</option>';
+        return '<option value="' + l + '"' + (catalogLevelFilter === String(l) ? ' selected' : '') + '>' + (l ? 'Ур. ' + l : 'Любой уровень') + '</option>';
       }).join('');
 
       var groupOptions = [
@@ -908,22 +768,20 @@
       }).join('');
 
       var filterHtml =
-        '<div class="catalog-filters" style="display:flex;flex-direction:column;gap:8px;margin:12px 0">' +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-            '<select class="filter-select" id="dirFilterSelect" onchange="filterCatalogDirection(this.value)">' + dirOptions + '</select>' +
-            '<select class="filter-select" id="uniFilterSelect" onchange="filterCatalogUni(this.value)">' + uniOptions + '</select>' +
+        '<div class="catalog-filters">' +
+          '<div class="filter-row">' +
+            '<select class="filter-select" onchange="filterCatalogDirection(this.value)">' + dirOptions + '</select>' +
+            '<select class="filter-select" onchange="filterCatalogUni(this.value)">' + uniOptions + '</select>' +
           '</div>' +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
-            '<select class="filter-select" id="profileFilterSelect" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
-            '<select class="filter-select" id="levelFilterSelect" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
+          '<div class="filter-row">' +
+            '<select class="filter-select" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
+            '<select class="filter-select" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
           '</div>' +
-          '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+          '<div class="filter-row" style="align-items:center">' +
             '<span class="chip' + (catalogBenefitsOnly ? ' active' : '') + '" onclick="toggleBenefitsOnly()">' +
-              (catalogBenefitsOnly ? ICONS.check + ' ' : '') + 'Только с льготами' +
-            '</span>' +
-            '<select class="filter-select" id="groupSelect" onchange="filterCatalogGroup(this.value)" style="flex:none;width:auto;padding:6px 28px 6px 10px">' +
-              '<optgroup label="Группировка">' + groupOptions + '</optgroup>' +
-            '</select>' +
+              (catalogBenefitsOnly ? ICONS.check + ' ' : '') + 'Только с льготами</span>' +
+            '<select class="filter-select" style="flex:none;width:auto;padding:6px 24px 6px 8px" onchange="filterCatalogGroup(this.value)">' +
+              groupOptions + '</select>' +
           '</div>' +
         '</div>';
 
@@ -935,41 +793,12 @@
       }
     }
 
-    function filterCatalogProfile(profile) {
-      catalogProfileFilter = profile;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
-
-    function filterCatalogDirection(dir) {
-      catalogDirectionFilter = dir;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
-
-    function filterCatalogUni(uni) {
-      catalogUniFilter = uni;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
-
-    function filterCatalogLevel(level) {
-      catalogLevelFilter = level;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
-
-    function filterCatalogGroup(val) {
-      catalogGroupBy = val;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
-
-    function toggleBenefitsOnly() {
-      catalogBenefitsOnly = !catalogBenefitsOnly;
-      renderCatalogFilter();
-      renderCatalogResults();
-    }
+    function filterCatalogProfile(profile) { catalogProfileFilter = profile; renderCatalogFilter(); renderCatalogResults(); }
+    function filterCatalogDirection(dir) { catalogDirectionFilter = dir; renderCatalogFilter(); renderCatalogResults(); }
+    function filterCatalogUni(uni) { catalogUniFilter = uni; renderCatalogFilter(); renderCatalogResults(); }
+    function filterCatalogLevel(level) { catalogLevelFilter = level; renderCatalogFilter(); renderCatalogResults(); }
+    function filterCatalogGroup(val) { catalogGroupBy = val; renderCatalogFilter(); renderCatalogResults(); }
+    function toggleBenefitsOnly() { catalogBenefitsOnly = !catalogBenefitsOnly; renderCatalogFilter(); renderCatalogResults(); }
 
     function profileMatchesFilter(profiles, filter) {
       if (!filter) return true;
@@ -979,7 +808,6 @@
 
     function getOlympiadGroups(items) {
       if (!catalogGroupBy) return null;
-
       var groups = {};
       var order = [];
 
@@ -1000,7 +828,6 @@
           if (has100) keys.push('100 баллов');
           if (!keys.length) keys.push('Без льгот');
         }
-
         keys.forEach(function(k) {
           if (!groups[k]) { groups[k] = []; order.push(k); }
           groups[k].push(o);
@@ -1015,19 +842,18 @@
       var hasBvi = allProfiles.some(function(p) { return p.benefits && p.benefits['БВИ']; });
       var has100 = allProfiles.some(function(p) { return p.benefits && p.benefits['100_баллов']; });
       var levels = [...new Set(allProfiles.map(function(p) { return p.level; }).filter(Boolean))].sort().join(', ');
-      var profHtml = '<div class="profiles-list" style="margin-top:10px">';
+      var profHtml = '<div class="profiles-list" style="margin-top:8px">';
       allProfiles.forEach(function(p) {
         var levelBadge = p.level ? '<span class="badge level">Ур. ' + p.level + '</span>' : '';
         var bviBadge = p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '';
         var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '';
-        profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer">' +
+        profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:6px;padding:5px 0;font-size:12px;cursor:pointer">' +
           '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color:var(--primary)"> ' +
           '<span>' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
           '</label>';
       });
       profHtml += '</div>';
 
-      // Найдём ближайший дедлайн из типовых этапов
       var deadlineHtml = '';
       var now = Date.now();
       var nearestDeadline = null;
@@ -1044,20 +870,18 @@
       if (nearestDeadline) {
         var days = Math.ceil((nearestDeadline.ts - now) / (1000*60*60*24));
         var cls = days <= 7 ? 'deadline-urgent' : days <= 30 ? 'deadline-soon' : 'deadline-later';
-        deadlineHtml = '<div class="deadline-badge ' + cls + '" style="margin-top:8px">' +
+        deadlineHtml = '<div class="deadline-badge ' + cls + '">' +
           ICONS.clock + ' ' + esc(nearestDeadline.name) + ': ' + formatDate(nearestDeadline.date) +
           ' (' + days + ' дн.)</div>';
       }
 
       return '<div class="olympiad-card" style="cursor:default">' +
         '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
-        (o.universities && o.universities.length ? '<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">' + o.universities.map(function(u) { return '<span class="badge" style="background:rgba(139,124,247,0.15);color:var(--primary);font-size:10px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
+        (o.universities && o.universities.length ? '<div style="margin-top:3px;display:flex;flex-wrap:wrap;gap:3px">' + o.universities.map(function(u) { return '<span class="badge" style="background:var(--surface-hover);color:var(--text-dim);font-size:9px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
         '</div>' +
         (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
-        (hasBvi || has100 ? '<div class="meta" style="margin-top:6px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
-        deadlineHtml +
-        profHtml +
-        '</div>';
+        (hasBvi || has100 ? '<div class="meta" style="margin-top:4px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
+        deadlineHtml + profHtml + '</div>';
     }
 
     function renderCatalogResults() {
@@ -1078,7 +902,10 @@
         items = items.filter(function(o) { return profileMatchesFilter(o.profiles, catalogProfileFilter); });
       }
       if (catalogLevelFilter) {
-        items = items.filter(function(o) { return (o.profiles || []).some(function(p) { return p.level === parseInt(catalogLevelFilter); }); });
+        var lv = parseInt(catalogLevelFilter);
+        items = items.filter(function(o) {
+          return (o.profiles || []).some(function(p) { return p.level === lv; });
+        });
       }
       if (catalogBenefitsOnly) {
         items = items.filter(function(o) {
@@ -1087,29 +914,38 @@
       }
       if (q) {
         items = items.filter(function(o) {
-          if (o.name.toLowerCase().indexOf(q) !== -1) return true;
-          if ((o.organizer || '').toLowerCase().indexOf(q) !== -1) return true;
-          if ((o.profiles || []).some(function(p) { return p.name.toLowerCase().indexOf(q) !== -1; })) return true;
-          if ((o.universities || []).some(function(u) { return u.toLowerCase().indexOf(q) !== -1; })) return true;
-          return false;
+          var name = (o.name || '').toLowerCase();
+          var org = (o.organizer || '').toLowerCase();
+          var tags = (o.tags || []).join(' ').toLowerCase();
+          var unis = (o.universities || []).join(' ').toLowerCase();
+          return name.indexOf(q) !== -1 || org.indexOf(q) !== -1 || tags.indexOf(q) !== -1 || unis.indexOf(q) !== -1;
         });
       }
-      items.sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+      // Sort
+      if (catalogGroupBy) {
+        items.sort(function(a, b) { return a.name.localeCompare(b.name); });
+      } else {
+        items.sort(function(a, b) {
+          var aHasBvi = (a.profiles || []).some(function(p) { return p.benefits && p.benefits['БВИ']; });
+          var bHasBvi = (b.profiles || []).some(function(p) { return p.benefits && p.benefits['БВИ']; });
+          if (aHasBvi !== bHasBvi) return bHasBvi - aHasBvi;
+          return a.name.localeCompare(b.name);
+        });
+      }
 
       if (!items.length) {
         el.innerHTML = '<div class="empty-state"><h3>Ничего не найдено</h3></div>';
         return;
       }
 
-      var groups = getOlympiadGroups(items);
-      if (!groups) {
-        // Без группировки — плоский список
+      var result = getOlympiadGroups(items);
+      if (!result) {
         el.innerHTML = items.map(function(o) { return renderOlympiadCard(o); }).join('');
       } else {
-        // С группировкой
         var html = '';
-        groups.order.forEach(function(groupName) {
-          var groupItems = groups[groupName];
+        result.order.forEach(function(groupName) {
+          var groupItems = result.groups[groupName];
           html += '<div class="group-header">' +
             '<div class="group-icon">' + (catalogGroupBy === 'university' ? '🎓' : catalogGroupBy === 'direction' ? '📐' : catalogGroupBy === 'level' ? '📊' : '⭐') + '</div>' +
             '<span>' + esc(groupName) + '</span>' +
@@ -1127,7 +963,6 @@
       _searchTimer = setTimeout(function() { renderCatalogResults(); }, 150);
     }
 
-    // Показываем/скрываем кнопку "Добавить" на вкладке Каталог при клике по чекбоксам
     document.addEventListener('change', function(e) {
       if (e.target.classList.contains('profile-chk')) {
         var footer = document.getElementById('catalogTabFooter');
@@ -1144,28 +979,22 @@
         ids.push({ oid: cb.getAttribute('data-oid'), slug: cb.getAttribute('data-slug') });
       });
       if (ids.length === 0) return;
-
       haptic('medium');
-
       var ok = 0, fail = 0;
       for (var i = 0; i < ids.length; i++) {
         try {
           const h = authHeaders();
           h['Content-Type'] = 'application/json';
           const resp = await fetch(API + '/my-olympiads/add', {
-            method: 'POST',
-            headers: h,
+            method: 'POST', headers: h,
             body: JSON.stringify({ olympiad_id: ids[i].oid, profile_slug: ids[i].slug })
           });
-          if (resp.ok) { ok++; }
-          else { fail++; }
+          if (resp.ok) ok++; else fail++;
         } catch(e) { fail++; }
       }
-      if (fail === 0) { showToast('Добавлено: ' + ok); }
-      else { showToast('Добавлено: ' + ok + ', ошибок: ' + fail); }
+      showToast(fail === 0 ? 'Добавлено: ' + ok : 'Добавлено: ' + ok + ', ошибок: ' + fail);
       hapticNotify(fail === 0 ? 'success' : 'warning');
       await loadData();
-      // Переключаем на "Мои"
       document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
       document.querySelector('[data-tab="my"]').classList.add('active');
       renderTab('my');
@@ -1184,7 +1013,7 @@
       var container = document.getElementById('tabContent');
       if (!myOlympiads.length) {
         container.innerHTML =
-          '<div class="empty-state"><h3>Нет добавленных олимпиад</h3><p>Откройте вкладку «Каталог», выберите профили и нажмите «Добавить выбранные»</p></div>';
+          '<div class="empty-state"><h3>Нет добавленных олимпиад</h3><p>Откройте «Каталог», выберите профили и нажмите «Добавить выбранные»</p></div>';
         return;
       }
 
@@ -1192,7 +1021,6 @@
       var sorted = myOlympiads.slice().sort(function(a, b) {
         var statusDiff = (order[a.status] || 99) - (order[b.status] || 99);
         if (statusDiff !== 0) return statusDiff;
-        // Внутри группы — по ближайшему дедлайну
         var nextA = findNextStage(a.stages);
         var nextB = findNextStage(b.stages);
         var dateA = nextA ? new Date(nextA.date_start || nextA.date_end || 0).getTime() : 9999999999999;
@@ -1208,8 +1036,7 @@
           (o.profile_name ? '<div class="organizer">' + esc(o.profile_name) + '</div>' : '') +
           '<div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
           '<div>' + (o.level ? '<span class="badge level">Ур. ' + esc(o.level) + '</span>' : '') + '</div></div>' +
-          '<div class="meta">' +
-          renderBenefitBadges(o.benefits) + '</div>' +
+          '<div class="meta">' + renderBenefitBadges(o.benefits) + '</div>' +
           (nextStage ? renderNextStageInfo(nextStage, daysLeft) : '') +
           (o.registration_url ? '<a class="btn-link" href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()">' + ICONS.external + ' Регистрация</a>' : '') +
           '</div>';
@@ -1243,49 +1070,48 @@
       var o = myOlympiads.find(function(x) { return x.id == entryId; });
       if (!o) return;
       currentDetailEntryId = entryId;
-
       document.getElementById('modalTitle').textContent = o.name;
       document.getElementById('detailModal').classList.add('open');
       bodyScrollLock(true);
       updateBackButton();
 
-      var stagesHtml = o.stages.map(function(s, idx) {
+      var stagesHtml = o.stages.map(function(s) {
         var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' - ');
         var days = s.date_start ? daysUntil(s.date_start) : null;
         var daysStr = '';
         if (days !== null && !s.is_completed) {
-          if (days < 0) daysStr = '<span style="color:var(--red);font-size:11px">Просрочено</span>';
-          else if (days <= 7) daysStr = '<span style="color:var(--red);font-size:11px">' + days + ' дн.</span>';
-          else daysStr = '<span style="color:var(--text-dim);font-size:11px">' + days + ' дн.</span>';
+          if (days < 0) daysStr = '<span style="color:var(--red);font-size:10px">Просрочено</span>';
+          else if (days <= 7) daysStr = '<span style="color:var(--red);font-size:10px">' + days + ' дн.</span>';
+          else daysStr = '<span style="color:var(--text-dim);font-size:10px">' + days + ' дн.</span>';
         }
-        var editBtn = '<button class="btn-link" style="font-size:11px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + s.id + ')" title="Редактировать">✎</button>';
-        var delBtn = '<button class="btn-link" style="font-size:11px;color:var(--red)" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')" title="Удалить">✕</button>';
+        var editBtn = '<button class="btn-link" style="font-size:10px" onclick="event.stopPropagation(); openEditStageModal(' + o.id + ', ' + s.id + ')">✎</button>';
+        var delBtn = '<button class="btn-link" style="font-size:10px;color:var(--red)" onclick="event.stopPropagation(); deleteStage(' + o.id + ', ' + s.id + ')">✕</button>';
         return '<div class="stage-item">' +
           '<div class="stage-name">' +
           '<span style="color:' + (s.is_completed ? 'var(--green)' : 'var(--yellow)') + '">' + (s.is_completed ? ICONS.check : ICONS.clock) + '</span>' +
-          esc(s.name) + (s.result ? ' <span style="color:var(--green);font-size:11px">(' + esc(s.result) + ')</span>' : '') +
+          esc(s.name) + (s.result ? ' <span style="color:var(--green);font-size:10px">(' + esc(s.result) + ')</span>' : '') +
           '</div>' +
-          '<div style="text-align:right;display:flex;align-items:center;gap:4px">' +
+          '<div style="text-align:right;display:flex;align-items:center;gap:3px">' +
           editBtn + delBtn +
           '<div><div class="date">' + (dateStr || '-') + '</div>' + daysStr + '</div>' +
           '</div></div>';
       }).join('');
 
       document.getElementById('modalBody').innerHTML =
-        '<div style="margin-bottom:10px">' +
+        '<div style="margin-bottom:8px">' +
         (o.level ? '<span class="badge level">Ур. ' + esc(o.level) + '</span>' : '') +
-        (o.profile_name ? '<span class="badge" style="background:#2d3748;color:var(--text)">' + esc(o.profile_name) + '</span>' : '') +
+        (o.profile_name ? '<span class="badge" style="background:var(--surface-hover);color:var(--text)">' + esc(o.profile_name) + '</span>' : '') +
         renderBenefitBadges(o.benefits) + '</div>' +
-        '<div style="font-size:13px;color:var(--text-dim);margin-bottom:4px">' + esc(o.organizer || '') + '</div>' +
+        '<div style="font-size:12px;color:var(--text-muted);margin-bottom:3px">' + esc(o.organizer || '') + '</div>' +
         (o.registration_url ? '<a class="btn-link" href="' + esc(o.registration_url) + '" target="_blank" rel="noopener">' + ICONS.external + ' Ссылка на регистрацию</a>' : '') +
         '<div class="section-title">Статус</div><div class="status-selector">' +
         ['planned','registered','participating','passed_round','won'].map(function(key) {
           return '<button class="status-btn ' + (o.status === key ? 'active' : '') + '" onclick="updateStatus(' + o.id + ", '" + key + "')" + '">' + statusLabel(key) + '</button>';
         }).join('') + '</div>' +
         '<div class="section-title">Этапы</div>' +
-        '<div style="margin:6px 0 10px"><button class="btn btn-outline btn-sm" onclick="openStageModal(' + o.id + ')">' + ICONS.plus + ' Добавить этап</button></div>' +
-        (stagesHtml || '<div style="color:var(--text-dim);font-size:13px">Нет этапов</div>') +
-        '<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">' +
+        '<div style="margin:4px 0 8px"><button class="btn btn-outline btn-sm" onclick="openStageModal(' + o.id + ')">' + ICONS.plus + ' Добавить этап</button></div>' +
+        (stagesHtml || '<div style="color:var(--text-dim);font-size:12px">Нет этапов</div>') +
+        '<div style="margin-top:14px;display:flex;gap:6px;flex-wrap:wrap">' +
         '<button class="btn btn-primary btn-sm" onclick="syncToCalendar(' + o.id + ')">' + ICONS.calendar + ' Календарь</button>' +
         '<button class="btn btn-danger btn-sm" onclick="deleteOlympiad(' + o.id + ')">' + ICONS.delete + ' Удалить</button></div>';
     }
@@ -1306,46 +1132,34 @@
         hapticNotify('success');
         await loadData();
         openDetail(entryId);
-      } catch(e) {
-        hideLoading();
-        showToast('Ошибка');
-      }
+      } catch(e) { hideLoading(); showToast('Ошибка'); }
     }
 
     async function deleteOlympiad(entryId) {
-      openConfirm(
-        'Удалить олимпиаду',
-        'Вы уверены, что хотите удалить эту олимпиаду из списка? Все этапы будут удалены.',
-        'Удалить',
-        async function() {
-          try {
-            const h = authHeaders();
-            h['Content-Type'] = 'application/json';
-            await fetch(API + '/my-olympiads/' + entryId, {
-              method: 'DELETE', headers: h
-            });
-            showToast('Удалено');
-            closeModal();
-            await loadData();
-            renderTab('my');
-            hapticNotify('success');
-          } catch(e) { showToast('Ошибка при удалении'); }
-        }
-      );
+      openConfirm('Удалить олимпиаду', 'Вы уверены? Все этапы будут удалены.', 'Удалить', async function() {
+        try {
+          const h = authHeaders();
+          h['Content-Type'] = 'application/json';
+          await fetch(API + '/my-olympiads/' + entryId, { method: 'DELETE', headers: h });
+          showToast('Удалено');
+          closeModal();
+          await loadData();
+          renderTab('my');
+          hapticNotify('success');
+        } catch(e) { showToast('Ошибка при удалении'); }
+      });
     }
 
-    // ========== STAGE MODAL (вместо prompt) ==========
+    // ========== STAGE MODAL ==========
     function openStageModal(entryId) {
       currentDetailEntryId = entryId;
       document.getElementById('stageNameInput').value = '';
       document.getElementById('stageStartInput').value = '';
       document.getElementById('stageEndInput').value = '';
-      // Сброс убран: старый скрытый инпут для completed/result — добавляем новые
       var existingCompleted = document.getElementById('stageCompletedInput');
       if (existingCompleted) existingCompleted.checked = false;
       var existingResult = document.getElementById('stageResultInput');
       if (existingResult) existingResult.value = '';
-
       document.getElementById('stageModal').classList.add('open');
       bodyScrollLock(true);
       updateBackButton();
@@ -1362,13 +1176,10 @@
       document.getElementById('stageStartInput').value = s.date_start ? s.date_start.slice(0,10) : '';
       document.getElementById('stageEndInput').value = s.date_end ? s.date_end.slice(0,10) : '';
       var sc = document.getElementById('stageCompletedInput');
-      if (sc) sc.checked = s.is_completed || false;
+      if (sc) { sc.checked = s.is_completed || false; sc.dataset.editStageId = s.id; sc.dataset.editEntryId = entryId; }
       var sr = document.getElementById('stageResultInput');
       if (sr) sr.value = s.result || '';
-
       document.getElementById('stageModal').classList.add('open');
-      if (sc) sc.dataset.editStageId = s.id;
-      if (sc) sc.dataset.editEntryId = entryId;
       bodyScrollLock(true);
       updateBackButton();
     }
@@ -1387,13 +1198,8 @@
       var isCompleted = document.getElementById('stageCompletedInput').checked;
       var result = document.getElementById('stageResultInput').value.trim() || null;
 
-      // Валидация дат
-      if (start && end && start > end) {
-        showToast('Дата начала не может быть позже даты окончания');
-        return;
-      }
+      if (start && end && start > end) { showToast('Дата начала не может быть позже даты окончания'); return; }
 
-      // Определяем edit или create
       var sc = document.getElementById('stageCompletedInput');
       var editStageId = sc ? sc.dataset.editStageId : undefined;
       var editEntryId = sc ? sc.dataset.editEntryId : undefined;
@@ -1415,10 +1221,7 @@
           });
           showToast('Этап добавлен');
         }
-
-        // Сбрасываем edit-флаги
         if (sc) { delete sc.dataset.editStageId; delete sc.dataset.editEntryId; }
-
         closeStageModal();
         await loadData();
         openDetail(currentDetailEntryId);
@@ -1427,13 +1230,11 @@
     }
 
     async function deleteStage(entryId, stageId) {
-      openConfirm('Удалить этап', 'Вы уверены, что хотите удалить этот этап?', 'Удалить', async function() {
+      openConfirm('Удалить этап', 'Вы уверены?', 'Удалить', async function() {
         try {
           const h = authHeaders();
           h['Content-Type'] = 'application/json';
-          await fetch(API + '/my-olympiads/' + entryId + '/stage/' + stageId, {
-            method: 'DELETE', headers: h
-          });
+          await fetch(API + '/my-olympiads/' + entryId + '/stage/' + stageId, { method: 'DELETE', headers: h });
           showToast('Этап удалён');
           await loadData();
           openDetail(entryId);
