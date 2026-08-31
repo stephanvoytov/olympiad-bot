@@ -453,6 +453,8 @@
       d.appendChild(document.createTextNode(str || ''));
       return d.innerHTML;
     }
+    function slSanitize(s) { return s ? encodeURIComponent(s) : s; }
+    function slDesanitize(s) { return s ? decodeURIComponent(s) : s; }
 
     function statusIcon(status) {
       return '<span class="status-indicator" style="color:var(--' + (status === 'won' ? 'success' : status === 'registered' ? 'brand' : status === 'participating' ? 'warning' : status === 'passed_round' ? 'orange' : 'text-2') + ')">' + (ICONS[status] || ICONS.planned) + ' ' + statusLabel(status) + '</span>';
@@ -715,17 +717,17 @@
           '<div class="filter-row">' +
             '<sl-select id="directionSelect" placeholder="Все направления" clearable size="small">' +
               '<sl-option value="">Все направления</sl-option>' +
-              dirList.map(function(d) { return '<sl-option value="' + esc(d) + '">' + esc(d) + '</sl-option>'; }).join('') +
+              dirList.map(function(d) { return '<sl-option value="' + slSanitize(d) + '">' + esc(d) + '</sl-option>'; }).join('') +
             '</sl-select>' +
             '<sl-select id="uniSelect" placeholder="Все вузы" clearable size="small">' +
               '<sl-option value="">Все вузы</sl-option>' +
-              uniList.map(function(u) { return '<sl-option value="' + esc(u) + '">' + esc(u) + '</sl-option>'; }).join('') +
+              uniList.map(function(u) { return '<sl-option value="' + slSanitize(u) + '">' + esc(u) + '</sl-option>'; }).join('') +
             '</sl-select>' +
           '</div>' +
           '<div class="filter-row">' +
             '<sl-select id="profileSelect" placeholder="Все профили" clearable size="small">' +
               '<sl-option value="">Все профили</sl-option>' +
-              profileList.map(function(p) { return '<sl-option value="' + esc(p) + '">' + esc(p) + '</sl-option>'; }).join('') +
+              profileList.map(function(p) { return '<sl-option value="' + slSanitize(p) + '">' + esc(p) + '</sl-option>'; }).join('') +
             '</sl-select>' +
             '<sl-select id="levelSelect" placeholder="Любой уровень" clearable size="small">' +
               levelOptions.map(function(l) { return '<sl-option value="' + l + '">' + (l ? 'Ур. ' + l : 'Любой уровень') + '</sl-option>'; }).join('') +
@@ -744,7 +746,7 @@
         var existing = container.querySelector('#catalogFilters');
         if (existing) existing.remove();
         searchBar.insertAdjacentHTML('afterend', filterHtml);
-        // Restore values and attach shoelace listeners
+        // Restore values and attach shoelace listeners (values are URI-encoded to avoid space restriction)
         setTimeout(function() {
           var dirSel = document.getElementById('directionSelect');
           var uniSel = document.getElementById('uniSelect');
@@ -752,10 +754,10 @@
           var lvlSel = document.getElementById('levelSelect');
           var grpSel = document.getElementById('groupSelect');
           var benChip = document.getElementById('benefitsChip');
-          if (dirSel) { dirSel.value = catalogDirectionFilter; dirSel.addEventListener('sl-change', function() { filterCatalogDirection(this.value); }); }
-          if (uniSel) { uniSel.value = catalogUniFilter; uniSel.addEventListener('sl-change', function() { filterCatalogUni(this.value); }); }
-          if (profSel) { profSel.value = catalogProfileFilter; profSel.addEventListener('sl-change', function() { filterCatalogProfile(this.value); }); }
-          if (lvlSel) { lvlSel.value = catalogLevelFilter; lvlSel.addEventListener('sl-change', function() { filterCatalogLevel(this.value); }); }
+          if (dirSel) { dirSel.value = slSanitize(catalogDirectionFilter); dirSel.addEventListener('sl-change', function() { filterCatalogDirection(slDesanitize(this.value)); }); dirSel.addEventListener('sl-clear', function() { filterCatalogDirection(''); }); }
+          if (uniSel) { uniSel.value = slSanitize(catalogUniFilter); uniSel.addEventListener('sl-change', function() { filterCatalogUni(slDesanitize(this.value)); }); uniSel.addEventListener('sl-clear', function() { filterCatalogUni(''); }); }
+          if (profSel) { profSel.value = slSanitize(catalogProfileFilter); profSel.addEventListener('sl-change', function() { filterCatalogProfile(slDesanitize(this.value)); }); profSel.addEventListener('sl-clear', function() { filterCatalogProfile(''); }); }
+          if (lvlSel) { lvlSel.value = catalogLevelFilter; lvlSel.addEventListener('sl-change', function() { filterCatalogLevel(this.value); }); lvlSel.addEventListener('sl-clear', function() { filterCatalogLevel(''); }); }
           if (grpSel) { grpSel.value = catalogGroupBy; grpSel.addEventListener('sl-change', function() { filterCatalogGroup(this.value); }); }
           if (benChip) benChip.addEventListener('click', toggleBenefitsOnly);
         }, 50);
