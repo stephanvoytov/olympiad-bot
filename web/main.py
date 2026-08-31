@@ -8,7 +8,6 @@ import json
 import logging
 import os
 import secrets
-import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 from urllib.parse import parse_qs
@@ -232,8 +231,8 @@ def _get_telegram_id(request: Request) -> int:
             telegram_id = int(tid_header)
         except ValueError:
             raise HTTPException(status_code=401, detail="Invalid telegram ID")
-        from database.db import SessionLocal as _SL
-        db = _SL()
+        from database.db import SessionLocal
+        db = SessionLocal()
         try:
             user = db.query(User).filter(User.telegram_id == telegram_id).first()
             if not user or not user.site_password:
@@ -361,7 +360,10 @@ async def login_site(
     """Вход на сайт по Telegram ID + пароль (без Telegram WebApp)."""
     user = db.query(User).filter(User.telegram_id == body.telegram_id).first()
     if not user or not user.site_password:
-        raise HTTPException(status_code=401, detail="Пользователь не найден или пароль не установлен. Откройте бота в Telegram.")
+        raise HTTPException(
+            status_code=401,
+            detail="Пользователь не найден или пароль не установлен. Откройте бота в Telegram.",
+        )
     if not secrets.compare_digest(user.site_password, body.password):
         raise HTTPException(status_code=401, detail="Неверный пароль")
     return UserResponse(
@@ -492,7 +494,6 @@ async def list_my_olympiads(
     profile_keys = [(uo.olympiad_id, uo.profile_slug) for uo in user.olympiads if uo.profile_slug]
     profiles_map: dict[tuple[str, str], OlympiadProfile | None] = {}
     if profile_keys:
-        import itertools
         olympiad_ids = set(k[0] for k in profile_keys)
         slugs = set(k[1] for k in profile_keys)
         batch_profiles = (
