@@ -342,6 +342,27 @@
     .countdown.soon { color: var(--yellow); }
     .countdown.normal { color: var(--green); }
 
+    /* Group headers in catalog */
+    .group-header {
+      display: flex; align-items: center; gap: 10px;
+      padding: 14px 0 8px; margin-top: 8px;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.8px; color: var(--primary);
+      border-bottom: 1px solid var(--border);
+    }
+    .group-header:first-child { margin-top: 0; }
+    .group-header .group-icon {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: rgba(139,124,247,0.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .group-header .group-count {
+      margin-left: auto; background: rgba(139,124,247,0.15);
+      padding: 2px 8px; border-radius: 10px; font-size: 11px;
+      color: var(--primary); font-weight: 600;
+    }
+
     /* Loading overlay */
     .loading-overlay {
       position: fixed; inset: 0; z-index: 300;
@@ -488,6 +509,8 @@
     let catalogLevelFilter = '';
     let catalogDirectionFilter = '';
     let catalogUniFilter = '';
+    let catalogBenefitsOnly = false;
+    let catalogGroupBy = ''; // '' | 'direction' | 'university' | 'level' | 'benefits'
     let currentDetailEntryId = null;
 
     // ========== SVG ICONS ==========
@@ -807,7 +830,6 @@
       const container = document.getElementById('tabContent');
       if (!container) return;
 
-      // Collect unique directions (tags) and universities
       var directions = new Set();
       var unis = new Set();
       catalog.forEach(function(o) {
@@ -835,6 +857,16 @@
         return '<option value="' + l + '"' + (catalogLevelFilter === String(l) ? ' selected' : '') + '>' + label + '</option>';
       }).join('');
 
+      var groupOptions = [
+        { val: '', label: 'Без группировки' },
+        { val: 'direction', label: 'По направлению' },
+        { val: 'university', label: 'По вузу' },
+        { val: 'level', label: 'По уровню' },
+        { val: 'benefits', label: 'По льготам' },
+      ].map(function(g) {
+        return '<option value="' + g.val + '"' + (catalogGroupBy === g.val ? ' selected' : '') + '>' + g.label + '</option>';
+      }).join('');
+
       var filterHtml =
         '<div class="catalog-filters" style="display:flex;flex-direction:column;gap:8px;margin:12px 0">' +
           '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
@@ -845,9 +877,16 @@
             '<select class="filter-select" id="profileFilterSelect" onchange="filterCatalogProfile(this.value)">' + profileOptions + '</select>' +
             '<select class="filter-select" id="levelFilterSelect" onchange="filterCatalogLevel(this.value)">' + levelOptions + '</select>' +
           '</div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
+            '<span class="chip' + (catalogBenefitsOnly ? ' active' : '') + '" onclick="toggleBenefitsOnly()">' +
+              (catalogBenefitsOnly ? ICONS.check + ' ' : '') + 'Только с льготами' +
+            '</span>' +
+            '<select class="filter-select" id="groupSelect" onchange="filterCatalogGroup(this.value)" style="flex:none;width:auto;padding:6px 28px 6px 10px">' +
+              '<optgroup label="Группировка">' + groupOptions + '</optgroup>' +
+            '</select>' +
+          '</div>' +
         '</div>';
 
-      // Вставляем после search-bar
       var searchBar = container.querySelector('.search-bar');
       if (searchBar) {
         var existing = container.querySelector('.catalog-filters');
@@ -880,14 +919,105 @@
       renderCatalogResults();
     }
 
-    function getProfileNames(olympiad) {
-      return (olympiad.profiles || []).map(function(p) { return p.name; });
+    function filterCatalogGroup(val) {
+      catalogGroupBy = val;
+      renderCatalogFilter();
+      renderCatalogResults();
+    }
+
+    function toggleBenefitsOnly() {
+      catalogBenefitsOnly = !catalogBenefitsOnly;
+      renderCatalogFilter();
+      renderCatalogResults();
     }
 
     function profileMatchesFilter(profiles, filter) {
       if (!filter) return true;
       filter = filter.toLowerCase();
       return profiles.some(function(p) { return p.name.toLowerCase().indexOf(filter) !== -1 || p.slug.toLowerCase().indexOf(filter) !== -1; });
+    }
+
+    function getOlympiadGroups(items) {
+      if (!catalogGroupBy) return null;
+
+      var groups = {};
+      var order = [];
+
+      items.forEach(function(o) {
+        var keys = [];
+        if (catalogGroupBy === 'direction') {
+          keys = (o.tags || []).length ? o.tags : ['Без направления'];
+        } else if (catalogGroupBy === 'university') {
+          keys = (o.universities || []).length ? o.universities : ['Без вуза'];
+        } else if (catalogGroupBy === 'level') {
+          var lvls = new Set();
+          (o.profiles || []).forEach(function(p) { if (p.level) lvls.add('Уровень ' + p.level); });
+          keys = lvls.size ? Array.from(lvls) : ['Без уровня'];
+        } else if (catalogGroupBy === 'benefits') {
+          var hasBvi = (o.profiles || []).some(function(p) { return p.benefits && p.benefits['БВИ']; });
+          var has100 = (o.profiles || []).some(function(p) { return p.benefits && p.benefits['100_баллов']; });
+          if (hasBvi) keys.push('БВИ');
+          if (has100) keys.push('100 баллов');
+          if (!keys.length) keys.push('Без льгот');
+        }
+
+        keys.forEach(function(k) {
+          if (!groups[k]) { groups[k] = []; order.push(k); }
+          groups[k].push(o);
+        });
+      });
+
+      return { groups: groups, order: order };
+    }
+
+    function renderOlympiadCard(o) {
+      var allProfiles = o.profiles || [];
+      var hasBvi = allProfiles.some(function(p) { return p.benefits && p.benefits['БВИ']; });
+      var has100 = allProfiles.some(function(p) { return p.benefits && p.benefits['100_баллов']; });
+      var levels = [...new Set(allProfiles.map(function(p) { return p.level; }).filter(Boolean))].sort().join(', ');
+      var profHtml = '<div class="profiles-list" style="margin-top:10px">';
+      allProfiles.forEach(function(p) {
+        var levelBadge = p.level ? '<span class="badge level">Ур. ' + p.level + '</span>' : '';
+        var bviBadge = p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '';
+        var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '';
+        profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer">' +
+          '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color:var(--primary)"> ' +
+          '<span>' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
+          '</label>';
+      });
+      profHtml += '</div>';
+
+      // Найдём ближайший дедлайн из типовых этапов
+      var deadlineHtml = '';
+      var now = Date.now();
+      var nearestDeadline = null;
+      allProfiles.forEach(function(p) {
+        (p.typical_stages || []).forEach(function(s) {
+          if (s.date_end) {
+            var ts = new Date(s.date_end).getTime();
+            if (ts > now && (!nearestDeadline || ts < nearestDeadline.ts)) {
+              nearestDeadline = { ts: ts, name: s.name, date: s.date_end };
+            }
+          }
+        });
+      });
+      if (nearestDeadline) {
+        var days = Math.ceil((nearestDeadline.ts - now) / (1000*60*60*24));
+        var cls = days <= 7 ? 'deadline-urgent' : days <= 30 ? 'deadline-soon' : 'deadline-later';
+        deadlineHtml = '<div class="deadline-badge ' + cls + '" style="margin-top:8px">' +
+          ICONS.clock + ' ' + esc(nearestDeadline.name) + ': ' + formatDate(nearestDeadline.date) +
+          ' (' + days + ' дн.)</div>';
+      }
+
+      return '<div class="olympiad-card" style="cursor:default">' +
+        '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
+        (o.universities && o.universities.length ? '<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">' + o.universities.map(function(u) { return '<span class="badge" style="background:rgba(139,124,247,0.15);color:var(--primary);font-size:10px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
+        '</div>' +
+        (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
+        (hasBvi || has100 ? '<div class="meta" style="margin-top:6px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
+        deadlineHtml +
+        profHtml +
+        '</div>';
     }
 
     function renderCatalogResults() {
@@ -910,43 +1040,45 @@
       if (catalogLevelFilter) {
         items = items.filter(function(o) { return (o.profiles || []).some(function(p) { return p.level === parseInt(catalogLevelFilter); }); });
       }
+      if (catalogBenefitsOnly) {
+        items = items.filter(function(o) {
+          return (o.profiles || []).some(function(p) { return p.benefits && (p.benefits['БВИ'] || p.benefits['100_баллов']); });
+        });
+      }
       if (q) {
         items = items.filter(function(o) {
           if (o.name.toLowerCase().indexOf(q) !== -1) return true;
           if ((o.organizer || '').toLowerCase().indexOf(q) !== -1) return true;
           if ((o.profiles || []).some(function(p) { return p.name.toLowerCase().indexOf(q) !== -1; })) return true;
+          if ((o.universities || []).some(function(u) { return u.toLowerCase().indexOf(q) !== -1; })) return true;
           return false;
         });
       }
       items.sort(function(a, b) { return a.name.localeCompare(b.name); });
 
-      el.innerHTML = items.length
-        ? items.map(function(o) {
-            var allProfiles = o.profiles || [];
-            var hasBvi = allProfiles.some(function(p) { return p.benefits && p.benefits['БВИ']; });
-            var has100 = allProfiles.some(function(p) { return p.benefits && p.benefits['100_баллов']; });
-            var levels = [...new Set(allProfiles.map(function(p) { return p.level; }).filter(Boolean))].sort().join(', ');
-            var profHtml = '<div class="profiles-list" style="margin-top:10px">';
-            allProfiles.forEach(function(p) {
-              var levelBadge = p.level ? '<span class="badge level">Ур. ' + p.level + '</span>' : '';
-              var bviBadge = p.benefits && p.benefits['БВИ'] ? '<span class="badge bvi">БВИ</span>' : '';
-              var ptsBadge = p.benefits && p.benefits['100_баллов'] ? '<span class="badge points">100</span>' : '';
-              profHtml += '<label class="profile-checkbox" style="display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px;cursor:pointer">' +
-                '<input type="checkbox" class="profile-chk" data-oid="' + esc(o.id) + '" data-slug="' + esc(p.slug) + '" style="accent-color:var(--primary)"> ' +
-                '<span>' + esc(p.name) + '</span> ' + levelBadge + ' ' + bviBadge + ' ' + ptsBadge +
-                '</label>';
-            });
-            profHtml += '</div>';
-            return '<div class="olympiad-card" style="cursor:default">' +
-              '<div class="row1"><div><div class="name">' + esc(o.name) + '</div><div class="organizer">' + esc(o.organizer || '') + '</div>' +
-              (o.universities && o.universities.length ? '<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px">' + o.universities.map(function(u) { return '<span class="badge" style="background:rgba(139,124,247,0.15);color:var(--primary);font-size:10px">' + esc(u) + '</span>'; }).join('') + '</div>' : '') +
-              '</div>' +
-              (levels ? '<div><span class="badge level">Ур. ' + esc(levels) + '</span></div>' : '') + '</div>' +
-              (hasBvi || has100 ? '<div class="meta" style="margin-top:6px">' + (hasBvi ? '<span class="badge bvi">БВИ</span>' : '') + (has100 ? '<span class="badge points">100 баллов</span>' : '') + '</div>' : '') +
-              profHtml +
-              '</div>';
-          }).join('')
-        : '<div class="empty-state"><h3>Ничего не найдено</h3></div>';
+      if (!items.length) {
+        el.innerHTML = '<div class="empty-state"><h3>Ничего не найдено</h3></div>';
+        return;
+      }
+
+      var groups = getOlympiadGroups(items);
+      if (!groups) {
+        // Без группировки — плоский список
+        el.innerHTML = items.map(function(o) { return renderOlympiadCard(o); }).join('');
+      } else {
+        // С группировкой
+        var html = '';
+        groups.order.forEach(function(groupName) {
+          var groupItems = groups[groupName];
+          html += '<div class="group-header">' +
+            '<div class="group-icon">' + (catalogGroupBy === 'university' ? '🎓' : catalogGroupBy === 'direction' ? '📐' : catalogGroupBy === 'level' ? '📊' : '⭐') + '</div>' +
+            '<span>' + esc(groupName) + '</span>' +
+            '<span class="group-count">' + groupItems.length + '</span>' +
+            '</div>';
+          groupItems.forEach(function(o) { html += renderOlympiadCard(o); });
+        });
+        el.innerHTML = html;
+      }
     }
 
     var _searchTimer = null;
