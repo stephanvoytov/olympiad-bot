@@ -32,7 +32,6 @@ def slugify(name):
 
 # All 79 olympiads from 2026/27 перечень
 # Format: (num, name, organizer_short, profiles: [(profile_name, subject_group)], level)
-# level: 1=БВИ+100, 2=100/+баллы, 3=+баллы
 OLYMPIADS = [
     (1, "Финатлон для старшеклассников", "НАФИР/Минобрнауки/МосПолитех",
      [("финансовая грамотность", "экономика и управление")], 2),
@@ -322,144 +321,91 @@ OLYMPIADS = [
      [("технологическое предпринимательство", "информатика, управление в технических системах, экономика")], 2),
 ]
 
-# Real data for major olympiads: URL, benefits, dates
-# Sources: official sites, 4ege.ru, ucheba.ru, postupi.online
-# Note: 2026/27 dates are predictions based on 2025/26 schedule
+# Real data: URLs and dates (NO fake benefits!)
+# Benefits depend on: university × profile × olympiad × winner/prizewinner
+# This is per-university rules — cannot be stored in catalog.
+# Level (1-4) from official перечень IS accurate.
 REAL_DATA = {
     # 1. Финатлон
     1: {
         "url": "https://olympiadnafr.ru/",
         "registration_url": "https://olympiadnafr.ru/",
-        "benefits": {"100_баллов": ["РАНХиГС", "МосПолитех"]},
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-15"},
             {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
+        ],
+    },
+    # 7. Олимпиада по ИИ
+    7: {
+        "url": "https://olimp.ai/",
+        "registration_url": "https://olimp.ai/",
+        "stages": [
+            {"name": "Тренировочный этап", "date_start": "2026-09-01", "date_end": "2026-09-20"},
+            {"name": "Регистрация", "date_start": "2026-09-21", "date_end": "2026-10-15"},
+            {"name": "Отборочный этап", "date_start": "2026-10-16", "date_end": "2026-11-15"},
+            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-02-28"},
         ],
     },
     # 8. Высшая проба
     8: {
         "url": "https://vysprob.ru/",
         "registration_url": "https://vysprob.ru/",
-        "benefits": {
-            "БВИ": ["МГУ", "ВШЭ", "ИТМО", "МГИМО"],
-            "100_баллов": [
-                "РАНХиГС", "СПбГУ", "МГТУ", "МИФИ", "РГГУ", "РГСУ", "РГЮА", "РНИМУ", "РУДН",
-                "ГУУ", "Российская академия образования", "Сириус", "КФУ", "УрФУ", "ТГУ", "НГУ",
-                "БФУ", "СВФУ",
-            ],
-        },
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-15"},
-            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
+            {"name": "Регистрация", "date_start": "2026-08-20", "date_end": "2026-10-15"},
+            {"name": "Отборочный этап", "date_start": "2026-10-16", "date_end": "2026-12-15"},
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
         ],
     },
-    # 20. Международная олимпиада Иннополиса
+    # 20. Иннополис
     20: {
         "url": "https://dovuz.innopolis.university/pre-olympiads/innopolis-open",
         "registration_url": "https://dovuz.innopolis.university/pre-olympiads/innopolis-open",
-        "benefits": {
-            "БВИ": ["Иннополис"],
-            "100_баллов": ["МФТИ", "ВШЭ", "МГТУ", "СПбГУ", "МИФИ", "ИТМО", "МГУ"],
-        },
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-31"},
-            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
-            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
+            {"name": "Регистрация", "date_start": "2026-09-01", "date_end": "2026-11-01"},
+            {"name": "Отборочный этап", "date_start": "2026-11-02", "date_end": "2026-12-15"},
+            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-02-28"},
         ],
     },
     # 35. МОШ
     35: {
         "url": "https://mosolymp.ru/",
         "registration_url": "https://mosolymp.ru/",
-        "benefits": {
-            "БВИ": ["МГУ", "МГТУ", "МИФИ", "ВШЭ"],
-            "100_баллов": ["РАНХиГС", "СПбГУ", "МГИМО", "РГГУ", "РГСУ", "РГЮА", "РНИМУ", "РУДН"],
-        },
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-31"},
-            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
-            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
-        ],
-    },
-    # 40. ОММО (муниципальная)
-    40: {
-        "url": "https://mathus.ru/olymp/ommo.php",
-        "registration_url": "https://mathus.ru/olymp/ommo.php",
-        "benefits": {
-            "БВИ": ["МГУ"],
-            "100_баллов": ["ВШЭ", "МИФИ", "МГТУ", "СПбГУ", "РАНХиГС", "ИТМО", "НГУ", "УрФУ", "ТГУ"],
-        },
-        "stages": [
-            {"name": "Регистрация", "date_start": "2027-01-11", "date_end": "2027-01-25"},
-            {"name": "Заочный тур", "date_start": "2027-01-11", "date_end": "2027-01-25"},
-            {"name": "Очный тур", "date_start": "2027-02-01", "date_end": "2027-02-01"},
-        ],
-    },
-    # 41. Олимпиада Курчатов
-    41: {
-        "url": "https://olimpiada.ru/activity/5853",
-        "registration_url": "https://olimpiada.ru/activity/5853",
-        "benefits": {
-            "БВИ": ["НИЦ Курчатовский институт"],
-            "100_баллов": ["МГУ", "СПбГУ", "МГТУ", "МИФИ", "ВШЭ", "ИТМО", "РАНХиГС"],
-        },
-        "stages": [
-            {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-31"},
-            {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
-            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
+            {"name": "Регистрация", "date_start": "2026-09-01", "date_end": "2026-10-15"},
+            {"name": "Отборочный этап", "date_start": "2026-10-16", "date_end": "2026-12-01"},
+            {"name": "Заключительный этап", "date_start": "2027-01-15", "date_end": "2027-02-28"},
         ],
     },
     # 48. Ломоносов
     48: {
         "url": "https://olymp.msu.ru/",
         "registration_url": "https://olymp.msu.ru/rus/register/",
-        "benefits": {
-            "БВИ": ["МГУ"],
-            "100_баллов": [
-                "СПбГУ", "МГТУ", "МИФИ", "ВШЭ", "ИТМО", "РАНХиГС", "МГИМО", "РГГУ", "РГСУ",
-                "РГЮА", "РНИМУ", "РУДН", "НГУ", "УрФУ", "ТГУ", "КФУ", "БФУ", "СВФУ",
-            ],
-        },
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-24", "date_end": "2026-12-29"},
             {"name": "Отборочный этап 1 тур", "date_start": "2026-10-01", "date_end": "2026-11-30"},
             {"name": "Отборочный этап 2 тур", "date_start": "2026-11-01", "date_end": "2026-12-31"},
-            {"name": "Регистрация на заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-01"},
-            {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
+            {"name": "Заключительный этап", "date_start": "2027-02-15", "date_end": "2027-03-15"},
         ],
     },
-    # 51. Физтех
+    # 51. Физтех — даты из офф. сайта
     51: {
         "url": "https://olymp-online.mipt.ru/",
         "registration_url": "https://olymp-online.mipt.ru/pre-reg/",
-        "benefits": {
-            "БВИ": ["МИФИ"],
-            "100_баллов": ["МГТУ", "СПбГУ", "ВШЭ", "ИТМО", "РАНХиГС", "РНИМУ", "РУДН"],
-        },
         "stages": [
-            {"name": "Регистрация", "date_start": "2026-09-07", "date_end": "2026-10-10"},
-            {"name": "Отборочный этап (математика)", "date_start": "2026-10-11", "date_end": "2026-10-11"},
-            {"name": "Отборочный этап (физика)", "date_start": "2026-10-04", "date_end": "2026-10-04"},
-            {"name": "Заключительный этап", "date_start": "2027-02-14", "date_end": "2027-02-15"},
+            {"name": "Регистрация", "date_start": "2026-09-07", "date_end": "2026-11-07"},
+            {"name": "Отборочный тур (физика)", "date_start": "2026-10-04", "date_end": "2026-10-04"},
+            {"name": "Отборочный тур (математика)", "date_start": "2026-10-11", "date_end": "2026-11-07"},
+            {"name": "Заключительный этап", "date_start": "2027-02-13", "date_end": "2027-02-14"},
         ],
     },
     # 56. Олимпиада СПбГУ
     56: {
         "url": "https://olympiada.spbu.ru/",
         "registration_url": "https://sch-olymp.spbu.ru/",
-        "benefits": {
-            "БВИ": ["СПбГУ"],
-            "100_баллов": [
-                "МГУ", "МГТУ", "МИФИ", "ВШЭ", "ИТМО", "РАНХиГС", "МГИМО", "РГГУ", "РГСУ",
-                "РГЮА", "РНИМУ", "РУДН", "НГУ", "УрФУ", "ТГУ", "КФУ", "БФУ", "СВФУ",
-            ],
-        },
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-25", "date_end": "2026-12-14"},
             {"name": "Отборочный этап", "date_start": "2026-10-25", "date_end": "2026-12-14"},
-            {"name": "Регистрация на заключительный этап", "date_start": "2027-01-01", "date_end": "2027-01-18"},
             {"name": "Заключительный этап", "date_start": "2027-01-19", "date_end": "2027-03-09"},
         ],
     },
@@ -467,13 +413,8 @@ REAL_DATA = {
     65: {
         "url": "https://olympiad.gazprom.ru/",
         "registration_url": "https://olympiad.gazprom.ru/",
-        "benefits": {
-            "БВИ": ["СПбГЭТУ ЛЭТИ"],
-            "100_баллов": ["МГТУ", "МИФИ", "НГТУ", "ТюмГУ", "Самарский"],
-        },
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-10", "date_end": "2027-01-15"},
-            {"name": "Подготовительный этап", "date_start": "2026-10-10", "date_end": "2026-10-31"},
             {"name": "Отборочный этап", "date_start": "2026-11-01", "date_end": "2027-01-15"},
             {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-01"},
         ],
@@ -482,34 +423,21 @@ REAL_DATA = {
     66: {
         "url": "https://olymp.mephi.ru/rosatom",
         "registration_url": "https://org.mephi.ru/",
-        "benefits": {
-            "БВИ": ["НИЯУ МИФИ"],
-            "100_баллов": ["МГУ", "СПбГУ", "МГТУ", "ВШЭ", "ИТМО", "РАНХиГС", "МГИМО"],
-        },
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-01", "date_end": "2026-12-21"},
-            {"name": "Очный отборочный тур (физика)", "date_start": "2026-09-14", "date_end": "2026-09-14"},
-            {"name": "Очный отборочный тур (математика)", "date_start": "2026-11-16", "date_end": "2026-11-16"},
-            {"name": "Дистанционный отборочный тур", "date_start": "2026-11-17", "date_end": "2026-12-21"},
-            {"name": "Заключительный этап (физика)", "date_start": "2027-02-07", "date_end": "2027-02-07"},
-            {"name": "Заключительный этап (математика)", "date_start": "2027-02-08", "date_end": "2027-02-08"},
+            {"name": "Отборочный тур", "date_start": "2026-11-17", "date_end": "2026-12-21"},
+            {"name": "Заключительный этап", "date_start": "2027-02-07", "date_end": "2027-02-08"},
         ],
     },
     # 76. Турнир городов
     76: {
         "url": "https://turgor.ru/",
         "registration_url": "https://turgor.ru/reg/",
-        "benefits": {
-            "БВИ": ["МГУ"],
-            "100_баллов": ["СПбГУ", "МГТУ", "МИФИ", "ВШЭ", "ИТМО"],
-        },
         "stages": [
             {"name": "Регистрация на осенний тур", "date_start": "2026-09-29", "date_end": "2026-10-11"},
-            {"name": "Осенний базовый тур", "date_start": "2026-10-05", "date_end": "2026-10-05"},
-            {"name": "Осенний сложный тур", "date_start": "2026-10-19", "date_end": "2026-10-19"},
-            {"name": "Регистрация на весенний тур", "date_start": "2027-02-01", "date_end": "2027-03-01"},
+            {"name": "Осенний базовый тур", "date_start": "2026-10-19", "date_end": "2026-10-19"},
+            {"name": "Осенний сложный тур", "date_start": "2026-11-02", "date_end": "2026-11-02"},
             {"name": "Весенний базовый тур", "date_start": "2027-03-01", "date_end": "2027-03-01"},
-            {"name": "Весенний сложный тур", "date_start": "2027-03-15", "date_end": "2027-03-15"},
             {"name": "Заключительный устный тур", "date_start": "2027-03-29", "date_end": "2027-03-29"},
         ],
     },
@@ -517,13 +445,6 @@ REAL_DATA = {
     77: {
         "url": "https://olympiada.spbu.ru/",
         "registration_url": "https://sch-olymp.spbu.ru/",
-        "benefits": {
-            "БВИ": ["СПбГУ"],
-            "100_баллов": [
-                "МГУ", "МГТУ", "МИФИ", "ВШЭ", "ИТМО", "РАНХиГС", "МГИМО", "РГГУ", "РГСУ",
-                "РГЮА", "РНИМУ", "РУДН",
-            ],
-        },
         "stages": [
             {"name": "Регистрация", "date_start": "2026-10-25", "date_end": "2026-12-14"},
             {"name": "Отборочный этап", "date_start": "2026-10-25", "date_end": "2026-12-14"},
@@ -532,7 +453,7 @@ REAL_DATA = {
     },
 }
 
-# Default stages when no real data
+# Default stages when no real data — generic placeholders
 def make_stages(level):
     """Generate default stages for 2026/27."""
     return [
@@ -540,10 +461,6 @@ def make_stages(level):
         {"name": "Отборочный этап", "date_start": "2026-12-01", "date_end": "2027-01-31"},
         {"name": "Заключительный этап", "date_start": "2027-02-01", "date_end": "2027-03-31"},
     ]
-
-def make_benefits(level):
-    """Default benefits based on level. Empty = no benefits shown."""
-    return {}
 
 # Build JSON
 olympiads = []
@@ -604,51 +521,23 @@ for num, name, organizer, profiles, level in OLYMPIADS:
         "иннополис": "Иннополис",
         "высшая школа": "ВШЭ", "вше": "ВШЭ",
         "ранхигс": "РАНХиГС",
-        "киберфорум": "Киберфорум",
-        "ипм": "ИПМ",
         "сеченов": "Сеченовский",
-        "каи": "Казанский (КАИ)",
         "казан": "Казанский (КАИ)",
         "томск": "ТГУ",
         "новосиб": "НГУ", "нгту": "НГТУ",
-        " Sammat": "САММАТ",
         "самар": "Самарский (САММАТ)",
         "омск": "ОмГУ",
-        "חול": "ЧелГУ",
         "челябинск": "ЧелГУ",
-        "ростов": "РГСУ",
-        "назгом": "НазГом",
-        "вгту": "ВГТУ",
         "мэи": "НИУ МЭИ",
         "НИУ МЭИ": "НИУ МЭИ",
-        "вятгту": "ВятГТУ",
-        "сибфу": "СибФУ",
-        "сибирский федеральный": "СибФУ",
-        "先行": "УрФУ",
-        "тюмени": "ТюмГУ",
-        "петрозаводск": "ПетрГУ",
         "свфу": "СВФУ",
-        "ярославл": "ЯрГУ",
-        "сахаров": "ННГУ",
-        "нниу": "ННГУ",
         "кутафин": "РГЮА",
-        "права человека": "РГЮА",
         "строганов": "МГХПА",
         "консерватория": "Московская консерватория",
-        "цифровой контур": "ВШЭ",
         "яндекс": "Яндекс",
         "сбер": "Сбер",
         "росатом": "Росатом",
         "газпром": "Газпром",
-        "ростех": "Ростех",
-        "газпром нефть": "Газпром нефть",
-        "роскосмос": "Роскосмос",
-        "роснано": "Роснано",
-        "рсю": "РСЮ",
-        "рас": "РАС",
-        "рào": "РАО",
-        "рао": "РАО",
-        "рособрнадзор": "Рособрнадзор",
         "минобрнауки": "Минобрнауки",
     }
     for key, uni_name in uni_map.items():
@@ -656,9 +545,8 @@ for num, name, organizer, profiles, level in OLYMPIADS:
             universities.add(uni_name)
     universities = sorted(universities) or ["Другое"]
 
-    # Use real data if available, otherwise defaults
+    # Use real data if available — NO benefits, only URLs and dates
     real = REAL_DATA.get(num, {})
-    benefits = real.get("benefits", make_benefits(level))
     stages = real.get("stages", make_stages(level))
     url = real.get("url", "")
     registration_url = real.get("registration_url", "")
@@ -677,7 +565,6 @@ for num, name, organizer, profiles, level in OLYMPIADS:
             "slug": pslug,
             "name": pname,
             "level": level,
-            "benefits": benefits.copy(),
             "stages": stages,
         })
 

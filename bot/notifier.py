@@ -1,6 +1,6 @@
 """
 Сервис напоминаний — проверяет этапы олимпиад и отправляет уведомления.
-Запускается как отдельная задача (периодическая проверка).
+Отправляет за 3 дня и за 1 день до дедлайна.
 """
 
 import asyncio
@@ -15,7 +15,6 @@ from database.models import Olympiad, Stage, User, UserOlympiad
 
 logger = logging.getLogger(__name__)
 
-# Один Bot на весь модуль
 _bot: Bot | None = None
 
 
@@ -27,7 +26,6 @@ def get_bot() -> Bot:
 
 
 async def send_telegram_message(telegram_id: int, text: str):
-    """Отправить сообщение пользователю через Bot API"""
     bot = get_bot()
     try:
         await bot.send_message(chat_id=telegram_id, text=text)
@@ -36,23 +34,18 @@ async def send_telegram_message(telegram_id: int, text: str):
 
 
 async def check_and_notify():
-    """
-    Проверить все этапы и отправить напоминания.
-    """
     db = SessionLocal()
     try:
         now = datetime.now(UTC)
+        window_end = now + timedelta(days=7)
 
-        # Берём все неотправленные этапы на ближайшие 30 дней
-        window_end = now + timedelta(days=30)
-
-        stages_to_notify = (
+        # Берём все незавершённые этапы на ближайшие 7 дней
+        stages = (
             db.query(Stage, UserOlympiad, User)
             .join(UserOlympiad, Stage.user_olympiad_id == UserOlympiad.id)
             .join(User, UserOlympiad.user_id == User.id)
             .filter(
                 Stage.is_completed == False,  # noqa: E712
-                Stage.notified == False,  # noqa: E712
                 User.notify_enabled == True,  # noqa: E712
                 (
                     (Stage.date_end.isnot(None) & Stage.date_end.between(now, window_end))
@@ -62,34 +55,45 @@ async def check_and_notify():
             .all()
         )
 
-        for stage, uo, user in stages_to_notify:
-            # Выбираем целевую дату (date_end приоритетнее)
+        sent = 0
+        for stage, uo, user in stages:
             target_date = stage.date_end or stage.date_start
-            days_left = (target_date - now).days + 1
-
-            # Учитываем персональную настройку notify_days_before
-            if days_left > user.notify_days_before:
-                continue
+            days_left = (target_date - now).days
 
             # Получаем название олимпиады
             olympiad = db.query(Olympiad).filter(Olympiad.id == uo.olympiad_id).first()
             olympiad_name = olympiad.name if olympiad else "Олимпиада"
 
-            text = (
-                f"⏰ Напоминание\n\n"
-                f"📌 {olympiad_name}\n"
-                f"📅 {stage.name}\n"
-                f"📆 {target_date.strftime('%d.%m.%Y')}\n"
-                f"⏳ Осталось {days_left} дн."
-            )
+            # За 1 день — приоритетнее
+            if days_left <= 1 and not stage.reminded_1d:
+                text = (
+                    f"🔴 ЗАВТРА!\n\n"
+                    f"📌 {olympiad_name}\n"
+                    f"📅 {stage.name}\n"
+                    f"📆 {target_date.strftime('%d.%m.%Y')}"
+                )
+                await send_telegram_message(user.telegram_id, text)
+                stage.reminded_1d = True
+                stage.reminded_3d = True  # помечаем и 3д тоже
+                sent += 1
+                logger.info(f"1d reminder → {user.telegram_id}: {olympiad_name} / {stage.name}")
 
-            await send_telegram_message(user.telegram_id, text)
-            stage.notified = True
-            logger.info(
-                f"Notification sent to {user.telegram_id} for {olympiad_name}: {stage.name}"
-            )
+            # За 3 дня
+            elif days_left <= 3 and not stage.reminded_3d:
+                text = (
+                    f"⏰ Через {days_left} дн.\n\n"
+                    f"📌 {olympiad_name}\n"
+                    f"📅 {stage.name}\n"
+                    f"📆 {target_date.strftime('%d.%m.%Y')}"
+                )
+                await send_telegram_message(user.telegram_id, text)
+                stage.reminded_3d = True
+                sent += 1
+                logger.info(f"3d reminder → {user.telegram_id}: {olympiad_name} / {stage.name}")
 
-        db.commit()
+        if sent:
+            db.commit()
+            logger.info(f"Sent {sent} reminders")
 
     except Exception as e:
         logger.error(f"Notifier error: {e}")
@@ -98,7 +102,6 @@ async def check_and_notify():
 
 
 async def notifier_loop(interval_minutes: int = 60):
-    """Запускать проверку каждые interval_minutes минут"""
     logger.info(f"Notifier started, checking every {interval_minutes} min")
     while True:
         await check_and_notify()

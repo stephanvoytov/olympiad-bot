@@ -82,7 +82,8 @@ class Stage(Base):
     date_end = Column(DateTime, nullable=True)
     is_completed = Column(Boolean, default=False)
     result = Column(String(64), nullable=True)
-    notified = Column(Boolean, default=False)
+    reminded_3d = Column(Boolean, default=False)
+    reminded_1d = Column(Boolean, default=False)
 
     user_olympiad = relationship("UserOlympiad", back_populates="stages")
 
