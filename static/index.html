@@ -1054,19 +1054,19 @@
         return dateA - dateB;
       });
 
-      container.innerHTML = sorted.map(function(o) {
-        var nextStage = findNextStage(o.stages);
-        var daysLeft = nextStage && nextStage.date_start ? daysUntil(nextStage.date_start) : null;
-        return '<div class="olympiad-card" onclick="openDetail(' + o.id + ')">' +
-          '<div class="row1"><div><div class="name">' + statusIcon(o.status) + ' ' + esc(o.name) + '</div>' +
-          (o.profile_name ? '<div class="organizer">' + esc(o.profile_name) + '</div>' : '') +
-          '<div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
-          '<div>' + (o.level ? '<sl-badge variant="primary" pill>Ур. ' + esc(o.level) + '</sl-badge>' : '') + '</div></div>' +
-          '<div class="meta">' + renderBenefitBadges(o.benefits) + '</div>' +
-          (nextStage ? renderNextStageInfo(nextStage, daysLeft) : '') +
-          (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);margin-top: var(--size-1);">' + ICONS.external + ' Регистрация</a>' : '') +
-          '</div>';
-      }).join('');
+container.innerHTML = sorted.map(function(o) {
+          var nextStage = findNextStage(o.stages);
+          var daysLeft = nextStage && nextStage.date_end ? daysUntil(nextStage.date_end) : null;
+          return '<div class="olympiad-card" onclick="openDetail(' + o.id + ')">' +
+            '<div class="row1"><div><div class="name">' + statusIcon(o.status) + ' ' + esc(o.name) + '</div>' +
+            (o.profile_name ? '<div class="organizer">' + esc(o.profile_name) + '</div>' : '') +
+            '<div class="organizer">' + esc(o.organizer || '') + '</div></div>' +
+            '<div>' + (o.level ? '<sl-badge variant="primary" pill>Ур. ' + esc(o.level) + '</sl-badge>' : '') + '</div></div>' +
+            '<div class="meta">' + renderBenefitBadges(o.benefits) + '</div>' +
+            (nextStage ? renderNextStageInfo(nextStage, daysLeft) : '') +
+            (o.registration_url ? '<a href="' + esc(o.registration_url) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="display:inline-flex;align-items:center;gap:4px;color:var(--brand);text-decoration:none;font-size: var(--font-size-0);font-weight: var(--font-weight-5);margin-top: var(--size-1);">' + ICONS.external + ' Регистрация</a>' : '') +
+            '</div>';
+        }).join('');
     }
 
     function findNextStage(stages) {
@@ -1101,7 +1101,7 @@
       // Build stages html with Shoelace buttons
       var stagesHtml = o.stages.map(function(s) {
         var dateStr = [s.date_start, s.date_end].filter(Boolean).map(function(d) { return formatDate(d); }).join(' - ');
-        var days = s.date_start ? daysUntil(s.date_start) : null;
+        var days = s.date_end ? daysUntil(s.date_end) : null;
         var daysStr = '';
         if (days !== null && !s.is_completed) {
           if (days < 0) daysStr = '<span style="color:var(--danger);font-size: var(--font-size-00);">Просрочено</span>';
