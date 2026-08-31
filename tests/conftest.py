@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from database.db import Base
-from database.models import Olympiad, OlympiadProfile
+from database.models import Olympiad, OlympiadProfile, Stage, User, UserOlympiad  # noqa: F401
 
 # Temp file for test DB (shared connections work correctly with file-based SQLite)
 _db_fd, _db_path = tempfile.mkstemp(suffix=".db")
@@ -44,11 +44,29 @@ def _get_test_db():
 
 
 @pytest.fixture(autouse=True)
-def setup_db():
-    """Create tables before each test, drop after."""
+def setup_db(monkeypatch):
+    """Create tables before each test, drop after.
+
+    Also patches database.db.SessionLocal so that code using it directly
+    (e.g. _get_telegram_id, _seed_olympiads) operates on the test DB.
+    """
     Base.metadata.create_all(bind=engine)
+
+    import database.db as _db_module
+
+    monkeypatch.setattr(_db_module, "SessionLocal", TestingSessionLocal)
+
     yield
+
     Base.metadata.drop_all(bind=engine)
+
+
+@pytest.fixture(autouse=True)
+def _no_seed(monkeypatch):
+    """Skip _seed_olympiads() during tests — test DB is seeded via fixtures."""
+    import web.main as _web_main
+
+    monkeypatch.setattr(_web_main, "_seed_olympiads", lambda: None)
 
 
 @pytest.fixture

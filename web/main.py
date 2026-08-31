@@ -338,7 +338,24 @@ async def get_user(
 
     user = db.query(User).filter(User.telegram_id == telegram_id).first()
     if not user:
-        raise HTTPException(status_code=401, detail="User not found")
+        # Auto-create on first Telegram login
+        tg_info = {}
+        init_data = request.headers.get("X-Telegram-Init-Data", "")
+        if init_data:
+            verified = verify_telegram_init_data(init_data)
+            if verified:
+                try:
+                    tg_info = json.loads(verified.get("user", "{}"))
+                except (json.JSONDecodeError, KeyError):
+                    pass
+        user = User(
+            telegram_id=telegram_id,
+            username=tg_info.get("username"),
+            full_name=f"{tg_info.get('first_name', '')} {tg_info.get('last_name', '')}".strip(),
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
 
     return UserResponse(
         id=user.id,

@@ -20,21 +20,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:16-alpine
-        env:
-          POSTGRES_USER: olympiad
-          POSTGRES_PASSWORD: olympiad_secret
-          POSTGRES_DB: olympiadb_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -45,4 +30,4 @@ jobs:
       - run: pip install pytest httpx
       - run: pytest tests/ -v
         env:
-          DATABASE_URL: postgresql://olympiad:olympiad_secret@localhost:5432/olympiadb_test
+          BOT_TOKEN: "test-token-for-ci"

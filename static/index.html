@@ -812,26 +812,24 @@
       var order = [];
 
       items.forEach(function(o) {
-        var keys = [];
+        var key = '';
         if (catalogGroupBy === 'direction') {
-          keys = (o.tags || []).length ? o.tags : ['Без направления'];
+          key = (o.tags && o.tags.length) ? o.tags[0] : 'Без направления';
         } else if (catalogGroupBy === 'university') {
-          keys = (o.universities || []).length ? o.universities : ['Без вуза'];
+          key = (o.universities && o.universities.length) ? o.universities[0] : 'Без вуза';
         } else if (catalogGroupBy === 'level') {
           var lvls = new Set();
           (o.profiles || []).forEach(function(p) { if (p.level) lvls.add('Уровень ' + p.level); });
-          keys = lvls.size ? Array.from(lvls) : ['Без уровня'];
+          key = lvls.size ? Array.from(lvls).sort()[0] : 'Без уровня';
         } else if (catalogGroupBy === 'benefits') {
           var hasBvi = (o.profiles || []).some(function(p) { return p.benefits && p.benefits['БВИ']; });
           var has100 = (o.profiles || []).some(function(p) { return p.benefits && p.benefits['100_баллов']; });
-          if (hasBvi) keys.push('БВИ');
-          if (has100) keys.push('100 баллов');
-          if (!keys.length) keys.push('Без льгот');
+          if (hasBvi) key = 'БВИ';
+          else if (has100) key = '100 баллов';
+          else key = 'Без льгот';
         }
-        keys.forEach(function(k) {
-          if (!groups[k]) { groups[k] = []; order.push(k); }
-          groups[k].push(o);
-        });
+        if (!groups[key]) { groups[key] = []; order.push(key); }
+        groups[key].push(o);
       });
 
       return { groups: groups, order: order };
