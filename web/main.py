@@ -257,6 +257,7 @@ def _serialize_profile(p: OlympiadProfile) -> dict:
     return {
         "slug": p.slug,
         "name": p.name,
+        "subject": p.subject or p.name,
         "level": p.level,
         "benefits": p.benefits or {},
         "stages": p.typical_stages or [],
@@ -554,6 +555,7 @@ async def list_my_olympiads(
         if profile:
             obj["profile_slug"] = profile.slug
             obj["profile_name"] = profile.name
+            obj["profile_subject"] = profile.subject or profile.name
             obj["level"] = profile.level
             obj["benefits"] = profile.benefits or {}
         else:
@@ -906,6 +908,7 @@ def _seed_olympiads():
                 if prof["slug"] in existing_profiles:
                     p = existing_profiles[prof["slug"]]
                     p.name = prof["name"]
+                    p.subject = prof.get("subject") or prof.get("name", "")
                     p.level = prof.get("level")
                     p.benefits = prof.get("benefits", {})
                     p.typical_stages = prof.get("stages", [])
@@ -914,6 +917,7 @@ def _seed_olympiads():
                         olympiad_id=existing.id,
                         slug=prof["slug"],
                         name=prof["name"],
+                        subject=prof.get("subject") or prof.get("name", ""),
                         level=prof.get("level"),
                         benefits=prof.get("benefits", {}),
                         typical_stages=prof.get("stages", []),

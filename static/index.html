@@ -362,12 +362,12 @@
     let tgUser = null;
     let myOlympiads = [];
     let catalog = [];
-    let catalogProfileFilter = '';
-    let catalogLevelFilter = '';
-    let catalogDirectionFilter = '';
+    let catalogDirectionsFilter = [];
+    let catalogSubjectsFilter = [];
     let catalogUniFilter = '';
+    let catalogLevelFilter = '';
     let catalogBenefitsOnly = false;
-    let catalogGroupBy = '';
+    let catalogGroupBy = 'university';
     let currentDetailEntryId = null;
 
     // ========== SVG ICONS ==========
@@ -675,7 +675,9 @@
 
     // ========== CATALOG ==========
     function renderCatalogContent(profileFilter) {
-      if (profileFilter !== undefined) catalogProfileFilter = profileFilter;
+      if (profileFilter !== undefined && profileFilter) {
+        if (!catalogSubjectsFilter.includes(profileFilter)) catalogSubjectsFilter.push(profileFilter);
+      }
       const container = document.getElementById('tabContent');
       container.innerHTML =
         '<div class="search-bar"><sl-input id="searchInput" placeholder="Поиск по названию..." clearable size="medium"><sl-icon slot="prefix" name="search"></sl-icon></sl-input></div>' +
@@ -703,19 +705,17 @@
       if (!container) return;
 
       var directions = new Set();
+      var subjects = new Set();
       var unis = new Set();
       catalog.forEach(function(o) {
         (o.tags || []).forEach(function(t) { directions.add(t); });
+        (o.profiles || []).forEach(function(p) { subjects.add(p.subject || p.name); });
         (o.universities || []).forEach(function(u) { unis.add(u); });
       });
       var dirList = Array.from(directions).sort();
+      var subjList = Array.from(subjects).sort();
       var uniList = Array.from(unis).sort();
 
-      var profiles = new Set();
-      catalog.forEach(function(o) { (o.profiles || []).forEach(function(p) { profiles.add(p.name); }); });
-      var profileList = Array.from(profiles).sort();
-
-      var levelOptions = ['', 1, 2, 3];
       var groupOptions = [
         { val: '', label: 'Без группировки' },
         { val: 'direction', label: 'По направлению' },
@@ -724,31 +724,37 @@
         { val: 'benefits', label: 'По льготам' },
       ];
 
+      var dirSelHtml = dirList.map(function(d) {
+        return '<sl-option value="' + slSanitize(d) + '"' + (catalogDirectionsFilter.includes(d) ? ' selected' : '') + '>' + esc(d) + '</sl-option>';
+      }).join('');
+      var subjSelHtml = subjList.map(function(s) {
+        return '<sl-option value="' + slSanitize(s) + '"' + (catalogSubjectsFilter.includes(s) ? ' selected' : '') + '>' + esc(s) + '</sl-option>';
+      }).join('');
+
       var filterHtml =
         '<div class="catalog-filters" id="catalogFilters">' +
           '<div class="filter-row">' +
-            '<sl-select id="directionSelect" placeholder="Все направления" clearable size="small">' +
-              '<sl-option value="">Все направления</sl-option>' +
-              dirList.map(function(d) { return '<sl-option value="' + slSanitize(d) + '">' + esc(d) + '</sl-option>'; }).join('') +
+            '<sl-select id="directionSelect" placeholder="Направления" multiple clearable size="small" style="min-width:130px">' +
+              dirSelHtml +
             '</sl-select>' +
-            '<sl-select id="uniSelect" placeholder="Все вузы" clearable size="small">' +
+            '<sl-select id="subjectSelect" placeholder="Предметы" multiple clearable size="small" style="min-width:130px">' +
+              subjSelHtml +
+            '</sl-select>' +
+            '<sl-select id="uniSelect" placeholder="Все вузы" clearable size="small" style="min-width:130px">' +
               '<sl-option value="">Все вузы</sl-option>' +
               uniList.map(function(u) { return '<sl-option value="' + slSanitize(u) + '">' + esc(u) + '</sl-option>'; }).join('') +
             '</sl-select>' +
           '</div>' +
           '<div class="filter-row">' +
-            '<sl-select id="profileSelect" placeholder="Все профили" clearable size="small">' +
-              '<sl-option value="">Все профили</sl-option>' +
-              profileList.map(function(p) { return '<sl-option value="' + slSanitize(p) + '">' + esc(p) + '</sl-option>'; }).join('') +
+            '<sl-select id="levelSelect" placeholder="Уровень" clearable size="small" style="width:110px">' +
+              '<sl-option value="">Любой</sl-option>' +
+              '<sl-option value="1"' + (catalogLevelFilter === '1' ? ' selected' : '') + '>Ур. 1</sl-option>' +
+              '<sl-option value="2"' + (catalogLevelFilter === '2' ? ' selected' : '') + '>Ур. 2</sl-option>' +
+              '<sl-option value="3"' + (catalogLevelFilter === '3' ? ' selected' : '') + '>Ур. 3</sl-option>' +
             '</sl-select>' +
-            '<sl-select id="levelSelect" placeholder="Любой уровень" clearable size="small">' +
-              levelOptions.map(function(l) { return '<sl-option value="' + l + '">' + (l ? 'Ур. ' + l : 'Любой уровень') + '</sl-option>'; }).join('') +
-            '</sl-select>' +
-          '</div>' +
-          '<div class="filter-row">' +
             '<sl-button id="benefitsChip" size="small" pill variant="' + (catalogBenefitsOnly ? 'primary' : 'neutral') + '">' + (catalogBenefitsOnly ? '✓ ' : '') + 'Только с льготами</sl-button>' +
-            '<sl-select id="groupSelect" placeholder="Без группировки" size="small" style="flex:1; max-width: 200px;">' +
-              groupOptions.map(function(g) { return '<sl-option value="' + g.val + '">' + g.label + '</sl-option>'; }).join('') +
+            '<sl-select id="groupSelect" size="small" style="flex:1; max-width:200px;">' +
+              groupOptions.map(function(g) { return '<sl-option value="' + g.val + '"' + (catalogGroupBy === g.val ? ' selected' : '') + '>' + g.label + '</sl-option>'; }).join('') +
             '</sl-select>' +
           '</div>' +
         '</div>';
@@ -758,36 +764,54 @@
         var existing = container.querySelector('#catalogFilters');
         if (existing) existing.remove();
         searchBar.insertAdjacentHTML('afterend', filterHtml);
-        // Restore values and attach shoelace listeners (values are URI-encoded to avoid space restriction)
         setTimeout(function() {
           var dirSel = document.getElementById('directionSelect');
+          var subjSel = document.getElementById('subjectSelect');
           var uniSel = document.getElementById('uniSelect');
-          var profSel = document.getElementById('profileSelect');
           var lvlSel = document.getElementById('levelSelect');
           var grpSel = document.getElementById('groupSelect');
           var benChip = document.getElementById('benefitsChip');
-          if (dirSel) { dirSel.value = slSanitize(catalogDirectionFilter); dirSel.addEventListener('sl-change', function() { filterCatalogDirection(slDesanitize(this.value)); }); dirSel.addEventListener('sl-clear', function() { filterCatalogDirection(''); }); }
-          if (uniSel) { uniSel.value = slSanitize(catalogUniFilter); uniSel.addEventListener('sl-change', function() { filterCatalogUni(slDesanitize(this.value)); }); uniSel.addEventListener('sl-clear', function() { filterCatalogUni(''); }); }
-          if (profSel) { profSel.value = slSanitize(catalogProfileFilter); profSel.addEventListener('sl-change', function() { filterCatalogProfile(slDesanitize(this.value)); }); profSel.addEventListener('sl-clear', function() { filterCatalogProfile(''); }); }
-          if (lvlSel) { lvlSel.value = catalogLevelFilter; lvlSel.addEventListener('sl-change', function() { filterCatalogLevel(this.value); }); lvlSel.addEventListener('sl-clear', function() { filterCatalogLevel(''); }); }
-          if (grpSel) { grpSel.value = catalogGroupBy; grpSel.addEventListener('sl-change', function() { filterCatalogGroup(this.value); }); }
+
+          if (dirSel) {
+            dirSel.addEventListener('sl-change', function() {
+              catalogDirectionsFilter = (dirSel.value || []).map(slDesanitize);
+              renderCatalogResults();
+            });
+            dirSel.addEventListener('sl-clear', function() {
+              catalogDirectionsFilter = [];
+              renderCatalogResults();
+            });
+          }
+          if (subjSel) {
+            subjSel.addEventListener('sl-change', function() {
+              catalogSubjectsFilter = (subjSel.value || []).map(slDesanitize);
+              renderCatalogResults();
+            });
+            subjSel.addEventListener('sl-clear', function() {
+              catalogSubjectsFilter = [];
+              renderCatalogResults();
+            });
+          }
+          if (uniSel) {
+            uniSel.addEventListener('sl-change', function() { filterCatalogUni(slDesanitize(uniSel.value || '')); });
+            uniSel.addEventListener('sl-clear', function() { filterCatalogUni(''); });
+          }
+          if (lvlSel) {
+            lvlSel.addEventListener('sl-change', function() { filterCatalogLevel(lvlSel.value || ''); });
+            lvlSel.addEventListener('sl-clear', function() { filterCatalogLevel(''); });
+          }
+          if (grpSel) {
+            grpSel.addEventListener('sl-change', function() { filterCatalogGroup(grpSel.value || ''); });
+          }
           if (benChip) benChip.addEventListener('click', toggleBenefitsOnly);
         }, 50);
       }
     }
 
-    function filterCatalogProfile(profile) { catalogProfileFilter = profile; renderCatalogFilter(); renderCatalogResults(); }
-    function filterCatalogDirection(dir) { catalogDirectionFilter = dir; renderCatalogFilter(); renderCatalogResults(); }
-    function filterCatalogUni(uni) { catalogUniFilter = uni; renderCatalogFilter(); renderCatalogResults(); }
-    function filterCatalogLevel(level) { catalogLevelFilter = level; renderCatalogFilter(); renderCatalogResults(); }
-    function filterCatalogGroup(val) { catalogGroupBy = val; renderCatalogFilter(); renderCatalogResults(); }
+    function filterCatalogUni(uni) { catalogUniFilter = uni; renderCatalogResults(); }
+    function filterCatalogLevel(level) { catalogLevelFilter = level; renderCatalogResults(); }
+    function filterCatalogGroup(val) { catalogGroupBy = val; renderCatalogResults(); }
     function toggleBenefitsOnly() { catalogBenefitsOnly = !catalogBenefitsOnly; renderCatalogFilter(); renderCatalogResults(); }
-
-    function profileMatchesFilter(profiles, filter) {
-      if (!filter) return true;
-      filter = filter.toLowerCase();
-      return profiles.some(function(p) { return p.name.toLowerCase().indexOf(filter) !== -1 || p.slug.toLowerCase().indexOf(filter) !== -1; });
-    }
 
     function getOlympiadGroups(items) {
       if (!catalogGroupBy) return null;
@@ -888,13 +912,29 @@
       if (inp) q = (inp.value || '').toLowerCase();
 
       var items = catalog.slice();
-      if (catalogDirectionFilter) {
-        var dirLower = catalogDirectionFilter.toLowerCase();
-        items = items.filter(function(o) { return (o.tags || []).some(function(t) { return t.toLowerCase() === dirLower; }); });
-        // Filter profiles to only show matching direction
+      if (catalogDirectionsFilter.length) {
+        items = items.filter(function(o) {
+          return catalogDirectionsFilter.some(function(d) { return (o.tags || []).map(function(t){return t.toLowerCase();}).indexOf(d.toLowerCase()) !== -1; });
+        });
         items = items.map(function(o) {
           var filteredProfiles = (o.profiles || []).filter(function(p) {
-            return (p.name || '').toLowerCase().indexOf(dirLower) !== -1;
+            return catalogDirectionsFilter.some(function(d) { return (p.name || '').toLowerCase().indexOf(d.toLowerCase()) !== -1; });
+          });
+          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
+          return Object.assign({}, o, { profiles: filteredProfiles });
+        });
+      }
+      if (catalogSubjectsFilter.length) {
+        items = items.filter(function(o) {
+          return (o.profiles || []).some(function(p) {
+            var subj = (p.subject || p.name || '').toLowerCase();
+            return catalogSubjectsFilter.some(function(s) { return subj.indexOf(s.toLowerCase()) !== -1; });
+          });
+        });
+        items = items.map(function(o) {
+          var filteredProfiles = (o.profiles || []).filter(function(p) {
+            var subj = (p.subject || p.name || '').toLowerCase();
+            return catalogSubjectsFilter.some(function(s) { return subj.indexOf(s.toLowerCase()) !== -1; });
           });
           if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
           return Object.assign({}, o, { profiles: filteredProfiles });
@@ -904,24 +944,11 @@
         var uniLower = catalogUniFilter.toLowerCase();
         items = items.filter(function(o) { return (o.universities || []).some(function(u) { return u.toLowerCase() === uniLower; }); });
       }
-      if (catalogProfileFilter) {
-        var profLower = catalogProfileFilter.toLowerCase();
-        items = items.filter(function(o) { return (o.profiles || []).some(function(p) { return (p.name || '').toLowerCase().indexOf(profLower) !== -1; }); });
-        // Also filter profiles to only matching
-        items = items.map(function(o) {
-          var filteredProfiles = (o.profiles || []).filter(function(p) {
-            return (p.name || '').toLowerCase().indexOf(profLower) !== -1;
-          });
-          if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
-          return Object.assign({}, o, { profiles: filteredProfiles });
-        });
-      }
       if (catalogLevelFilter) {
         var lv = parseInt(catalogLevelFilter);
         items = items.filter(function(o) {
           return (o.profiles || []).some(function(p) { return p.level === lv; });
         });
-        // Filter profiles to only matching level
         items = items.map(function(o) {
           var filteredProfiles = (o.profiles || []).filter(function(p) { return p.level === lv; });
           if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];
@@ -932,7 +959,6 @@
         items = items.filter(function(o) {
           return (o.profiles || []).some(function(p) { return hasBenefit(p, 'БВИ') || hasBenefit(p, '100_баллов'); });
         });
-        // Filter profiles to only those with benefits
         items = items.map(function(o) {
           var filteredProfiles = (o.profiles || []).filter(function(p) { return hasBenefit(p, 'БВИ') || hasBenefit(p, '100_баллов'); });
           if (filteredProfiles.length === 0) filteredProfiles = o.profiles || [];

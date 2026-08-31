@@ -59,6 +59,7 @@ class OlympiadProfile(Base):
     olympiad_id = Column(String(64), ForeignKey("olympiads.id", ondelete="CASCADE"), nullable=False)
     slug = Column(String(64), nullable=False)
     name = Column(String(128), nullable=False)
+    subject = Column(String(128), nullable=True)  # школьный предмет для фильтра
     level = Column(Integer, nullable=True)
     benefits = Column(JSON, default=dict)
     typical_stages = Column(JSON, default=list)

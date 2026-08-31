@@ -893,8 +893,43 @@ for num, name, organizer, profiles, level in OLYMPIADS:
     url = real.get("url", "")
     registration_url = real.get("registration_url", "")
 
+    # Определяем школьный предмет по имени профиля (надёжнее чем subject_group)
+    def detect_subject(pname):
+        n = pname.lower()
+        if any(x in n for x in ['математик', 'вероятн', 'статистик', 'криптограф', 'механик', 'космонавт']):
+            return 'математика'
+        if any(x in n for x in ['физик', 'астроном']):
+            return 'физика'
+        if any(x in n for x in ['информатик', 'программиров', 'компьютер', 'робототехник', 'ии', 'искусственн', 'автоматизац', 'транспорт', 'беспилотн', 'данные', 'виртуальн', 'квантов', 'мобильн', 'безопасн', 'спутник', 'беспроводн', 'аэрокосмич', 'космическ', 'авиац', 'химическ', 'биологическ', 'энергет', 'технологическ', 'предприним']):
+            return 'информатика'
+        if any(x in n for x in ['химич', 'химия', 'нано', 'инфохим']):
+            return 'химия'
+        if any(x in n for x in ['биолог', 'генетик', 'геномн', 'медицин', 'фармац', 'аграрн']):
+            return 'биология'
+        if any(x in n for x in ['истор', 'востоковед']):
+            return 'история'
+        if any(x in n for x in ['обществ', 'прав', 'юридич', 'политолог', 'психолог', 'социолог', 'журналист', 'культуролог', 'философ', 'религи', 'теолог', 'международн', 'государств', 'медиа', 'педагог', 'образован']):
+            return 'обществознание'
+        if any(x in n for x in ['эконом', 'финанс', 'бизнес', 'предприним']):
+            return 'экономика'
+        if any(x in n for x in ['географ', 'геолог', 'земле', 'эколог']):
+            return 'география'
+        if any(x in n for x in ['литерат', 'филолог', 'лингвист', 'язык', 'русск', 'иностран']):
+            return 'языки'
+        if any(x in n for x in ['рисов', 'живоп', 'дизайн', 'график', 'искусств', 'композиц', 'архитект', 'декоратив', 'музык', 'инструмент', 'хоров', 'фортепиан', 'теория музык', 'духов']):
+            return 'искусство'
+        if any(x in n for x in ['инженер', 'техник', 'технолог', 'строител', 'конструктор', 'электро', 'электр']):
+            return 'инженерия'
+        return 'другое'
+
     profile_entries = []
     for pname, subject_group in profiles:
+        # Нормализуем имя профиля — берём первое слово/часть
+        clean_name = pname.strip().split(',')[0].split('(')[0].strip()
+        clean_name = clean_name[0].upper() + clean_name[1:] if clean_name else pname
+
+        subject = detect_subject(pname)
+
         pslug = slugify(pname)
         # Ensure unique profile slug within olympiad
         base_pslug = pslug
@@ -905,7 +940,8 @@ for num, name, organizer, profiles, level in OLYMPIADS:
             pcounter += 1
         profile_entries.append({
             "slug": pslug,
-            "name": pname,
+            "name": clean_name,
+            "subject": subject,
             "level": level,
             "stages": stages,
         })
